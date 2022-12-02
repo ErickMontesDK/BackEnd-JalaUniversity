@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1669946974781" clover="3.2.0">
+  <project timestamp="1669946974782" name="All files">
+    <metrics statements="42" coveredstatements="40" conditionals="22" coveredconditionals="20" methods="9" coveredmethods="8" elements="73" coveredelements="68" complexity="0" loc="42" ncloc="42" packages="1" files="6" classes="6"/>
+    <file name="calc.ts" path="D:\Notes\Developer Road\ProgramasDeveloper Road\BackEnd I\3-Unit testing\src\calc.ts">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="2" type="stmt"/>
+    </file>
+    <file name="king.ts" path="D:\Notes\Developer Road\ProgramasDeveloper Road\BackEnd I\3-Unit testing\src\king.ts">
+      <metrics statements="13" coveredstatements="12" conditionals="12" coveredconditionals="10" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="7" count="4" type="stmt"/>
+      <line num="8" count="4" type="stmt"/>
+      <line num="9" count="4" type="stmt"/>
+      <line num="11" count="4" type="cond" truecount="4" falsecount="0"/>
+      <line num="12" count="1" type="stmt"/>
+      <line num="13" count="3" type="cond" truecount="4" falsecount="0"/>
+      <line num="14" count="1" type="stmt"/>
+      <line num="15" count="2" type="cond" truecount="2" falsecount="2"/>
+      <line num="16" count="0" type="stmt"/>
+      <line num="18" count="2" type="stmt"/>
+    </file>
+    <file name="movements.ts" path="D:\Notes\Developer Road\ProgramasDeveloper Road\BackEnd I\3-Unit testing\src\movements.ts">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <line num="4" count="2" type="stmt"/>
+      <line num="6" count="12" type="stmt"/>
+      <line num="11" count="12" type="stmt"/>
+      <line num="12" count="12" type="stmt"/>
+      <line num="13" count="12" type="stmt"/>
+      <line num="15" count="12" type="stmt"/>
+      <line num="19" count="12" type="stmt"/>
+    </file>
+    <file name="piece.ts" path="D:\Notes\Developer Road\ProgramasDeveloper Road\BackEnd I\3-Unit testing\src\piece.ts">
+      <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+      <line num="3" count="2" type="stmt"/>
+      <line num="5" count="2" type="stmt"/>
+      <line num="8" count="9" type="stmt"/>
+      <line num="9" count="9" type="stmt"/>
+      <line num="13" count="0" type="stmt"/>
+    </file>
+    <file name="position.ts" path="D:\Notes\Developer Road\ProgramasDeveloper Road\BackEnd I\3-Unit testing\src\position.ts">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <line num="4" count="2" type="stmt"/>
+      <line num="6" count="21" type="stmt"/>
+    </file>
+    <file name="queen.ts" path="D:\Notes\Developer Road\ProgramasDeveloper Road\BackEnd I\3-Unit testing\src\queen.ts">
+      <metrics statements="13" coveredstatements="13" conditionals="10" coveredconditionals="10" methods="1" coveredmethods="1"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="5" count="1" type="stmt"/>
+      <line num="7" count="8" type="stmt"/>
+      <line num="8" count="8" type="stmt"/>
+      <line num="9" count="8" type="stmt"/>
+      <line num="11" count="8" type="cond" truecount="4" falsecount="0"/>
+      <line num="12" count="1" type="stmt"/>
+      <line num="13" count="7" type="cond" truecount="4" falsecount="0"/>
+      <line num="14" count="1" type="stmt"/>
+      <line num="15" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="16" count="2" type="stmt"/>
+      <line num="18" count="4" type="stmt"/>
+    </file>
+  </project>
+</coverage>
