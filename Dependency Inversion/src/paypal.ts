@@ -4,7 +4,7 @@ import 'reflect-metadata'
 
 @injectable()
 export class paypal implements MetodoPago {
-  user: string | undefined
+  user: string | undefined = 'The user'
 
   setUser (user: string):void {
     this.user = user
