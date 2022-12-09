@@ -1,3 +1,4 @@
+
 {
     "compilerOptions": {
       "target": "es6",
@@ -15,7 +16,7 @@
       "emitDecoratorMetadata":true,
       "experimentalDecorators":true
     },
-    "include": ["src"],
+    "include": ["src", "app.ts"],
     "exclude": ["node_modules"]
-  }
+}
 

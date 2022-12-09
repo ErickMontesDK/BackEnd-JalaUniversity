@@ -1,7 +1,7 @@
 import { Container } from 'inversify'
-import UserService from './userServices'
-import IUserRepository from '../repository/user-repository'
+import UserService from '../services/userServices'
 import UserData from '../database/data-access'
+import IUserRepository from '../repository/user-repository'
 import 'reflect-metadata'
 
 const container = new Container()

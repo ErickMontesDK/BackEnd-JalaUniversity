@@ -1,16 +1,11 @@
-/* eslint-disable no-useless-constructor */
 import User from '../entities/user'
 import IUserRepository from '../repository/user-repository'
-import UserData from '../database/data-access'
-import { inject, injectable } from 'inversify'
+import { injectable } from 'inversify'
+import { container } from '../containers/inversify.config'
 
 @injectable()
 export default class UserService implements IUserRepository {
-  userData: IUserRepository
-
-  constructor (@inject('UserData') userData: UserData) {
-    this.userData = userData
-  }
+  userData: IUserRepository = container.get<IUserRepository>('UserData')
 
   async create (user: User) {
     const repository = await this.userData.create(user)

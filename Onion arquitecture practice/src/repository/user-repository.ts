@@ -4,6 +4,6 @@ import User from '../entities/user'
 export default interface IUserRepository{
     create(user: User): Promise<User>;
     read(id:number): Promise<User | null>;
-    update(user: User): Promise<User>;
+    update(user: User): Promise<User | null>;
     delete(id:number):Promise<string>;
 }

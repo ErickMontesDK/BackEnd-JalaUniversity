@@ -27,7 +27,7 @@ export default class UserData implements IUserRepository {
       await repository.delete({ id })
       return `User with id ${id} was deleted`
     } else {
-      return `User with id ${id} wasn't found `
+      return `User with id ${id} was not found `
     }
   }
 }
