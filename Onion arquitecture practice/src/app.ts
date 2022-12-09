@@ -1,24 +1,30 @@
 import { UserDataSource } from './database/data-source'
-import UserService from './services/userService'
 import User from './entities/user'
+import { container } from './inversify.config'
+import IUserRepository from './repository/user-repository'
 
-class Running {
+const UserService = container.get<IUserRepository>('UserService')
+
+class Test {
   async initializeDB () {
     await UserDataSource.initialize()
 
-    const newUser = new User('Erick', 'Montes')
-    const userAccess = new UserService()
+    const newUser = new User()
+    newUser.name = 'Erick'
+    newUser.lastName = 'Montes'
+
+    const userAccess = UserService
     await userAccess.create(newUser)
 
     const userLoaded = await userAccess.read(1)
 
     if (userLoaded) {
-      userLoaded.changeLastname = 'Bedolla'
+      userLoaded.lastName = 'Bedolla'
       userAccess.update(userLoaded)
       console.log(userLoaded)
     }
-    userAccess.delete(2)
+    userAccess.delete(7)
   }
 }
 
-new Running().initializeDB()
+new Test().initializeDB()

@@ -1,11 +1,10 @@
 import { Container } from 'inversify'
-import IUserService from './services/user-service'
-import UserService from './services/concrete-user-service'
-import User from './entities/user'
+import UserService from './services/userServices'
+import IUserRepository from './repository/user-repository'
+import 'reflect-metadata'
 
 const container = new Container()
 
-container.bind<IUserService>('UserService').to(UserService)
-container.bind<User>('User').to(User)
+container.bind<IUserRepository>('UserService').to(UserService)
 
 export { container }
