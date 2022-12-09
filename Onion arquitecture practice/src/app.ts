@@ -1,6 +1,6 @@
 import { UserDataSource } from './database/data-source'
 import User from './entities/user'
-import { container } from './inversify.config'
+import { container } from './services/inversify.config'
 import IUserRepository from './repository/user-repository'
 
 const UserService = container.get<IUserRepository>('UserService')
@@ -23,7 +23,7 @@ class Test {
       userAccess.update(userLoaded)
       console.log(userLoaded)
     }
-    userAccess.delete(7)
+    userAccess.delete(8)
   }
 }
 

@@ -2,11 +2,15 @@
 import User from '../entities/user'
 import IUserRepository from '../repository/user-repository'
 import UserData from '../database/data-access'
-import { injectable } from 'inversify'
+import { inject, injectable } from 'inversify'
 
 @injectable()
 export default class UserService implements IUserRepository {
-  userData = new UserData()
+  userData: IUserRepository
+
+  constructor (@inject('UserData') userData: UserData) {
+    this.userData = userData
+  }
 
   async create (user: User) {
     const repository = await this.userData.create(user)
