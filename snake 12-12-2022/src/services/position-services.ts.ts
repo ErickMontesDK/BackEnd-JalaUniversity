@@ -1,5 +1,5 @@
-import positionRepository from '../repository/positionRepository'
-import { container } from '../inversify/inversify.config'
+import positionRepository from '../domain/repository/positionRepository'
+import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
 import { injectable } from 'inversify'
 

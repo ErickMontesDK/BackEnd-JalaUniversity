@@ -1,4 +1,4 @@
-import Board from '../../entities/board'
+import Board from '../../../domain/entities/board'
 import dbBoard from '../entities/dbBoard'
 
 export default class mapper {

@@ -1,8 +1,9 @@
 import { Router } from 'express'
-import { AppDataSource } from '../database/db-source'
-import { container } from '../inversify/inversify.config'
-import BoardRepository from '../repository/boardRepository'
-import positionRepository from '../repository/positionRepository'
+import { AppDataSource } from '../infrastructure/database/db-source'
+import { container } from '../infrastructure/inversify/inversify.config'
+import BoardRepository from '../domain/repository/boardRepository'
+import positionRepository from '../domain/repository/positionRepository'
+import snakeRepository from '../domain/repository/snakeRepository'
 
 export const defaultRoute = Router()
 
@@ -32,4 +33,25 @@ defaultRoute.get('/position/:seed', (req, res) => {
   }
 
   getPosition()
+})
+defaultRoute.get('/snake?', (req, res) => {
+  async function createSnake () {
+    if (req.query.user && req.query.seed) {
+      await AppDataSource.initialize()
+      let numberCorrection = req.query.seed
+      numberCorrection = numberCorrection.toString()
+
+      const seed = parseInt(numberCorrection, 10)
+      const user = req.query.user.toString()
+
+      const snakeGenerator = container.get<snakeRepository>('SnakeService')
+      const newSnake = await snakeGenerator.create(seed, user)
+
+      res.send(newSnake)
+      await AppDataSource.destroy()
+    } else {
+      res.send('Faltan parametros para la snake')
+    }
+  }
+  createSnake()
 })

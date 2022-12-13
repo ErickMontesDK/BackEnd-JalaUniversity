@@ -1,5 +1,5 @@
-import BoardRepository from '../repository/boardRepository'
-import { container } from '../inversify/inversify.config'
+import BoardRepository from '../domain/repository/boardRepository'
+import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
 import { injectable } from 'inversify'
 

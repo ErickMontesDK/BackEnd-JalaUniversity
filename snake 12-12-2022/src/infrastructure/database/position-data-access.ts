@@ -1,28 +1,17 @@
 import { AppDataSource } from './db-source'
-import positionRepository from '../repository/positionRepository'
+import positionRepository from '../../domain/repository/positionRepository'
 import dbPosition from './entities/dbPosition'
-import Position from '../entities/position'
+import Position from '../../domain/entities/position'
 import mapper from './mappers/position.mapper'
 import { injectable } from 'inversify'
+import { randomPosition } from '../../domain/utils/randomPosition'
 import 'reflect-metadata'
 
 @injectable()
 export default class PositionData implements positionRepository {
   async create (seed: number) {
-    let counter = 1
-    let prevRand = 1
-
-    const rand = (max:number) => {
-      const time = new Date().getTime()
-      const randValue = ((time / counter) / (prevRand + 1)) % max
-      counter++
-      prevRand = randValue
-      const ifString = randValue.toString()
-      return parseInt(ifString)
-    }
-
-    const x = rand(seed)
-    const y = rand(seed)
+    const x = randomPosition(seed)
+    const y = randomPosition(seed)
     const newPosition = new Position()
     newPosition.coordX = x
     newPosition.coordY = y
