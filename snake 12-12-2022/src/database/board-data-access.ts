@@ -2,7 +2,7 @@ import { AppDataSource } from './db-source'
 import BoardRepository from '../repository/boardRepository'
 import dbBoard from './entities/dbBoard'
 import Board from '../entities/board'
-import mapper from './mapper'
+import mapper from './mappers/board.mapper'
 
 export default class BoardData implements BoardRepository {
   async create (num: number) {

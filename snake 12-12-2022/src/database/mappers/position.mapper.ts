@@ -1,0 +1,13 @@
+import dbPosition from '../entities/dbPosition'
+import Position from '../../entities/position'
+
+export default class mapper {
+  static toEntity (position: dbPosition) {
+    const entityPosition: Position = new Position()
+    entityPosition.id = position.id
+    entityPosition.coordX = position.coordX
+    entityPosition.coordY = position.coordY
+
+    return entityPosition
+  }
+}

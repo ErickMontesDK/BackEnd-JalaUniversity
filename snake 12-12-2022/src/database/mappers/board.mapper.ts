@@ -1,5 +1,5 @@
-import Board from '../entities/board'
-import dbBoard from './entities/dbBoard'
+import Board from '../../entities/board'
+import dbBoard from '../entities/dbBoard'
 
 export default class mapper {
   static toEntity (board: dbBoard) {

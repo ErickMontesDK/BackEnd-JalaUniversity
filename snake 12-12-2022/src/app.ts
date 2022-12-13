@@ -9,7 +9,7 @@ app.use(defaultRoute)
 app.listen(port, () => console.log(`Server listening on port ${port}`))
 
 // import { AppDataSource } from './database/db-source'
-// import BoardService from './services/board-services'
+// import PositionData from './database/position-data-access'
 
 // class Test {
 //   async initializeDB () {
@@ -17,8 +17,9 @@ app.listen(port, () => console.log(`Server listening on port ${port}`))
 
 //     const num = 20
 
-//     const BoardAccess = new BoardService()
-//     await BoardAccess.create(num)
+//     const BoardAccess = new PositionData()
+//     const meh = await BoardAccess.create(num)
+//     console.log(meh)
 //   }
 // }
 
