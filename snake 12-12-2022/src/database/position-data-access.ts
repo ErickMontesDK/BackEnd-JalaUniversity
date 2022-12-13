@@ -9,8 +9,20 @@ import 'reflect-metadata'
 @injectable()
 export default class PositionData implements positionRepository {
   async create (seed: number) {
-    const x = Math.floor(Math.random() * seed)
-    const y = Math.floor(Math.random() * seed)
+    let counter = 1
+    let prevRand = 1
+
+    const rand = (max:number) => {
+      const time = new Date().getTime()
+      const randValue = ((time / counter) / (prevRand + 1)) % max
+      counter++
+      prevRand = randValue
+      const ifString = randValue.toString()
+      return parseInt(ifString)
+    }
+
+    const x = rand(seed)
+    const y = rand(seed)
     const newPosition = new Position()
     newPosition.coordX = x
     newPosition.coordY = y

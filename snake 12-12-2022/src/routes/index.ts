@@ -8,9 +8,6 @@ export const defaultRoute = Router()
 
 defaultRoute.get('/', (req, res) => {
   res.send('Snake game')
-  // async function initializeDB () {
-  // }
-  // initializeDB()
 })
 defaultRoute.get('/create/:elements', (req, res) => {
   async function createBoard () {
