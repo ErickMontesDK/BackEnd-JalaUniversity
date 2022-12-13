@@ -3,7 +3,10 @@ import positionRepository from '../repository/positionRepository'
 import dbPosition from './entities/dbPosition'
 import Position from '../entities/position'
 import mapper from './mappers/position.mapper'
+import { injectable } from 'inversify'
+import 'reflect-metadata'
 
+@injectable()
 export default class PositionData implements positionRepository {
   async create (seed: number) {
     const x = Math.floor(Math.random() * seed)

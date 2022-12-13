@@ -1,9 +1,11 @@
 import positionRepository from '../repository/positionRepository'
-import PositionData from '../database/position-data-access'
+import { container } from '../inversify/inversify.config'
+import 'reflect-metadata'
+import { injectable } from 'inversify'
 
+@injectable()
 export default class PositionService implements positionRepository {
-//   userData: IUserRepository = container.get<IUserRepository>('UserData')
-  positionData = new PositionData()
+  positionData: positionRepository = container.get<positionRepository>('PositionData')
 
   async create (seed: number) {
     return await this.positionData.create(seed)

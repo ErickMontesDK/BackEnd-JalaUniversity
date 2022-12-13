@@ -1,9 +1,11 @@
 import BoardRepository from '../repository/boardRepository'
-import BoardData from '../database/board-data-access'
+import { container } from '../inversify/inversify.config'
+import 'reflect-metadata'
+import { injectable } from 'inversify'
 
+@injectable()
 export default class BoardService implements BoardRepository {
-//   userData: IUserRepository = container.get<IUserRepository>('UserData')
-  boardData = new BoardData()
+  boardData : BoardRepository = container.get<BoardRepository>('BoardData')
 
   async create (num: number) {
     return await this.boardData.create(num)

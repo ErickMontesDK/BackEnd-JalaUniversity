@@ -3,7 +3,10 @@ import BoardRepository from '../repository/boardRepository'
 import dbBoard from './entities/dbBoard'
 import Board from '../entities/board'
 import mapper from './mappers/board.mapper'
+import { injectable } from 'inversify'
+import 'reflect-metadata'
 
+@injectable()
 export default class BoardData implements BoardRepository {
   async create (num: number) {
     const board:dbBoard = new Board()
