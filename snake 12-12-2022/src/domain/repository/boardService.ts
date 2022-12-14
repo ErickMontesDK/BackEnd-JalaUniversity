@@ -1,7 +1,7 @@
 import Board from '../entities/board'
 
-export default interface BoardRepository{
-    create(board: Board):Promise<Board>
+export default interface boardService{
+    create(elements: string):Promise<Board>
     read(id: number): Promise<Board | null>
     delete(id: number): Promise<string>
 }

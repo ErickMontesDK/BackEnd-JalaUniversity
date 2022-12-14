@@ -9,15 +9,17 @@ import PositionService from '../../services/position-services.ts'
 import snakeRepository from '../../domain/repository/snakeRepository'
 import SnakeData from '../database/snake-data-access'
 import SnakeService from '../../services/snake-services'
+import boardService from '../../domain/repository/boardService'
+import snakeService from '../../domain/repository/snakeService'
 
 const container = new Container()
 
 container.bind<BoardRepository>('BoardData').to(BoardData)
 container.bind<positionRepository>('PositionData').to(PositionData)
 
-container.bind<BoardRepository>('BoardService').to(BoardService)
+container.bind<boardService>('BoardService').to(BoardService)
 container.bind<positionRepository>('PositionService').to(PositionService)
 
 container.bind<snakeRepository>('SnakeData').to(SnakeData)
-container.bind<snakeRepository>('SnakeService').to(SnakeService)
+container.bind<snakeService>('SnakeService').to(SnakeService)
 export { container }

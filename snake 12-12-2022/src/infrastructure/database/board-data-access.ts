@@ -1,24 +1,20 @@
 import { AppDataSource } from './db-source'
 import BoardRepository from '../../domain/repository/boardRepository'
 import dbBoard from './entities/dbBoard'
-import Board from '../../domain/entities/board'
 import mapper from './mappers/board.mapper'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
 
 @injectable()
 export default class BoardData implements BoardRepository {
-  async create (num: number) {
-    const board:dbBoard = new Board()
-    board.arregloX = num
-    board.arregloY = num
-
+  async create (board: dbBoard) {
+    await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbBoard)
     await repository.save(board)
 
     const skipN = (await repository.find()).length - 1
     const boardCreated = (await repository.find({ skip: skipN }))[0]
-
+    await AppDataSource.destroy()
     return mapper.toEntity(boardCreated)
   }
 

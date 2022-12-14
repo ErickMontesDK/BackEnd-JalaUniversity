@@ -1,57 +1,48 @@
+/* eslint-disable eqeqeq */
 import { Router } from 'express'
-import { AppDataSource } from '../infrastructure/database/db-source'
 import { container } from '../infrastructure/inversify/inversify.config'
-import BoardRepository from '../domain/repository/boardRepository'
-import positionRepository from '../domain/repository/positionRepository'
-import snakeRepository from '../domain/repository/snakeRepository'
+import BoardService from '../services/board-services'
+import snakeService from '../domain/repository/snakeService'
+import { direction } from '../domain/types'
 
 export const defaultRoute = Router()
+
+const boardGenerator = container.get<BoardService>('BoardService')
+const snakeGenerator = container.get<snakeService>('SnakeService')
 
 defaultRoute.get('/', (req, res) => {
   res.send('Snake game')
 })
-defaultRoute.get('/create/:elements', (req, res) => {
-  async function createBoard () {
-    await AppDataSource.initialize()
-    const number = parseFloat(req.params.elements)
-    const boardGenerator = container.get<BoardRepository>('BoardService')
-    const newBoard = await boardGenerator.create(number)
-    res.send(newBoard)
-    await AppDataSource.destroy()
-  }
-
-  createBoard()
+defaultRoute.get('/create/:elements', async (req, res) => {
+  const newBoard = await boardGenerator.create(req.params.elements)
+  res.send(newBoard)
 })
-defaultRoute.get('/position/:seed', (req, res) => {
-  async function getPosition () {
-    await AppDataSource.initialize()
-    const number = parseFloat(req.params.seed)
-    const positionGenerator = container.get<positionRepository>('PositionService')
-    const newPosition = await positionGenerator.create(number)
-    res.send(newPosition)
-    await AppDataSource.destroy()
-  }
+defaultRoute.get('/snake/:id?', async (req, res) => {
+  if (req.query.move && req.params.id) {
+    const number = req.params.id.toString()
+    const id = parseInt(number)
+    const move = req.query.move.toString()
 
-  getPosition()
+    const directions:direction[] = ['down', 'up', 'left', 'right']
+
+    directions.forEach(async (direction) => {
+      if (direction == move) {
+        const msg = await snakeGenerator.updateDirection(id, direction)
+        res.send(msg)
+      }
+    })
+  }
 })
-defaultRoute.get('/snake?', (req, res) => {
-  async function createSnake () {
-    if (req.query.user && req.query.seed) {
-      await AppDataSource.initialize()
-      let numberCorrection = req.query.seed
-      numberCorrection = numberCorrection.toString()
+defaultRoute.get('/snake?', async (req, res) => {
+  if (req.query.seed && req.query.user) {
+    let numberCorrection = req.query.seed
+    numberCorrection = numberCorrection.toString()
+    const seed = parseInt(numberCorrection, 10)
 
-      const seed = parseInt(numberCorrection, 10)
-      const user = req.query.user.toString()
+    let player = req.query.user
+    player = player.toString()
 
-      const snakeGenerator = container.get<snakeRepository>('SnakeService')
-      const newSnake = await snakeGenerator.create(seed, user)
-
-      res.send(newSnake)
-      await AppDataSource.destroy()
-    } else {
-      res.send('Faltan parametros para la snake')
-    }
+    const newSnake = await snakeGenerator.create(seed, player)
+    res.send(newSnake)
   }
-  createSnake()
 })
