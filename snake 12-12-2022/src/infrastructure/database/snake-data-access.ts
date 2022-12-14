@@ -5,6 +5,7 @@ import 'reflect-metadata'
 import snakeRepository from '../../domain/repository/snakeRepository'
 import dbSnake from './entities/dbSnake'
 import { direction } from '../../domain/types'
+import { movingInDirection } from '../../domain/utils/movingDirection'
 
 @injectable()
 export default class SnakeData implements snakeRepository {
@@ -20,8 +21,11 @@ export default class SnakeData implements snakeRepository {
   }
 
   async read (id: number) {
+    await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbSnake)
-    return await repository.findOneBy({ id })
+    const findedSnake = await repository.findOneBy({ id })
+    await AppDataSource.destroy()
+    return findedSnake
   }
 
   async updateDirection (id: number, direction: direction) {
@@ -33,6 +37,24 @@ export default class SnakeData implements snakeRepository {
       await repository.save(findedSnake)
       await AppDataSource.destroy()
       return `snake with id ${id} move ${direction}`
+    } else {
+      await AppDataSource.destroy()
+      return `can´t find snake with id ${id}`
+    }
+  }
+
+  async updateMovement (id: number) {
+    await AppDataSource.initialize()
+    const repository = AppDataSource.getRepository(dbSnake)
+    const findedSnake = await repository.findOneBy({ id })
+
+    if (findedSnake) {
+      const updateSnake = movingInDirection(findedSnake)
+      const direction = updateSnake.direction
+
+      await repository.save(updateSnake)
+      await AppDataSource.destroy()
+      return `snake with id ${id} move one to ${direction}`
     } else {
       await AppDataSource.destroy()
       return `can´t find snake with id ${id}`

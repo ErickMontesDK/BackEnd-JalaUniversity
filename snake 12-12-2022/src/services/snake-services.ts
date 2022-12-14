@@ -34,6 +34,10 @@ export default class SnakeService implements snakeService {
     return await this.snakeData.updateDirection(id, direction)
   }
 
+  async updateMovement (id: number) {
+    return await this.snakeData.updateMovement(id)
+  }
+
   async read (id: number) {
     return await this.snakeData.read(id)
   }
