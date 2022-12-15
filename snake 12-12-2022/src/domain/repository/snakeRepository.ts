@@ -1,5 +1,5 @@
 import Snake from '../entities/snake'
-import { direction } from '../types'
+import { direction } from '../types/types'
 
 export default interface snakeRepository{
     create(newSnake: Snake): Promise<Snake>

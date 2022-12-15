@@ -1,5 +1,5 @@
 import Snake from '../entities/snake'
-import { direction } from '../types'
+import { direction } from '../types/types'
 
 export default interface snakeService{
     create(seed: number, player: string): Promise<Snake>

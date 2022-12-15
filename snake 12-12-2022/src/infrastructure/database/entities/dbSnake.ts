@@ -1,5 +1,5 @@
 import { PrimaryColumn, Column, Entity } from 'typeorm'
-import { direction } from '../../../domain/types'
+import { direction } from '../../../domain/types/types'
 import Snake from '../../../domain/entities/snake'
 
 @Entity()

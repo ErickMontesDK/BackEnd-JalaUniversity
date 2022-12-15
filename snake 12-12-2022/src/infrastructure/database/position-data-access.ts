@@ -4,7 +4,7 @@ import dbPosition from './entities/dbPosition'
 import Position from '../../domain/entities/position'
 import mapper from './mappers/position.mapper'
 import { injectable } from 'inversify'
-import { randomPosition } from '../../domain/utils/randomPosition'
+import { randomPosition } from '../../helpers/randomPosition'
 import 'reflect-metadata'
 
 @injectable()

@@ -1,4 +1,4 @@
-import { boxState } from '../types'
+import { boxState } from '../types/types'
 import Position from './position'
 
 export default class box extends Position {

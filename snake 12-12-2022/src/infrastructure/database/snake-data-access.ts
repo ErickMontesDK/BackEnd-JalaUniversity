@@ -4,8 +4,8 @@ import { injectable } from 'inversify'
 import 'reflect-metadata'
 import snakeRepository from '../../domain/repository/snakeRepository'
 import dbSnake from './entities/dbSnake'
-import { direction } from '../../domain/types'
-import { movingInDirection } from '../../domain/utils/movingDirection'
+import { direction } from '../../domain/types/types'
+import { movingInDirection } from '../../helpers/movingDirection'
 
 @injectable()
 export default class SnakeData implements snakeRepository {
