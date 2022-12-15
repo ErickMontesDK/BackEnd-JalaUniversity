@@ -1,13 +1,13 @@
-import BoardRepository from '../domain/repository/boardRepository'
+import IBoardRepository from '../domain/repository/IBoardRepository'
 import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
 import { injectable } from 'inversify'
 import Board from '../domain/entities/board'
-import boardService from '../domain/repository/boardService'
+import IBoardService from '../domain/repository/IBoardService'
 
 @injectable()
-export default class BoardService implements boardService {
-  boardData : BoardRepository = container.get<BoardRepository>('BoardData')
+export default class BoardService implements IBoardService {
+  boardData : IBoardRepository = container.get<IBoardRepository>('BoardData')
 
   async create (elements: string) {
     const number = parseInt(elements)

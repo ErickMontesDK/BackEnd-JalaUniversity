@@ -1,11 +1,11 @@
 import { AppDataSource } from './db-source'
-import mapper from './mappers/snake.mapper'
+import mapper from '../mappers/snake.mapper'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
 import snakeRepository from '../../domain/repository/snakeRepository'
 import dbSnake from './entities/dbSnake'
 import { direction } from '../../domain/types/types'
-import { movingInDirection } from '../../helpers/movingDirection'
+import { movingInDirection } from '../utils/movingDirection'
 
 @injectable()
 export default class SnakeData implements snakeRepository {

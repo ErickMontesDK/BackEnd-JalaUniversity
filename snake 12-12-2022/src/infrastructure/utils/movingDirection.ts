@@ -1,5 +1,5 @@
-import Snake from '../domain/entities/snake'
-import { direction } from '../domain/types/types'
+import Snake from '../../domain/entities/snake'
+import { direction } from '../../domain/types/types'
 
 export const movingInDirection = (findedSnake:Snake): Snake => {
   const direction:direction = findedSnake.direction
