@@ -1,11 +1,11 @@
-import snakeService from '../../domain/repository/snakeService'
-import { container } from '../../infrastructure/inversify/inversify.config'
+import snakeService from '../../../domain/repository/snakeService'
+import { container } from '../../../infrastructure/inversify/inversify.config'
 import { Request, Response } from 'express'
 import { injectable } from 'inversify'
 import ISnakeController from './ISnakecontroller'
 import 'reflect-metadata'
-import { direction } from '../../domain/types/types'
-import translateToDirection from '../../helpers/translateToDirection'
+import { direction } from '../../../domain/types/types'
+import translateToDirection from '../../../helpers/translateToDirection'
 
 @injectable()
 export default class SnakeControllers implements ISnakeController {

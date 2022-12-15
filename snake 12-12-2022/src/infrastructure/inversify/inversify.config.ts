@@ -11,8 +11,10 @@ import SnakeData from '../database/snake-data-access'
 import SnakeService from '../../services/snake-services'
 import boardService from '../../domain/repository/boardService'
 import snakeService from '../../domain/repository/snakeService'
-import ISnakeController from '../../controllers/serviceControllers/ISnakecontroller'
-import SnakeControllers from '../../controllers/serviceControllers/snakecontroller'
+import ISnakeController from '../../Presentation/Api/Controllers/ISnakecontroller'
+import SnakeControllers from '../../Presentation/Api/Controllers/snakecontroller'
+import IBoardController from '../../Presentation/Api/Controllers/IBoardController'
+import BoardController from '../../Presentation/Api/Controllers/boardController'
 
 const container = new Container()
 
@@ -24,4 +26,5 @@ container.bind<snakeRepository>('SnakeData').to(SnakeData)
 container.bind<snakeService>('SnakeService').to(SnakeService)
 container.bind<BoardRepository>('BoaddrdData').to(BoardData)
 container.bind<ISnakeController>('ControllerSnake').to(SnakeControllers)
+container.bind<IBoardController>('BoardController').to(BoardController)
 export { container }
