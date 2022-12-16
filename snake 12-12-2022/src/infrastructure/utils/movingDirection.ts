@@ -1,22 +1,23 @@
 import Snake from '../../domain/entities/snake'
 import { direction } from '../../domain/types/types'
 
-export const movingInDirection = (findedSnake:Snake): Snake => {
-  const direction:direction = findedSnake.direction
+export const movingInDirection = (SnakeFound:Snake, maxBoardValue:number): Snake => {
+  const direction:direction = SnakeFound.direction
+  const firstBox = 1
 
   switch (direction) {
     case 'up':
-      findedSnake.coordY++
+      SnakeFound.coordY = SnakeFound.coordY === maxBoardValue ? firstBox : SnakeFound.coordY + 1
       break
     case 'down':
-      findedSnake.coordY--
+      SnakeFound.coordY = SnakeFound.coordY === firstBox ? maxBoardValue : SnakeFound.coordY - 1
       break
     case 'left':
-      findedSnake.coordX--
+      SnakeFound.coordX = SnakeFound.coordX === firstBox ? maxBoardValue : SnakeFound.coordX - 1
       break
     case 'right':
-      findedSnake.coordX++
+      SnakeFound.coordX = SnakeFound.coordX === maxBoardValue ? firstBox : SnakeFound.coordX + 1
       break
   }
-  return findedSnake
+  return SnakeFound
 }

@@ -1,45 +1,44 @@
 import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
 import { injectable } from 'inversify'
-import snakeService from '../domain/repository/snakeService'
+import ISnakeService from '../domain/repository/ISnakeService'
 import { randomPosition } from '../helpers/randomPosition'
 import { direction } from '../domain/types/types'
 import Snake from '../domain/entities/snake'
-import snakeRepository from '../domain/repository/snakeRepository'
+import ISnakeRepository from '../domain/repository/ISnakeRepository'
 
 @injectable()
-export default class SnakeService implements snakeService {
-  snakeData = container.get<snakeRepository>('SnakeData')
+export default class SnakeService implements ISnakeService {
+  snakeData = container.get<ISnakeRepository>('SnakeData')
 
-  async create (seed: number, player: string) {
-    const user = player.toString()
-
-    const x = randomPosition(seed)
-    const y = randomPosition(seed)
+  async create (limitBoard: number, player: string) {
+    const x = randomPosition(limitBoard)
+    const y = randomPosition(limitBoard)
+    const initialLength = 1
 
     const directions:direction[] = ['up', 'down', 'left', 'right']
-    const directionSnakeMove = directions[randomPosition(3)]
+    const directionSnakeMove = directions[randomPosition(directions.length)]
 
     const newSnake = new Snake()
     newSnake.coordX = x
     newSnake.coordY = y
-    newSnake.length = 1
-    newSnake.user = user
+    newSnake.length = initialLength
+    newSnake.user = player
     newSnake.direction = directionSnakeMove
 
     return await this.snakeData.create(newSnake)
+  }
+
+  async read (id: number) {
+    return await this.snakeData.read(id)
   }
 
   async updateDirection (id: number, direction: direction) {
     return await this.snakeData.updateDirection(id, direction)
   }
 
-  async updateMovement (id: number) {
-    return await this.snakeData.updateMovement(id)
-  }
-
-  async read (id: number) {
-    return await this.snakeData.read(id)
+  async updateMovement (id: number, maxBoardValue:number) {
+    return await this.snakeData.startMoving(id, maxBoardValue)
   }
 
   async delete (id: number) {

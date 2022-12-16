@@ -1,31 +1,30 @@
 import { AppDataSource } from './db-source'
-import mapper from '../mappers/snake.mapper'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
-import snakeRepository from '../../domain/repository/snakeRepository'
+import ISnakeRepository from '../../domain/repository/ISnakeRepository'
 import dbSnake from './entities/dbSnake'
 import { direction } from '../../domain/types/types'
 import { movingInDirection } from '../utils/movingDirection'
+import returnForId from '../utils/returnForId'
 
 @injectable()
-export default class SnakeData implements snakeRepository {
+export default class SnakeData implements ISnakeRepository {
   async create (newSnake: dbSnake) {
     await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbSnake)
     await repository.save(newSnake)
 
-    const skipN = (await repository.find()).length - 1
-    const snakeCreated = (await repository.find({ skip: skipN }))[0]
+    const idSnake = await returnForId(repository)
     await AppDataSource.destroy()
-    return mapper.toEntity(snakeCreated)
+    return idSnake
   }
 
   async read (id: number) {
     await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbSnake)
-    const findedSnake = await repository.findOneBy({ id })
+    const SnakeFound = await repository.findOneBy({ id })
     await AppDataSource.destroy()
-    return findedSnake
+    return SnakeFound
   }
 
   async updateDirection (id: number, direction: direction) {
@@ -43,21 +42,20 @@ export default class SnakeData implements snakeRepository {
     }
   }
 
-  async updateMovement (id: number) {
+  async startMoving (id: number, maxBoardValue:number) {
     await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbSnake)
-    const findedSnake = await repository.findOneBy({ id })
+    const SnakeFound = await repository.findOneBy({ id })
 
-    if (findedSnake) {
-      const updateSnake = movingInDirection(findedSnake)
-      const direction = updateSnake.direction
+    if (SnakeFound && maxBoardValue) {
+      const updateSnake = movingInDirection(SnakeFound, maxBoardValue)
 
       await repository.save(updateSnake)
       await AppDataSource.destroy()
-      return `snake with id ${id} move one to ${direction}`
+      return updateSnake
     } else {
       await AppDataSource.destroy()
-      return `can´t find snake with id ${id}`
+      return { id, message: 'Snake Not Found' }
     }
   }
 
