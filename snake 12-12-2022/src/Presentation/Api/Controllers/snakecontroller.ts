@@ -9,24 +9,24 @@ import ISnakeService from '../../../domain/repository/ISnakeService'
 
 @injectable()
 export default class SnakeControllers implements ISnakeController {
-  snakeGenerator = container.get<ISnakeService>('SnakeService')
+  snakeServices = container.get<ISnakeService>('SnakeService')
 
   async createSnake (req:Request, res:Response): Promise<void> {
     if (req.query.limit && req.query.player) {
       const limitBoard = parseInt(req.query.limit as string)
       const player = req.query.player.toString()
 
-      const newSnakeId = await this.snakeGenerator.create(limitBoard, player)
-      res.json({ idSnake: newSnakeId })
+      const newSnakeId = await this.snakeServices.create(limitBoard, player)
+      res.json(newSnakeId)
     } else {
       res.json({ msg: 'Some parameters are missing (player name or board limit' })
     }
   }
 
-  async searchSnake (req:Request, res:Response): Promise<void> {
+  async searchById (req:Request, res:Response): Promise<void> {
     const id = parseInt(req.params.id as string)
 
-    const updatedSnake = await this.snakeGenerator.read(id)
+    const updatedSnake = await this.snakeServices.read(id)
     res.json(updatedSnake)
   }
 
@@ -36,8 +36,8 @@ export default class SnakeControllers implements ISnakeController {
       const move = req.query.direction.toString()
 
       const direction:direction = translateToDirection(move)
-      const msg = await this.snakeGenerator.updateDirection(id, direction)
-      res.send(msg)
+      const msg = await this.snakeServices.updateDirection(id, direction)
+      res.json(msg)
     } else {
       res.json({ msg: 'Some parameters are missing (id or new direction' })
     }
@@ -47,7 +47,14 @@ export default class SnakeControllers implements ISnakeController {
     const id = parseInt(req.params.id as string)
     const maxBoardValue = parseInt(req.params.max as string)
 
-    const updateSnake = await this.snakeGenerator.updateMovement(id, maxBoardValue)
-    res.send(updateSnake)
+    const updateSnake = await this.snakeServices.updateMovement(id, maxBoardValue)
+    res.json(updateSnake)
+  }
+
+  async deleteById (req:Request, res:Response): Promise<void> {
+    const id = parseInt(req.params.id as string)
+
+    const msgDelete = await this.snakeServices.delete(id)
+    res.json(msgDelete)
   }
 }

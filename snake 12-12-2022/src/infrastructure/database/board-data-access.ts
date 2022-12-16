@@ -14,7 +14,7 @@ export default class BoardData implements IBoardRepository {
 
     const idBoard = await returnForId(repository)
     await AppDataSource.destroy()
-    return idBoard
+    return { id: idBoard, message: 'Created' }
   }
 
   async read (id: number) {
@@ -26,7 +26,7 @@ export default class BoardData implements IBoardRepository {
       return boardFound
     } else {
       await AppDataSource.destroy()
-      return { idBoard: id, state: 'Not found' }
+      return { id, message: 'Not found' }
     }
   }
 
@@ -37,10 +37,10 @@ export default class BoardData implements IBoardRepository {
     if (boardById) {
       await repository.delete({ id })
       await AppDataSource.destroy()
-      return 'Deleted'
+      return { id, message: 'Snake deleted' }
     } else {
       await AppDataSource.destroy()
-      return 'Not Found'
+      return { id, message: 'Board not found' }
     }
   }
 }

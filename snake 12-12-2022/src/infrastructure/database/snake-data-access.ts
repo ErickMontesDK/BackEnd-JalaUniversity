@@ -16,15 +16,20 @@ export default class SnakeData implements ISnakeRepository {
 
     const idSnake = await returnForId(repository)
     await AppDataSource.destroy()
-    return idSnake
+    return { id: idSnake, message: 'Created' }
   }
 
   async read (id: number) {
     await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbSnake)
     const SnakeFound = await repository.findOneBy({ id })
-    await AppDataSource.destroy()
-    return SnakeFound
+    if (SnakeFound) {
+      await AppDataSource.destroy()
+      return SnakeFound
+    } else {
+      await AppDataSource.destroy()
+      return { id, message: 'Not found' }
+    }
   }
 
   async updateDirection (id: number, direction: direction) {
@@ -35,10 +40,10 @@ export default class SnakeData implements ISnakeRepository {
       findedSnake.direction = direction
       await repository.save(findedSnake)
       await AppDataSource.destroy()
-      return `snake with id ${id} move ${direction}`
+      return { id, message: `Snake moving to ${direction}` }
     } else {
       await AppDataSource.destroy()
-      return `can´t find snake with id ${id}`
+      return { id, message: 'Not found' }
     }
   }
 
@@ -60,13 +65,16 @@ export default class SnakeData implements ISnakeRepository {
   }
 
   async delete (id: number) {
+    await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbSnake)
     const snakeById = await repository.findOneBy({ id })
     if (snakeById) {
       await repository.delete({ id })
-      return `Snake with id ${id} was deleted`
+      await AppDataSource.destroy()
+      return { id, message: 'Snake deleted' }
     } else {
-      return `Snake with id ${id} was not found `
+      await AppDataSource.destroy()
+      return { id, message: 'Snake not found' }
     }
   }
 }

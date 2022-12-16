@@ -1,7 +1,8 @@
 import Board from '../entities/board'
+import { msgFormat } from '../types/types'
 
 export default interface IBoardRepository{
-    create(board: Board):Promise<number>
-    read(id: number): Promise<Board | {idBoard: number, state:string}>
-    delete(id: number): Promise<string>
+    create(board: Board):Promise<msgFormat>
+    read(id: number): Promise<Board | msgFormat>
+    delete(id: number): Promise<msgFormat>
 }

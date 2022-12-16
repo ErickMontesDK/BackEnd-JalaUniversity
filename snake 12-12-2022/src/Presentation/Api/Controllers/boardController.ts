@@ -8,23 +8,24 @@ import IBoardController from './IBoardController'
 export default class BoardController implements IBoardController {
   boardGenerator = container.get<IBoardService>('BoardService')
 
+  async createBoard (req:Request, res:Response): Promise<void> {
+    if (req.params.elements) {
+      const newBoard = await this.boardGenerator.create(req.params.elements)
+      res.json(newBoard)
+    } else {
+      res.json({ msg: 'Size board parameter is not specified' })
+    }
+  }
+
   async searchById (req:Request, res:Response): Promise<void> {
     const id = parseInt(req.params.id.toString())
     const boardFound = await this.boardGenerator.read(id)
-    console.log(boardFound)
     res.json(boardFound)
-  }
-
-  async createBoard (req:Request, res:Response): Promise<void> {
-    const newBoard = await this.boardGenerator.create(req.params.elements)
-    console.log(newBoard)
-    res.json({ idBoard: newBoard })
   }
 
   async deleteById (req:Request, res:Response): Promise<void> {
     const id = parseInt(req.params.id.toString())
-    const stateOfBoard = await this.boardGenerator.delete(id)
-    console.log(stateOfBoard)
-    res.json({ idBoard: id, msg: stateOfBoard })
+    const msgDelete = await this.boardGenerator.delete(id)
+    res.json(msgDelete)
   }
 }

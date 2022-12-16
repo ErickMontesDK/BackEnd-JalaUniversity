@@ -1,10 +1,10 @@
 import Snake from '../entities/snake'
-import { direction, notFoundmsg } from '../types/types'
+import { direction, msgFormat } from '../types/types'
 
 export default interface ISnakeRepository{
-    create(newSnake: Snake): Promise<number>
-    read(id: number): Promise<Snake | null>
-    updateDirection(id: number, direction:direction): Promise<string>
-    startMoving(id: number, maxBoardValue:number): Promise<Snake | notFoundmsg>
-    delete(id: number): Promise<string>
+    create(newSnake: Snake): Promise<msgFormat>
+    read(id: number): Promise<Snake | msgFormat>
+    updateDirection(id: number, direction:direction): Promise<msgFormat>
+    startMoving(id: number, maxBoardValue:number): Promise<Snake | msgFormat>
+    delete(id: number): Promise<msgFormat>
 }
