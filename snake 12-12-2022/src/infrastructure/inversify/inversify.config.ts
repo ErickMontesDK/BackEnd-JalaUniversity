@@ -12,6 +12,8 @@ import IBoardController from '../../Presentation/Api/Controllers/IBoardControlle
 import BoardController from '../../Presentation/Api/Controllers/boardController'
 import ISnakeService from '../../domain/repository/ISnakeService'
 import ISnakeRepository from '../../domain/repository/ISnakeRepository'
+import BoxData from '../database/box-data-access'
+import IBoxRepository from '../../domain/repository/IBoxRepository'
 
 const container = new Container()
 
@@ -21,4 +23,6 @@ container.bind<ISnakeRepository>('SnakeData').to(SnakeData)
 container.bind<ISnakeService>('SnakeService').to(SnakeService)
 container.bind<ISnakeController>('ControllerSnake').to(SnakeControllers)
 container.bind<IBoardController>('BoardController').to(BoardController)
+
+container.bind<IBoxRepository>('BoxDataAcess').to(BoxData)
 export { container }

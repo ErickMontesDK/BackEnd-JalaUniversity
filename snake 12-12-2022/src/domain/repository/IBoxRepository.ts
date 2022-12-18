@@ -1,9 +1,10 @@
 import Box from '../entities/box'
+import { msgFormat } from '../types/types'
 
-export default interface boxRepository {
-    create(newBox:Box): Promise<Box>
-    read(id: number): Promise<Box | null>
-    followSnake(id: number): Promise<Box | null>
-    foodToTail(id: number): Promise<Box | null>
-    delete(id: number): Promise<string>
+export default interface IBoxRepository {
+    create(newBox:Box): Promise<msgFormat>
+    read(id: number): Promise<Box | msgFormat>
+    // followSnake(id: number): Promise<Box | msgFormat>
+    // foodToTail(id: number): Promise<Box | msgFormat>
+    // delete(id: number): Promise<string>
 }
