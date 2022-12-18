@@ -16,6 +16,8 @@ export default class SnakeControllers implements ISnakeController {
         const player = req.query.player.toString()
         const newSnakeId = await this.snakeServices.create(limitBoard, player)
         res.json(newSnakeId)
+      } else {
+        throw new Error('not sent values')
       }
     } catch (err:unknown) {
       if (err instanceof Error) res.json({ name: err.name, msg: err.message })

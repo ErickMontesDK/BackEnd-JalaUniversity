@@ -1,5 +1,5 @@
-import dbPosition from '../database/entities/dbPosition'
-import Position from '../../domain/entities/position'
+import dbPosition from '../entities/dbPosition'
+import Position from '../../../domain/entities/position'
 
 export default class mapper {
   static toEntity (position: dbPosition) {

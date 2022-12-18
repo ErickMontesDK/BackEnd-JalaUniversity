@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm'
 import dbBoard from './entities/dbBoard'
 import dbBox from './entities/dbBox'
-import dbPosition from './entities/dbPosition'
+import dbGame from './entities/dbGame'
 import dbSnake from './entities/dbSnake'
 
 export const AppDataSource = new DataSource({
@@ -9,7 +9,7 @@ export const AppDataSource = new DataSource({
   database: 'databse.sqlite',
   synchronize: true,
   logging: false,
-  entities: [dbBoard, dbPosition, dbSnake, dbBox],
+  entities: [dbBoard, dbSnake, dbBox, dbGame],
   migrations: [],
   subscribers: []
 })

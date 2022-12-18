@@ -18,6 +18,12 @@ import IBoxController from '../../Presentation/Api/Controllers/IBoxController'
 import BoxController from '../../Presentation/Api/Controllers/boxController'
 import IBoxService from '../../domain/repository/IBoxService'
 import BoxService from '../../services/box-service'
+import IGameController from '../../Presentation/Api/Controllers/IGameController'
+import GameController from '../../Presentation/Api/Controllers/gameController.ts'
+import IGameRepository from '../../domain/repository/IGameRepository'
+import GameData from '../database/game-data-access'
+import IGameService from '../../domain/repository/IGameService'
+import GameService from '../../services/game-services'
 
 const container = new Container()
 
@@ -31,4 +37,8 @@ container.bind<IBoardController>('BoardController').to(BoardController)
 container.bind<IBoxRepository>('BoxDataAcess').to(BoxData)
 container.bind<IBoxController>('BoxController').to(BoxController)
 container.bind<IBoxService>('BoxService').to(BoxService)
+
+container.bind<IGameController>('GameController').to(GameController)
+container.bind<IGameRepository>('GameData').to(GameData)
+container.bind<IGameService>('GameService').to(GameService)
 export { container }

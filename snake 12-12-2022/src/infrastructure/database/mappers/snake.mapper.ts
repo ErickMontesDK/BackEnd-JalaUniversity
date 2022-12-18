@@ -1,5 +1,5 @@
-import Snake from '../../domain/entities/snake'
-import dbSnake from '../database/entities/dbSnake'
+import Snake from '../../../domain/entities/snake'
+import dbSnake from '../entities/dbSnake'
 
 export default class mapper {
   static toEntity (snake: dbSnake) {

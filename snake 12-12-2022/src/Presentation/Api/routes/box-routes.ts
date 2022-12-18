@@ -8,9 +8,9 @@ const boxController = container.get<IBoxController>('BoxController')
 boxRoutes.post('/create/limit/:max', async (req, res) => {
   boxController.createSnake(req, res)
 })
-// snakeRoutes.get('/:id', async (req, res) => {
-//   snakeController.searchById(req, res)
-// })
+boxRoutes.get('/:id', async (req, res) => {
+  boxController.searchById(req, res)
+})
 // snakeRoutes.put('/update/:id?', async (req, res) => {
 //   snakeController.updateDirection(req, res)
 // })

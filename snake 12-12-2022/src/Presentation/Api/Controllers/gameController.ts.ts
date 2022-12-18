@@ -2,33 +2,37 @@ import { container } from '../../../infrastructure/inversify/inversify.config'
 import { Request, Response } from 'express'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
-import IBoxController from './IBoxController'
-import IBoxService from '../../../domain/repository/IBoxService'
+import IGameController from './IGameController'
+import IGameService from '../../../domain/repository/IGameService'
 
 @injectable()
-export default class BoxController implements IBoxController {
-  BoxService = container.get<IBoxService>('BoxService')
+export default class GameController implements IGameController {
+  GameService = container.get<IGameService>('GameService')
 
-  async createSnake (req:Request, res:Response): Promise<void> {
+  async createGame (req:Request, res:Response): Promise<void> {
     try {
-      const limitBoard = parseInt(req.params.max as string)
+      if (req.query.size && req.query.players && req.query.speed) {
+        const size = parseInt(req.query.size as string)
+        const players = req.query.players.toString()
+        const speed = parseInt(req.query.speed as string)
 
-      const newFood = await this.BoxService.create(limitBoard)
-      res.json(newFood)
+        const newGame = await this.GameService.create(size, players, speed)
+        res.json(newGame)
+      }
     } catch (err:unknown) {
       if (err instanceof Error) res.json({ name: err.name, msg: err.message })
     }
   }
 
-  async searchById (req:Request, res:Response): Promise<void> {
-    try {
-      const id = parseInt(req.params.id as string)
-      const BoxFound = await this.BoxService.read(id)
-      res.json(BoxFound)
-    } catch (err:unknown) {
-      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
-    }
-  }
+  // async searchById (req:Request, res:Response): Promise<void> {
+  //   try {
+  //     const id = parseInt(req.params.id as string)
+  //     const BoxFound = await this.BoxService.read(id)
+  //     res.json(BoxFound)
+  //   } catch (err:unknown) {
+  //     if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+  //   }
+  // }
 
   // async updateDirection (req:Request, res:Response): Promise<void> {
   //   try {

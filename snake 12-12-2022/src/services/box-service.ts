@@ -26,9 +26,9 @@ export default class BoxService implements IBoxService {
     return await this.boxData.create(newFood)
   }
 
-  // async read (id: number) {
-  //   return await this.snakeData.read(id)
-  // }
+  async read (id: number) {
+    return await this.boxData.read(id)
+  }
 
   // async updateDirection (id: number, direction: string) {
   //   const fixedTypeDirection = translateToDirection(direction)
