@@ -1,16 +1,12 @@
-import express from 'express'
-import { defaultRoute } from './Presentation/Api/routes'
-import { boardRoutes } from './Presentation/Api/routes/board-routes'
-import { snakeRoutes } from './Presentation/Api/routes/snake-routes'
+import { AppDataSource } from './infrastructure/database/db-source'
+import { app } from './Presentation/Api'
 const bodyParser = require('body-parser')
 
-const app = express()
 const port = 4000
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-app.use(defaultRoute)
-app.use(boardRoutes)
-app.use(snakeRoutes)
+
+AppDataSource.initialize()
 
 app.listen(port, () => console.log(`Server listening on port ${port}`))

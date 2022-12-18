@@ -8,38 +8,32 @@ import returnForId from '../utils/returnForId'
 @injectable()
 export default class BoardData implements IBoardRepository {
   async create (board: dbBoard) {
-    await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbBoard)
     await repository.save(board)
 
     const idBoard = await returnForId(repository)
-    await AppDataSource.destroy()
+
     return { id: idBoard, message: 'Created' }
   }
 
   async read (id: number) {
-    await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbBoard)
     const boardFound = await repository.findOneBy({ id })
     if (boardFound) {
-      await AppDataSource.destroy()
       return boardFound
     } else {
-      await AppDataSource.destroy()
       return { id, message: 'Not found' }
     }
   }
 
   async delete (id: number) {
-    await AppDataSource.initialize()
     const repository = AppDataSource.getRepository(dbBoard)
     const boardById = await repository.findOneBy({ id })
     if (boardById) {
       await repository.delete({ id })
-      await AppDataSource.destroy()
+
       return { id, message: 'Snake deleted' }
     } else {
-      await AppDataSource.destroy()
       return { id, message: 'Board not found' }
     }
   }

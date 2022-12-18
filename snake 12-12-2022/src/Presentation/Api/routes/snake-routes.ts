@@ -5,18 +5,18 @@ import ISnakeController from '../Controllers/ISnakecontroller'
 export const snakeRoutes = Router()
 const snakeController = container.get<ISnakeController>('ControllerSnake')
 
-snakeRoutes.post('/snake/create?', async (req, res) => {
+snakeRoutes.post('/create?', async (req, res) => {
   snakeController.createSnake(req, res)
 })
-snakeRoutes.get('/snake/:id', async (req, res) => {
+snakeRoutes.get('/:id', async (req, res) => {
   snakeController.searchById(req, res)
 })
-snakeRoutes.put('/snake/update/:id?', async (req, res) => {
+snakeRoutes.put('/update/:id?', async (req, res) => {
   snakeController.updateDirection(req, res)
 })
-snakeRoutes.put('/snake/start/:id/:max', async (req, res) => {
+snakeRoutes.put('/start/:id/:max', async (req, res) => {
   snakeController.startRunning(req, res)
 })
-snakeRoutes.delete('/snake/delete/:id', async (req, res) => {
+snakeRoutes.delete('/delete/:id', async (req, res) => {
   snakeController.deleteById(req, res)
 })
