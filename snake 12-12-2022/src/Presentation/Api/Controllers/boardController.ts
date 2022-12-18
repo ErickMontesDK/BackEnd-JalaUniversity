@@ -9,23 +9,31 @@ export default class BoardController implements IBoardController {
   boardGenerator = container.get<IBoardService>('BoardService')
 
   async createBoard (req:Request, res:Response): Promise<void> {
-    if (req.params.elements) {
+    try {
       const newBoard = await this.boardGenerator.create(req.params.elements)
       res.json(newBoard)
-    } else {
-      res.json({ msg: 'Size board parameter is not specified' })
+    } catch (err: unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
     }
   }
 
   async searchById (req:Request, res:Response): Promise<void> {
-    const id = parseInt(req.params.id.toString())
-    const boardFound = await this.boardGenerator.read(id)
-    res.json(boardFound)
+    try {
+      const id = parseInt(req.params.id.toString())
+      const boardFound = await this.boardGenerator.read(id)
+      res.json(boardFound)
+    } catch (err: unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
   }
 
   async deleteById (req:Request, res:Response): Promise<void> {
-    const id = parseInt(req.params.id.toString())
-    const msgDelete = await this.boardGenerator.delete(id)
-    res.json(msgDelete)
+    try {
+      const id = parseInt(req.params.id.toString())
+      const msgDelete = await this.boardGenerator.delete(id)
+      res.json(msgDelete)
+    } catch (err: unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
   }
 }

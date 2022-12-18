@@ -6,6 +6,7 @@ import { randomPosition } from '../helpers/randomPosition'
 import { direction } from '../domain/types/types'
 import Snake from '../domain/entities/snake'
 import ISnakeRepository from '../domain/repository/ISnakeRepository'
+import translateToDirection from '../helpers/translateToDirection'
 
 @injectable()
 export default class SnakeService implements ISnakeService {
@@ -33,12 +34,21 @@ export default class SnakeService implements ISnakeService {
     return await this.snakeData.read(id)
   }
 
-  async updateDirection (id: number, direction: direction) {
-    return await this.snakeData.updateDirection(id, direction)
+  async updateDirection (id: number, direction: string) {
+    const fixedTypeDirection = translateToDirection(direction)
+    if (fixedTypeDirection !== undefined) {
+      return await this.snakeData.updateDirection(id, fixedTypeDirection)
+    } else {
+      throw new Error(`Unvalid direction sent: ${direction}`)
+    }
   }
 
   async updateMovement (id: number, maxBoardValue:number) {
-    return await this.snakeData.startMoving(id, maxBoardValue)
+    if (isNaN(maxBoardValue) === false) {
+      return await this.snakeData.startMoving(id, maxBoardValue)
+    } else {
+      throw new Error(`Unvalid limit value sent: ${maxBoardValue}`)
+    }
   }
 
   async delete (id: number) {
