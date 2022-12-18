@@ -2,9 +2,6 @@ import { AppDataSource } from './db-source'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
 import IBoxRepository from '../../domain/repository/IBoxRepository'
-// import dbSnake from './entities/dbSnake'
-// import { direction } from '../../domain/types/types'
-// import { movingInDirection } from '../utils/movingDirection'
 import returnForId from '../utils/returnForId'
 import dbBox from './entities/dbBox'
 
@@ -14,9 +11,9 @@ export default class BoxData implements IBoxRepository {
     const repository = AppDataSource.getRepository(dbBox)
     await repository.save(newFoodBox)
 
-    const idSnake = await returnForId(repository)
+    const idBox = await returnForId(repository)
 
-    return { id: idSnake, message: 'Created' }
+    return { id: idBox, message: 'Created' }
   }
 
   async read (id: number) {

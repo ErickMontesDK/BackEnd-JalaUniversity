@@ -1,32 +1,29 @@
 import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
 import { injectable } from 'inversify'
-import ISnakeService from '../domain/repository/ISnakeService'
 import { randomPosition } from '../helpers/randomPosition'
-import { direction } from '../domain/types/types'
-import Snake from '../domain/entities/snake'
-import ISnakeRepository from '../domain/repository/ISnakeRepository'
+import { boxState } from '../domain/types/types'
+import Box from '../domain/entities/box'
+import IBoxService from '../domain/repository/IBoxService'
+import IBoxRepository from '../domain/repository/IBoxRepository'
 
 @injectable()
-export default class SnakeService implements ISnakeService {
-  snakeData = container.get<ISnakeRepository>('SnakeData')
+export default class BoxService implements IBoxService {
+  boxData = container.get<IBoxRepository>('BoxDataAcess')
 
-  async create (limitBoard: number, player: string) {
+  async create (limitBoard: number) {
+    console.log(limitBoard)
     const x = randomPosition(limitBoard)
     const y = randomPosition(limitBoard)
-    const initialLength = 1
+    const defaultState: boxState = 'food'
 
-    const directions:direction[] = ['up', 'down', 'left', 'right']
-    const directionSnakeMove = directions[randomPosition(directions.length)]
+    const newFood = new Box()
+    newFood.coordX = x
+    newFood.coordY = y
+    newFood.state = defaultState
+    newFood.TailNode = 0
 
-    const newSnake = new Snake()
-    newSnake.coordX = x
-    newSnake.coordY = y
-    newSnake.length = initialLength
-    newSnake.user = player
-    newSnake.direction = directionSnakeMove
-
-    return await this.snakeData.create(newSnake)
+    return await this.boxData.create(newFood)
   }
 
   // async read (id: number) {
