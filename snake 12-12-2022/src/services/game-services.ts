@@ -25,7 +25,7 @@ export default class GameService implements IGameService {
     newGame.gameSpeed = speed
     newGame.idBoard = 3
     newGame.idSnakes = defaultId.toString()
-    newGame.idBodySnake = defaultId.toString()
+    newGame.idBodySnake = '2 4 6'
     newGame.idFood = defaultId
 
     return await this.gameData.create(newGame)
@@ -36,58 +36,15 @@ export default class GameService implements IGameService {
     const patternForGame = await this.gameData.read(id)
 
     const boardId = patternForGame.idBoard
+    const idFood = patternForGame.idFood
     const idSnakes:string[] = patternForGame.idSnakes.split(' ')
 
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(boardId)
-    const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(idSnakes, boardDisplay)
+    const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(idFood, boardDisplay)
+    const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(idSnakes, DisplayWithFood)
+
     console.log(DisplayWithSnakes)
-    //
-    // const idBodySnake = patternForGame.idBodySnake
-    // const idFood = patternForGame.idFood
-
-    // const foodDetail = await boxService.read(idFood)
-
-    // const createDisplay = async ():Promise<any> => {
-    //   const boardDisplay = await GameDisplayFunctions.createBoardArrange(boardId)
-
-    //   const addingSnakeInDisplay = (coordFromSnake: number[]) => {
-    //     for (let i = 0; i < boardDisplay.length; i++) {
-    //       if (i === coordFromSnake[1] - 1) {
-    //         const SnakeRow = boardDisplay[i]
-    //         SnakeRow[coordFromSnake[0] - 1] = '|Ss|'
-    //         boardDisplay[i] = SnakeRow
-    //       }// } else {
-    //       //   boardDisplay[i] = new Array(boardDetail.arregloX).fill(squareBox)
-    //       // }
-    //     }
-    //   }
-    //   const addingFoodInDisplay = (food: Box) => {
-    //     for (let i = 0; i < boardDisplay.length; i++) {
-    //       if (i === food.coordY - 1) {
-    //         const row = boardDisplay[i]
-    //         row[food.coordX - 1] = '|F|'
-    //         boardDisplay[i] = row
-    //       }
-    //     }
-    //   }
-
-    //   for (let i = 0; i < Snakes.length; i++) {
-    //     const coords = [Snakes[i].coordX, Snakes[i].coordY]
-    //     headSnakes.push(coords)
-    //   }
-
-    //   for (let j = 0; j < headSnakes.length; j++) {
-    //     addingSnakeInDisplay(headSnakes[j])
-    //   }
-
-    //   addingFoodInDisplay(foodDetail)
-    // console.log(boardDisplay)
-    // console.log(boardDisplay[0])
-    // console.log(boardDisplay[0][0])
-    // }
-    // createDisplay()
-
-    return patternForGame
+    return DisplayWithSnakes
   }
 
   // async updateDirection (id: number, direction: string) {
