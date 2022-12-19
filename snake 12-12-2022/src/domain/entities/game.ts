@@ -5,6 +5,5 @@ export default class Game {
   gameSpeed!: number
   idBoard!:number
   idSnakes!:string
-  idBodySnake!:string
   idFood!:number
 }

@@ -21,4 +21,7 @@ export default class dbSnake implements Snake {
 
     @Column()
       direction!: direction
+
+    @Column()
+      tailNodes!: string
 }

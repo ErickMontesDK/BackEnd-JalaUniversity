@@ -20,8 +20,5 @@ export default class dbGame implements Game {
       idSnakes!: string
 
     @Column()
-      idBodySnake!: string
-
-    @Column()
       idFood!: number
 }

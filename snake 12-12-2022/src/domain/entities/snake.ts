@@ -5,4 +5,5 @@ export default class Snake extends Position {
   length!: number
   user!: string
   direction!: direction
+  tailNodes!: string
 }

@@ -26,6 +26,7 @@ export default class SnakeService implements ISnakeService {
     newSnake.length = initialLength
     newSnake.user = player
     newSnake.direction = directionSnakeMove
+    newSnake.tailNodes = '0'
 
     return await this.snakeData.create(newSnake)
   }

@@ -13,13 +13,12 @@ export default class GameService implements IGameService {
 
   async create (limitBoard: number, players:string, speed:number) {
     const defaultGameState:gameState = 'Ready to Start'
-    const defaultId: number = 1
+    const defaultId: number = 2
     const newGame = new Game()
     newGame.gameState = defaultGameState
     newGame.gameSpeed = speed
     newGame.idBoard = 3
     newGame.idSnakes = defaultId.toString()
-    newGame.idBodySnake = '2 4 6'
     newGame.idFood = defaultId
 
     return await this.gameData.create(newGame)
@@ -32,9 +31,12 @@ export default class GameService implements IGameService {
     const boardId = patternForGame.idBoard
     const idFood = patternForGame.idFood
     const idSnakes:string[] = patternForGame.idSnakes.split(',')
+    console.log(idSnakes)
 
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(boardId)
+    console.log(boardDisplay)
     const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(idFood, boardDisplay)
+    console.log(DisplayWithFood)
     const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(idSnakes, DisplayWithFood)
 
     console.log(DisplayWithSnakes)
