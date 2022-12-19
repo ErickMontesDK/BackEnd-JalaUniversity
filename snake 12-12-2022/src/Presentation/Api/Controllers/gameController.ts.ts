@@ -24,15 +24,15 @@ export default class GameController implements IGameController {
     }
   }
 
-  // async searchById (req:Request, res:Response): Promise<void> {
-  //   try {
-  //     const id = parseInt(req.params.id as string)
-  //     const BoxFound = await this.BoxService.read(id)
-  //     res.json(BoxFound)
-  //   } catch (err:unknown) {
-  //     if (err instanceof Error) res.json({ name: err.name, msg: err.message })
-  //   }
-  // }
+  async searchById (req:Request, res:Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id as string)
+      const BoxFound = await this.GameService.read(id)
+      res.json(BoxFound)
+    } catch (err:unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
 
   // async updateDirection (req:Request, res:Response): Promise<void> {
   //   try {

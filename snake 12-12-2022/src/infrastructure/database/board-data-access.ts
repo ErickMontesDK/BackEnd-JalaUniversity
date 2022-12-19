@@ -22,7 +22,7 @@ export default class BoardData implements IBoardRepository {
     if (boardFound) {
       return boardFound
     } else {
-      return { id, message: 'Board not found' }
+      throw new Error('Board not found')
     }
   }
 

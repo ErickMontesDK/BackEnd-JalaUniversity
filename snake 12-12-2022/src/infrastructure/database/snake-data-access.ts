@@ -24,7 +24,7 @@ export default class SnakeData implements ISnakeRepository {
     if (SnakeFound) {
       return SnakeFound
     } else {
-      return { id, message: 'Not found' }
+      throw new Error(`Could not snake with id ${id}`)
     }
   }
 

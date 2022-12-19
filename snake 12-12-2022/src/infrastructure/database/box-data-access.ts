@@ -22,7 +22,7 @@ export default class BoxData implements IBoxRepository {
     if (BoxFound) {
       return BoxFound
     } else {
-      return { id, message: 'Not found' }
+      throw new Error(`box with id ${id} not found`)
     }
   }
 

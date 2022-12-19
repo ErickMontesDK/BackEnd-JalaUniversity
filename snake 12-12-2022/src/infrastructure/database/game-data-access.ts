@@ -16,15 +16,15 @@ export default class GameData implements IGameRepository {
     return { id: idGame, message: 'Created' }
   }
 
-  // async read (id: number) {
-  //   const repository = AppDataSource.getRepository(dbBox)
-  //   const BoxFound = await repository.findOneBy({ id })
-  //   if (BoxFound) {
-  //     return BoxFound
-  //   } else {
-  //     return { id, message: 'Not found' }
-  //   }
-  // }
+  async read (id: number) {
+    const repository = AppDataSource.getRepository(dbGame)
+    const GameFound = await repository.findOneBy({ id })
+    if (GameFound) {
+      return GameFound
+    } else {
+      throw new Error(`Could not find Game with id ${id}`)
+    }
+  }
 
   // async updateDirection (id: number, direction: direction) {
   //   const repository = AppDataSource.getRepository(dbSnake)

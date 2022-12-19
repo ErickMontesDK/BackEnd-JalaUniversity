@@ -6,5 +6,5 @@ export default class Game {
   idBoard!:number
   idSnakes!:string
   idBodySnake!:string
-  idFood!:string
+  idFood!:number
 }
