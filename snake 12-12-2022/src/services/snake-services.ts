@@ -52,6 +52,19 @@ export default class SnakeService implements ISnakeService {
     }
   }
 
+  async updateLength (id: number, node:string) {
+    const nodeToNumber = parseInt(node)
+
+    if (isNaN(nodeToNumber) === false) {
+      const snakeToGrow = await this.snakeData.read(id)
+      snakeToGrow.length++
+      snakeToGrow.tailNodes = snakeToGrow.tailNodes + `,${node}`
+      return await this.snakeData.growSnake(snakeToGrow)
+    } else {
+      throw new Error(`Unvalid node value sent: ${node}`)
+    }
+  }
+
   async delete (id: number) {
     return await this.snakeData.delete(id)
   }

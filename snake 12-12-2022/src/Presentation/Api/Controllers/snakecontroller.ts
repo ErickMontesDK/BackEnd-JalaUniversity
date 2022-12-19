@@ -60,6 +60,18 @@ export default class SnakeControllers implements ISnakeController {
     }
   }
 
+  async growingTail (req:Request, res:Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id as string)
+      const node = req.params.node.toString()
+
+      const updateSnake = await this.snakeServices.updateLength(id, node)
+      res.json(updateSnake)
+    } catch (err: unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
+
   async deleteById (req:Request, res:Response): Promise<void> {
     try {
       const id = parseInt(req.params.id as string)

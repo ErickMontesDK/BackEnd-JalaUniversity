@@ -34,9 +34,7 @@ export default class GameService implements IGameService {
     console.log(idSnakes)
 
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(boardId)
-    console.log(boardDisplay)
     const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(idFood, boardDisplay)
-    console.log(DisplayWithFood)
     const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(idSnakes, DisplayWithFood)
 
     console.log(DisplayWithSnakes)

@@ -6,5 +6,6 @@ export default interface ISnakeRepository{
     read(id: number): Promise<Snake>
     updateDirection(id: number, direction:direction): Promise<msgFormat>
     startMoving(id: number, maxBoardValue:number): Promise<Snake | msgFormat>
+    growSnake(snake: Snake): Promise<Snake | msgFormat>
     delete(id: number): Promise<msgFormat>
 }

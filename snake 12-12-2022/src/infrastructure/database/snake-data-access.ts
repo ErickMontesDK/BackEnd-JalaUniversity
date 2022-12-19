@@ -6,6 +6,7 @@ import dbSnake from './entities/dbSnake'
 import { direction } from '../../domain/types/types'
 import { movingInDirection } from '../utils/movingDirection'
 import returnForId from '../utils/returnForId'
+import Snake from '../../domain/entities/snake'
 
 @injectable()
 export default class SnakeData implements ISnakeRepository {
@@ -51,6 +52,23 @@ export default class SnakeData implements ISnakeRepository {
       await repository.save(updateSnake)
 
       return updateSnake
+    } else {
+      return { id, message: 'Snake Not Found' }
+    }
+  }
+
+  async growSnake (snake:Snake) {
+    const repository = AppDataSource.getRepository(dbSnake)
+    const id = snake.id
+    const SnakeFound = await repository.findOneBy({ id })
+
+    if (SnakeFound) {
+      SnakeFound.length = snake.length
+      SnakeFound.tailNodes = snake.tailNodes
+
+      await repository.save(SnakeFound)
+
+      return SnakeFound
     } else {
       return { id, message: 'Snake Not Found' }
     }

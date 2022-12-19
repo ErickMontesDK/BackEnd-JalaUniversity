@@ -17,6 +17,9 @@ snakeRoutes.put('/update/:id?', async (req, res) => {
 snakeRoutes.put('/start/:id/:max', async (req, res) => {
   snakeController.startRunning(req, res)
 })
+snakeRoutes.put('/grow/:id/:node', async (req, res) => {
+  snakeController.growingTail(req, res)
+})
 snakeRoutes.delete('/delete/:id', async (req, res) => {
   snakeController.deleteById(req, res)
 })
