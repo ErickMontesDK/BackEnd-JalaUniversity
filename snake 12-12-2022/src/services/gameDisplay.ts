@@ -20,17 +20,20 @@ export default class GameDisplayFunctions {
     return board
   }
 
-  static async addSnakesInDisplay (idSnakes:string[], board:string[][]): Promise<string[][]> {
+  static async returnAllSnakesInfo (idSnakes:string[]):Promise<Snake[]> {
     const snakeService = new SnakeService()
     const Snakes: Snake[] = []
     for (let i = 0; i < idSnakes.length; i++) {
       const snake = await snakeService.read(parseInt(idSnakes[i]))
       Snakes.push(snake)
     }
+    return Snakes
+  }
 
-    for (let i = 0; i < Snakes.length; i++) {
-      const coordY = board.length - Snakes[i].coordY
-      const coordX = Snakes[i].coordX - 1
+  static async addSnakesInDisplay (snakes:Snake[], board:string[][]): Promise<string[][]> {
+    for (let i = 0; i < snakes.length; i++) {
+      const coordY = board.length - snakes[i].coordY
+      const coordX = snakes[i].coordX - 1
       board[coordY][coordX] = '|++|'
     }
     return board
@@ -41,9 +44,29 @@ export default class GameDisplayFunctions {
     const foodInGame = await boxService.read(idFood)
 
     const coordY = board.length - foodInGame.coordY
-    const coordX = foodInGame.coordX - 1
-    board[coordY][coordX] = '|!!|'
+    const coordX = foodInGame.coordX + 1
+    board[coordY][coordX] = '|OO|'
 
+    return board
+  }
+
+  static async addSnakesBodys (board:string[][], snakes:Snake[]): Promise<string[][]> {
+    const boxService = new BoxService()
+
+    for (let i = 0; i < snakes.length; i++) {
+      const tailElements = snakes[i].tailNodes.split(',')
+      console.log(tailElements)
+      for (let j = 1; j < tailElements.length; j++) {
+        const idNode = parseInt(tailElements[j])
+        const Node = await boxService.read(idNode)
+
+        const coordY = board.length - Node.coordY - 1
+        const coordX = Node.coordX
+        console.log(coordX, coordY)
+        board[coordY][coordX] = '|X|'
+        console.log(board)
+      }
+    }
     return board
   }
 
