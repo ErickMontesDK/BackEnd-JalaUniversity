@@ -5,12 +5,6 @@ import IGameService from '../domain/repository/IGameService'
 import Game from '../domain/entities/game'
 import { gameState } from '../domain/types/types'
 import IGameRepository from '../domain/repository/IGameRepository'
-import dbGame from '../infrastructure/database/entities/dbGame'
-import SnakeService from './snake-services'
-import BoardService from './board-services'
-import Snake from '../domain/entities/snake'
-import BoxService from './box-service'
-import Box from '../domain/entities/box'
 import GameDisplayFunctions from './gameDisplay'
 
 @injectable()
@@ -37,7 +31,7 @@ export default class GameService implements IGameService {
 
     const boardId = patternForGame.idBoard
     const idFood = patternForGame.idFood
-    const idSnakes:string[] = patternForGame.idSnakes.split(' ')
+    const idSnakes:string[] = patternForGame.idSnakes.split(',')
 
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(boardId)
     const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(idFood, boardDisplay)

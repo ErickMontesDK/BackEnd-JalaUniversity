@@ -26,7 +26,6 @@ export default class GameDisplayFunctions {
     for (let i = 0; i < idSnakes.length; i++) {
       const snake = await snakeService.read(parseInt(idSnakes[i]))
       Snakes.push(snake)
-      console.log(snake)
     }
 
     for (let i = 0; i < Snakes.length; i++) {
