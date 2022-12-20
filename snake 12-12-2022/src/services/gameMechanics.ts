@@ -15,7 +15,6 @@ export default class GameMechanics {
     for (let i = 0; i < allSnakes.length; i++) {
       const snakeCoords = [allSnakes[i].coordX, allSnakes[i].coordY]
 
-      console.log(snakeCoords, foodCoords)
       if (snakeCoords[0] === foodCoords[0] && snakeCoords[1] === foodCoords[1]) {
         const snakeTailNodes = allSnakes[i].tailNodes.split(',')
         const idSnakeLastTailNode = parseInt(snakeTailNodes[snakeTailNodes.length - 1])

@@ -5,5 +5,4 @@ export default interface IGameController {
     searchById(req: Request, res: Response): Promise<void>
     showBoardGame(req: Request, res: Response): Promise<void>
     changeFood(req: Request, res: Response): Promise<void>
-    // deleteById(req: Request, res: Response): Promise<void>
 }

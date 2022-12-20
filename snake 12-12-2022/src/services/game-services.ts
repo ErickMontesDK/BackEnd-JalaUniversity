@@ -9,20 +9,38 @@ import GameDisplayFunctions from './gameDisplay'
 import GameMechanics from './gameMechanics'
 import BoxService from './box-service'
 import BoardService from './board-services'
+import SnakeService from './snake-services'
 
 @injectable()
 export default class GameService implements IGameService {
   gameData = container.get<IGameRepository>('GameData')
+  boardService = new BoardService()
+  snakeService = new SnakeService()
+  boxService = new BoxService()
 
   async create (limitBoard: number, players:string, speed:number) {
+    const limitBoardInString = limitBoard.toString()
+    const playersForGame = players.split(',')
+    let snakesForPlayersId = ''
+    const newBoardForThisGame = await this.boardService.create(limitBoardInString)
+    const newFoodForThisGame = await this.boxService.create(limitBoard)
+
+    for (let i = 0; i < playersForGame.length; i++) {
+      const newSnake = await this.snakeService.create(limitBoard, playersForGame[i])
+      if (i === 0) {
+        snakesForPlayersId = `${newSnake.id}`
+      } else {
+        snakesForPlayersId = snakesForPlayersId + `,${newSnake.id}`
+      }
+    }
+
     const defaultGameState:gameState = 'Ready to Start'
-    const defaultId: number = 2
     const newGame = new Game()
     newGame.gameState = defaultGameState
     newGame.gameSpeed = speed
-    newGame.idBoard = 3
-    newGame.idSnakes = defaultId.toString()
-    newGame.idFood = defaultId
+    newGame.idBoard = newBoardForThisGame.id
+    newGame.idSnakes = snakesForPlayersId
+    newGame.idFood = newFoodForThisGame.id
 
     return await this.gameData.create(newGame)
   }

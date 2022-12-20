@@ -69,18 +69,4 @@ export default class GameDisplayFunctions {
     }
     return board
   }
-
-  //   static async bodySnakes (idSnakes:string[], idBodySnake:string[]): Promise<string[][]> {
-  //     const Snakes = [{ length: 3 }, { length: 2 }]
-
-  //     for (let i = 0; i < Snakes.length; i++){
-  //         idBodySnake.slice()
-  //     }
-
-//     for (let i = 0; i < idBodySnake.length; i++) {
-//       const snake = await snakeService.read(parseInt(idSnakes[i]))
-//       Snakes.push(snake)
-//       console.log(snake)
-//     }
-//   }
 }

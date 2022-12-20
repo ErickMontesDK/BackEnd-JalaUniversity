@@ -18,10 +18,3 @@ gameRoutes.post('/create/elements?', async (req, res) => {
 gameRoutes.put('/updateFood/:id', async (req, res) => {
   gameGenerator.changeFood(req, res)
 })
-// gameRoutes.post('/update/elements?', async (req, res) => {
-//   gameGenerator.createGame(req, res)
-// })
-
-// boardRoutes.delete('/delete/:id', async (req, res) => {
-//   boardGenerator.deleteById(req, res)
-// })

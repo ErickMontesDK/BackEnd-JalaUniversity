@@ -34,30 +34,4 @@ export default class GameData implements IGameRepository {
     console.log(game)
     return game
   }
-
-  // async FoodIntoTail (id: number, coords: number[]) {
-  //   const repository = AppDataSource.getRepository(dbBox)
-  //   const boxFound = await repository.findOneBy({ id })
-  //   if (boxFound) {
-  //     boxFound.coordX = coords[0]
-  //     boxFound.coordY = coords[1]
-
-  //     await repository.save(boxFound)
-  //     return boxFound
-  //   } else {
-  //     return { id, message: 'Box Not Found' }
-  //   }
-  // }
-
-  // async delete (id: number) {
-  //   const repository = AppDataSource.getRepository(dbSnake)
-  //   const snakeById = await repository.findOneBy({ id })
-  //   if (snakeById) {
-  //     await repository.delete({ id })
-
-  //     return { id, message: 'Snake deleted' }
-  //   } else {
-  //     return { id, message: 'Snake not found' }
-  //   }
-  // }
 }

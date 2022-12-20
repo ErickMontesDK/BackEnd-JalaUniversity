@@ -6,6 +6,4 @@ export default interface IGameService{
     read(id: number): Promise<Game>
     displayBoardWithElements(id: number): Promise<string[][]>
     updateFoodInGame(gameId: number): Promise<Game>
-    // updateMovement(id: number, maxBoardValue:number): Promise<Snake | msgFormat>
-    // delete(id: number): Promise<msgFormat>
 }

@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import { Router } from 'express'
 import { container } from '../../../infrastructure/inversify/inversify.config'
 import IBoardController from '../Controllers/IBoardController'
