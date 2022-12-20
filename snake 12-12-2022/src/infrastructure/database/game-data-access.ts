@@ -4,6 +4,7 @@ import 'reflect-metadata'
 import returnForId from '../utils/returnForId'
 import dbGame from './entities/dbGame'
 import IGameRepository from '../../domain/repository/IGameRepository'
+import Game from '../../domain/entities/game'
 
 @injectable()
 export default class GameData implements IGameRepository {
@@ -26,18 +27,13 @@ export default class GameData implements IGameRepository {
     }
   }
 
-  // async updateDirection (id: number, direction: direction) {
-  //   const repository = AppDataSource.getRepository(dbSnake)
-  //   const findedSnake = await repository.findOneBy({ id })
-  //   if (findedSnake) {
-  //     findedSnake.direction = direction
-  //     await repository.save(findedSnake)
+  async updateGame (game: Game) {
+    const repository = AppDataSource.getRepository(dbGame)
 
-  //     return { id, message: `Snake moving to ${direction}` }
-  //   } else {
-  //     return { id, message: 'Not found' }
-  //   }
-  // }
+    await repository.save(game)
+    console.log(game)
+    return game
+  }
 
   // async FoodIntoTail (id: number, coords: number[]) {
   //   const repository = AppDataSource.getRepository(dbBox)

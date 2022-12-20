@@ -1,11 +1,13 @@
 import Snake from '../domain/entities/snake'
 import BoxService from './box-service'
+import GameService from './game-services'
 import SnakeService from './snake-services'
 
 export default class GameMechanics {
-  async eatingFood (allSnakes:Snake[], idFood: number): Promise<void> {
+  async eatingFood (allSnakes:Snake[], idFood: number, idGame:number): Promise<void> {
     const foodServices = new BoxService()
     const snakeServices = new SnakeService()
+    const gameServices = new GameService()
 
     const food = await foodServices.read(idFood)
     const foodCoords = [food.coordX, food.coordY]
@@ -22,6 +24,7 @@ export default class GameMechanics {
 
         await foodServices.updateToTail(food.id, SnakeLastTailNodeCoords)
         await snakeServices.updateLength(allSnakes[i].id, idFood.toString())
+        await gameServices.updateFoodInGame(idGame)
       }
     }
   }

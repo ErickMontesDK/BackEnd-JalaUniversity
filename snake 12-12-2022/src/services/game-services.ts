@@ -7,6 +7,8 @@ import { gameState } from '../domain/types/types'
 import IGameRepository from '../domain/repository/IGameRepository'
 import GameDisplayFunctions from './gameDisplay'
 import GameMechanics from './gameMechanics'
+import BoxService from './box-service'
+import BoardService from './board-services'
 
 @injectable()
 export default class GameService implements IGameService {
@@ -46,11 +48,21 @@ export default class GameService implements IGameService {
     console.log(DisplayWithSnakesBodys)
 
     const gameMechanics = new GameMechanics()
-    gameMechanics.eatingFood(AllSnakesData, idFood)
+    gameMechanics.eatingFood(AllSnakesData, idFood, id)
     return DisplayWithSnakes
   }
 
   async updateFoodInGame (gameId: number) {
+    const gameFound = await this.read(gameId)
+    const boardService = new BoardService()
+    const foodService = new BoxService()
 
+    const boardSize = (await boardService.read(gameFound.idBoard)).arregloX
+    const newFood = await foodService.create(boardSize)
+
+    const updateGame = gameFound
+    updateGame.idFood = newFood.id
+
+    return await this.gameData.updateGame(updateGame)
   }
 }

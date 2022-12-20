@@ -5,7 +5,7 @@ export default interface IGameService{
     create(limitBoard: number, players:string, speed:number): Promise<msgFormat>
     read(id: number): Promise<Game>
     displayBoardWithElements(id: number): Promise<string[][]>
-    // updateDirection(id: number, direction:string): Promise<msgFormat>
+    updateFoodInGame(gameId: number): Promise<Game>
     // updateMovement(id: number, maxBoardValue:number): Promise<Snake | msgFormat>
     // delete(id: number): Promise<msgFormat>
 }
