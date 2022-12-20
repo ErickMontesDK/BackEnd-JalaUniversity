@@ -63,11 +63,11 @@ export default class GameService implements IGameService {
     const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(AllSnakesData, DisplayWithFood)
     const DisplayWithSnakesBodys = await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, AllSnakesData)
 
-    console.log(DisplayWithSnakesBodys)
-
     const gameMechanics = new GameMechanics()
     gameMechanics.eatingFood(AllSnakesData, idFood, id)
-    return DisplayWithSnakes
+    const messageCollision = await gameMechanics.snakesCollide(AllSnakesData)
+    console.log(messageCollision)
+    return [DisplayWithSnakesBodys, messageCollision]
   }
 
   async updateFoodInGame (gameId: number) {

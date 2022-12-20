@@ -23,7 +23,7 @@ export default class GameMechanics {
         if (snakeTailNodes[0] !== '') {
           const idSnakeLastTailNode = parseInt(snakeTailNodes[snakeTailNodes.length - 1])
           const SnakeLastTailNode = await foodServices.read(idSnakeLastTailNode)
-          console.log(SnakeLastTailNode)
+
           SnakeLastTailNodeCoords = [SnakeLastTailNode.coordX, SnakeLastTailNode.coordY]
         }
 
@@ -32,5 +32,31 @@ export default class GameMechanics {
         await gameServices.updateFoodInGame(idGame)
       }
     }
+  }
+
+  async snakesCollide (AllSnakesData: Snake[]):Promise<string> {
+    for (let i = 0; i < AllSnakesData.length; i++) {
+      const snakeCoords = [AllSnakesData[i].coordX - 1, AllSnakesData[i].coordY - 1]
+
+      for (let j = 0; j < AllSnakesData.length; j++) {
+        if (j !== i) {
+          const tailElements = AllSnakesData[j].tailNodes.split(',')
+
+          if (tailElements[0] !== '') {
+            for (let k = 0; k < tailElements.length; k++) {
+              const boxService = new BoxService()
+              const tailNodeId = parseInt(tailElements[k])
+              const tailNode = await boxService.read(tailNodeId)
+              const tailNodeCoords = [tailNode.coordX, tailNode.coordY]
+
+              if (snakeCoords[0] === tailNodeCoords[0] && snakeCoords[1] === tailNodeCoords[1]) {
+                return 'Collision'
+              }
+            }
+          }
+        }
+      }
+    }
+    return 'Game running...'
   }
 }

@@ -9,6 +9,7 @@ export default class GameDisplayFunctions {
     const boardDetail = await boardService.read(idBoard)
     const squarebox = '|__|'
     const board = []
+
     for (let i = 0; i < boardDetail.arregloY; i++) {
       const rows = []
       for (let j = 0; j < boardDetail.arregloY; j++) {
@@ -34,7 +35,7 @@ export default class GameDisplayFunctions {
     for (let i = 0; i < snakes.length; i++) {
       const coordY = board.length - snakes[i].coordY
       const coordX = snakes[i].coordX - 1
-      board[coordY][coordX] = '|++|'
+      board[coordY][coordX] = '|00|'
     }
     return board
   }
@@ -46,7 +47,7 @@ export default class GameDisplayFunctions {
     let coordY = Math.abs(foodInGame.coordY - board.length)
     coordY = coordY >= board.length ? 1 : coordY
     const coordX = foodInGame.coordX - 1 < 0 ? 0 : foodInGame.coordX - 1
-    board[coordY][coordX] = '|OO|'
+    board[coordY][coordX] = '|!!|'
 
     return board
   }
