@@ -28,7 +28,7 @@ export default class SnakeService implements ISnakeService {
     newSnake.length = initialLength
     newSnake.user = player
     newSnake.direction = directionSnakeMove
-    newSnake.tailNodes = '0'
+    newSnake.tailNodes = ''
 
     return await this.snakeData.create(newSnake)
   }
@@ -72,7 +72,13 @@ export default class SnakeService implements ISnakeService {
     if (isNaN(nodeToNumber) === false) {
       const snakeToGrow = await this.snakeData.read(id)
       snakeToGrow.length++
-      snakeToGrow.tailNodes = snakeToGrow.tailNodes + `,${node}`
+
+      if (snakeToGrow.tailNodes === '') {
+        snakeToGrow.tailNodes = snakeToGrow.tailNodes + `${node}`
+      } else {
+        snakeToGrow.tailNodes = snakeToGrow.tailNodes + `,${node}`
+      }
+
       return await this.snakeData.growSnake(snakeToGrow)
     } else {
       throw new Error(`Unvalid node value sent: ${node}`)

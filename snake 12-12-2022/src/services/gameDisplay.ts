@@ -45,7 +45,7 @@ export default class GameDisplayFunctions {
 
     let coordY = Math.abs(foodInGame.coordY - board.length)
     coordY = coordY >= board.length ? 1 : coordY
-    const coordX = foodInGame.coordX - 1
+    const coordX = foodInGame.coordX - 1 < 0 ? 0 : foodInGame.coordX - 1
     board[coordY][coordX] = '|OO|'
 
     return board
@@ -57,14 +57,15 @@ export default class GameDisplayFunctions {
     for (let i = 0; i < snakes.length; i++) {
       const tailElements = snakes[i].tailNodes.split(',')
 
-      for (let j = 1; j < tailElements.length; j++) {
-        const idNode = parseInt(tailElements[j])
-        const Node = await boxService.read(idNode)
+      if (tailElements[0] !== '') {
+        for (let j = 0; j < tailElements.length; j++) {
+          const idNode = parseInt(tailElements[j])
+          const Node = await boxService.read(idNode)
+          const coordY = board.length - Node.coordY - 1
+          const coordX = Node.coordX
 
-        const coordY = board.length - Node.coordY - 1
-        const coordX = Node.coordX
-
-        board[coordY][coordX] = '|X|'
+          board[coordY][coordX] = '|X|'
+        }
       }
     }
     return board

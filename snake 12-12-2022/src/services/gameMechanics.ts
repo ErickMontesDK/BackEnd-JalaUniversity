@@ -14,12 +14,18 @@ export default class GameMechanics {
 
     for (let i = 0; i < allSnakes.length; i++) {
       const snakeCoords = [allSnakes[i].coordX, allSnakes[i].coordY]
+      snakeCoords[0] = foodCoords[0] === 0 ? snakeCoords[0] - 1 : snakeCoords[0]
 
       if (snakeCoords[0] === foodCoords[0] && snakeCoords[1] === foodCoords[1]) {
         const snakeTailNodes = allSnakes[i].tailNodes.split(',')
-        const idSnakeLastTailNode = parseInt(snakeTailNodes[snakeTailNodes.length - 1])
-        const SnakeLastTailNode = await foodServices.read(idSnakeLastTailNode)
-        const SnakeLastTailNodeCoords = [SnakeLastTailNode.coordX, SnakeLastTailNode.coordY]
+        let SnakeLastTailNodeCoords = snakeCoords
+
+        if (snakeTailNodes[0] !== '') {
+          const idSnakeLastTailNode = parseInt(snakeTailNodes[snakeTailNodes.length - 1])
+          const SnakeLastTailNode = await foodServices.read(idSnakeLastTailNode)
+          console.log(SnakeLastTailNode)
+          SnakeLastTailNodeCoords = [SnakeLastTailNode.coordX, SnakeLastTailNode.coordY]
+        }
 
         await foodServices.updateToTail(food.id, SnakeLastTailNodeCoords)
         await snakeServices.updateLength(allSnakes[i].id, idFood.toString())
