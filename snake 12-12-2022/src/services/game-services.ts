@@ -6,6 +6,7 @@ import Game from '../domain/entities/game'
 import { gameState } from '../domain/types/types'
 import IGameRepository from '../domain/repository/IGameRepository'
 import GameDisplayFunctions from './gameDisplay'
+import GameMechanics from './gameMechanics'
 
 @injectable()
 export default class GameService implements IGameService {
@@ -29,10 +30,11 @@ export default class GameService implements IGameService {
   }
 
   async displayBoardWithElements (id: number) {
-    const patternForGame = await this.gameData.read(id)
+    const patternForGame = await this.read(id)
 
     const boardId = patternForGame.idBoard
     const idFood = patternForGame.idFood
+
     const idSnakes:string[] = patternForGame.idSnakes.split(',')
     const AllSnakesData = await GameDisplayFunctions.returnAllSnakesInfo(idSnakes)
 
@@ -42,27 +44,13 @@ export default class GameService implements IGameService {
     const DisplayWithSnakesBodys = await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, AllSnakesData)
 
     console.log(DisplayWithSnakesBodys)
+
+    const gameMechanics = new GameMechanics()
+    gameMechanics.eatingFood(AllSnakesData, idFood)
     return DisplayWithSnakes
   }
 
-  // async updateDirection (id: number, direction: string) {
-  //   const fixedTypeDirection = translateToDirection(direction)
-  //   if (fixedTypeDirection !== undefined) {
-  //     return await this.snakeData.updateDirection(id, fixedTypeDirection)
-  //   } else {
-  //     throw new Error(`Unvalid direction sent: ${direction}`)
-  //   }
-  // }
+  async updateFoodInGame (gameId: number) {
 
-  // async updateMovement (id: number, maxBoardValue:number) {
-  //   if (isNaN(maxBoardValue) === false) {
-  //     return await this.snakeData.startMoving(id, maxBoardValue)
-  //   } else {
-  //     throw new Error(`Unvalid limit value sent: ${maxBoardValue}`)
-  //   }
-  // }
-
-  // async delete (id: number) {
-  //   return await this.snakeData.delete(id)
-  // }
+  }
 }

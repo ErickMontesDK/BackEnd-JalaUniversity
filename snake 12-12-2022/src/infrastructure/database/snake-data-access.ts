@@ -4,7 +4,6 @@ import 'reflect-metadata'
 import ISnakeRepository from '../../domain/repository/ISnakeRepository'
 import dbSnake from './entities/dbSnake'
 import { direction } from '../../domain/types/types'
-import { movingInDirection } from '../utils/movingDirection'
 import returnForId from '../utils/returnForId'
 import Snake from '../../domain/entities/snake'
 
@@ -44,8 +43,8 @@ export default class SnakeData implements ISnakeRepository {
 
   async startMoving (updateSnake: Snake) {
     const repository = AppDataSource.getRepository(dbSnake)
-    await repository.save(updateSnake)
 
+    await repository.save(updateSnake)
     return updateSnake
   }
 

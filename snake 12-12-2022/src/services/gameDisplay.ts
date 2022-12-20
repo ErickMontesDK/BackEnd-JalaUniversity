@@ -43,8 +43,9 @@ export default class GameDisplayFunctions {
     const boxService = new BoxService()
     const foodInGame = await boxService.read(idFood)
 
-    const coordY = board.length - foodInGame.coordY
-    const coordX = foodInGame.coordX + 1
+    let coordY = Math.abs(foodInGame.coordY - board.length)
+    coordY = coordY >= board.length ? 1 : coordY
+    const coordX = foodInGame.coordX - 1
     board[coordY][coordX] = '|OO|'
 
     return board
