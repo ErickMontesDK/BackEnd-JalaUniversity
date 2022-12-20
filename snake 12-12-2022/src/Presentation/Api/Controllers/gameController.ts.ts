@@ -34,6 +34,16 @@ export default class GameController implements IGameController {
     }
   }
 
+  async showBoardGame (req:Request, res:Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id as string)
+      const BoxFound = await this.GameService.displayBoardWithElements(id)
+      res.json(BoxFound)
+    } catch (err:unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
+
   // async updateDirection (req:Request, res:Response): Promise<void> {
   //   try {
   //     if (req.query.direction && req.params.id) {

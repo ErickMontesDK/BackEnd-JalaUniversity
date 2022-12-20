@@ -9,9 +9,16 @@ const gameGenerator = container.get<IGameController>('GameController')
 gameRoutes.get('/:id', async (req, res) => {
   gameGenerator.searchById(req, res)
 })
+gameRoutes.get('/display/:id', async (req, res) => {
+  gameGenerator.showBoardGame(req, res)
+})
 gameRoutes.post('/create/elements?', async (req, res) => {
   gameGenerator.createGame(req, res)
 })
+// gameRoutes.post('/update/elements?', async (req, res) => {
+//   gameGenerator.createGame(req, res)
+// })
+
 // boardRoutes.delete('/delete/:id', async (req, res) => {
 //   boardGenerator.deleteById(req, res)
 // })

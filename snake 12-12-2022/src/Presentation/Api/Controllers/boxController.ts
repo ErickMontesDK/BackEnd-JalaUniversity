@@ -30,6 +30,18 @@ export default class BoxController implements IBoxController {
     }
   }
 
+  async turnIntoTail (req:Request, res:Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id as string)
+      const coordx = parseInt(req.params.coordx as string)
+      const coordy = parseInt(req.params.coordy as string)
+      const UpdatedBox = await this.BoxService.updateToTail(id, [coordx, coordy])
+      res.json(UpdatedBox)
+    } catch (err:unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
+
   // async updateDirection (req:Request, res:Response): Promise<void> {
   //   try {
   //     if (req.query.direction && req.params.id) {

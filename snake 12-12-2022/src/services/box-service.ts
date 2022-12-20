@@ -30,14 +30,14 @@ export default class BoxService implements IBoxService {
     return await this.boxData.read(id)
   }
 
-  // async updateDirection (id: number, direction: string) {
-  //   const fixedTypeDirection = translateToDirection(direction)
-  //   if (fixedTypeDirection !== undefined) {
-  //     return await this.snakeData.updateDirection(id, fixedTypeDirection)
-  //   } else {
-  //     throw new Error(`Unvalid direction sent: ${direction}`)
-  //   }
-  // }
+  async updateToTail (id: number, coords: number[]) {
+    const defaultState: boxState = 'snake'
+    const foundBox = await this.boxData.read(id)
+    foundBox.coordX = coords[0]
+    foundBox.coordY = coords[1]
+    foundBox.state = defaultState
+    return await this.boxData.updatePositionState(id, foundBox)
+  }
 
   // async updateMovement (id: number, maxBoardValue:number) {
   //   if (isNaN(maxBoardValue) === false) {

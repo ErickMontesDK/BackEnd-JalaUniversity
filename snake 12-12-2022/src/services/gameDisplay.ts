@@ -55,16 +55,15 @@ export default class GameDisplayFunctions {
 
     for (let i = 0; i < snakes.length; i++) {
       const tailElements = snakes[i].tailNodes.split(',')
-      console.log(tailElements)
+
       for (let j = 1; j < tailElements.length; j++) {
         const idNode = parseInt(tailElements[j])
         const Node = await boxService.read(idNode)
 
         const coordY = board.length - Node.coordY - 1
         const coordX = Node.coordX
-        console.log(coordX, coordY)
+
         board[coordY][coordX] = '|X|'
-        console.log(board)
       }
     }
     return board

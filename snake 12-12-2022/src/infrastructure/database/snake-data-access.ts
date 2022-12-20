@@ -42,19 +42,11 @@ export default class SnakeData implements ISnakeRepository {
     }
   }
 
-  async startMoving (id: number, maxBoardValue:number) {
+  async startMoving (updateSnake: Snake) {
     const repository = AppDataSource.getRepository(dbSnake)
-    const SnakeFound = await repository.findOneBy({ id })
+    await repository.save(updateSnake)
 
-    if (SnakeFound && maxBoardValue) {
-      const updateSnake = movingInDirection(SnakeFound, maxBoardValue)
-
-      await repository.save(updateSnake)
-
-      return updateSnake
-    } else {
-      return { id, message: 'Snake Not Found' }
-    }
+    return updateSnake
   }
 
   async growSnake (snake:Snake) {

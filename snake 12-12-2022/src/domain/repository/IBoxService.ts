@@ -4,7 +4,7 @@ import { msgFormat } from '../types/types'
 export default interface IBoxService{
     create(limitBoard: number): Promise<msgFormat>
     read(id: number): Promise<Box>
-    // updateDirection(id: number, direction:string): Promise<msgFormat>
+    updateToTail(id: number, coords:number[]): Promise<Box | msgFormat>
     // updateMovement(id: number, maxBoardValue:number): Promise<Snake | msgFormat>
     // delete(id: number): Promise<msgFormat>
 }

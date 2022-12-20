@@ -4,6 +4,7 @@ import 'reflect-metadata'
 import IBoxRepository from '../../domain/repository/IBoxRepository'
 import returnForId from '../utils/returnForId'
 import dbBox from './entities/dbBox'
+import Box from '../../domain/entities/box'
 
 @injectable()
 export default class BoxData implements IBoxRepository {
@@ -26,32 +27,29 @@ export default class BoxData implements IBoxRepository {
     }
   }
 
-  // async updateDirection (id: number, direction: direction) {
-  //   const repository = AppDataSource.getRepository(dbSnake)
-  //   const findedSnake = await repository.findOneBy({ id })
-  //   if (findedSnake) {
-  //     findedSnake.direction = direction
-  //     await repository.save(findedSnake)
-
-  //     return { id, message: `Snake moving to ${direction}` }
-  //   } else {
-  //     return { id, message: 'Not found' }
-  //   }
-  // }
-
-  async FoodIntoTail (id: number, coords: number[]) {
+  async updatePositionState (id: number, box: Box) {
     const repository = AppDataSource.getRepository(dbBox)
-    const boxFound = await repository.findOneBy({ id })
-    if (boxFound) {
-      boxFound.coordX = coords[0]
-      boxFound.coordY = coords[1]
-
-      await repository.save(boxFound)
-      return boxFound
+    if (box) {
+      await repository.save(box)
+      return box
     } else {
-      return { id, message: 'Box Not Found' }
+      return { id, message: 'Not found' }
     }
   }
+
+  // async FoodIntoTail (id: number, coords: number[]) {
+  //   const repository = AppDataSource.getRepository(dbBox)
+  //   const boxFound = await repository.findOneBy({ id })
+  //   if (boxFound) {
+  //     boxFound.coordX = coords[0]
+  //     boxFound.coordY = coords[1]
+
+  //     await repository.save(boxFound)
+  //     return boxFound
+  //   } else {
+  //     return { id, message: 'Box Not Found' }
+  //   }
+  // }
 
   // async delete (id: number) {
   //   const repository = AppDataSource.getRepository(dbSnake)

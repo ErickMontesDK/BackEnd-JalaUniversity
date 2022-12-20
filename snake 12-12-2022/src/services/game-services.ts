@@ -25,7 +25,10 @@ export default class GameService implements IGameService {
   }
 
   async read (id: number) {
-    // const boxService = new BoxService()
+    return await this.gameData.read(id)
+  }
+
+  async displayBoardWithElements (id: number) {
     const patternForGame = await this.gameData.read(id)
 
     const boardId = patternForGame.idBoard
@@ -36,8 +39,8 @@ export default class GameService implements IGameService {
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(boardId)
     const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(idFood, boardDisplay)
     const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(AllSnakesData, DisplayWithFood)
-    console.log(DisplayWithSnakes)
     const DisplayWithSnakesBodys = await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, AllSnakesData)
+
     console.log(DisplayWithSnakesBodys)
     return DisplayWithSnakes
   }

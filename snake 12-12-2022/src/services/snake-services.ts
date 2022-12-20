@@ -7,6 +7,8 @@ import { direction } from '../domain/types/types'
 import Snake from '../domain/entities/snake'
 import ISnakeRepository from '../domain/repository/ISnakeRepository'
 import translateToDirection from '../helpers/translateToDirection'
+import { movingInDirection } from '../infrastructure/utils/movingDirection'
+import { tailNodesMovement } from './tailNodesMovement'
 
 @injectable()
 export default class SnakeService implements ISnakeService {
@@ -46,7 +48,19 @@ export default class SnakeService implements ISnakeService {
 
   async updateMovement (id: number, maxBoardValue:number) {
     if (isNaN(maxBoardValue) === false) {
-      return await this.snakeData.startMoving(id, maxBoardValue)
+      const foundSnake = await this.snakeData.read(id)
+
+      if (foundSnake) {
+        const oldPositionHead = [foundSnake.coordX, foundSnake.coordY]
+        const updateSnake = movingInDirection(foundSnake, maxBoardValue)
+
+        const tailNodes = updateSnake.tailNodes.split(',')
+        tailNodesMovement(tailNodes, oldPositionHead)
+
+        return await this.snakeData.startMoving(updateSnake)
+      } else {
+        return { id, message: 'Not found' }
+      }
     } else {
       throw new Error(`Unvalid limit value sent: ${maxBoardValue}`)
     }

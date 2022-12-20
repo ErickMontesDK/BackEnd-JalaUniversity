@@ -11,9 +11,9 @@ boxRoutes.post('/create/limit/:max', async (req, res) => {
 boxRoutes.get('/:id', async (req, res) => {
   boxController.searchById(req, res)
 })
-// snakeRoutes.put('/update/:id?', async (req, res) => {
-//   snakeController.updateDirection(req, res)
-// })
+boxRoutes.put('/update/:id/:coordx/:coordy', async (req, res) => {
+  boxController.turnIntoTail(req, res)
+})
 // snakeRoutes.put('/start/:id/:max', async (req, res) => {
 //   snakeController.startRunning(req, res)
 // })
