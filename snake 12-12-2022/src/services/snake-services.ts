@@ -99,7 +99,7 @@ export default class SnakeService implements ISnakeService {
     const scores:string[] = []
     const snakesLength = await this.snakeData.readBestScores()
 
-    snakesLength.forEach(snake =>{
+    snakesLength.forEach(snake => {
       const element = `PLAYER: ${snake.user} --> ${snake.length} POINTS`
       scores.push(element)
     })

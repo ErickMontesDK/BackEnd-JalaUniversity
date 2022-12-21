@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for infrastructure/database/box-data-access.ts</title>
+    <title>Code coverage report for infrastructure/database/game-data-access.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">infrastructure/database</a> box-data-access.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">infrastructure/database</a> game-data-access.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.09% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/21</span>
+                <span class='fraction'>8/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.57% </span>
+                <span class="strong">37.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/19</span>
+                <span class='fraction'>6/16</span>
             </div>
         
             
@@ -99,15 +99,12 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -124,6 +121,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -133,51 +131,44 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AppDataSource } from './db-source'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
-import IBoxRepository from '../../domain/repository/IBoxRepository'
 import returnForId from '../utils/returnForId'
-import dbBox from './entities/dbBox'
-import Box from '../../domain/entities/box'
+import dbGame from './entities/dbGame'
+import IGameRepository from '../../domain/repository/IGameRepository'
+import Game from '../../domain/entities/game'
 &nbsp;
 @injectable()
-export default <span class="fstat-no" title="function not covered" >class B</span>oxData implements IBoxRepository {
-  protected <span class="cstat-no" title="statement not covered" >repository = AppDataSource.getRepository(dbBox)</span>
+export default <span class="fstat-no" title="function not covered" >class G</span>ameData implements IGameRepository {
+  protected <span class="cstat-no" title="statement not covered" >repository = AppDataSource.getRepository(dbGame)</span>
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >create </span>(newFoodBox: dbBox) {
-<span class="cstat-no" title="statement not covered" >    await this.repository.save(newFoodBox)</span>
+  async <span class="fstat-no" title="function not covered" >create </span>(newGame: dbGame) {
+<span class="cstat-no" title="statement not covered" >    await this.repository.save(newGame)</span>
 &nbsp;
-    const idBox = <span class="cstat-no" title="statement not covered" >await returnForId(this.repository)</span>
+    const idGame = <span class="cstat-no" title="statement not covered" >await returnForId(this.repository)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return { id: idBox, message: 'Created' }</span>
+<span class="cstat-no" title="statement not covered" >    return { id: idGame, message: 'Created' }</span>
   }
 &nbsp;
   async <span class="fstat-no" title="function not covered" >read </span>(id: number) {
-    const BoxFound = <span class="cstat-no" title="statement not covered" >await this.repository.findOneBy({ id })</span>
-<span class="cstat-no" title="statement not covered" >    if (BoxFound) {</span>
-<span class="cstat-no" title="statement not covered" >      return BoxFound</span>
+    const GameFound = <span class="cstat-no" title="statement not covered" >await this.repository.findOneBy({ id })</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (GameFound) {</span>
+<span class="cstat-no" title="statement not covered" >      return GameFound</span>
     } else {
-<span class="cstat-no" title="statement not covered" >      throw new Error(`box with id ${id} not found`)</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error(`Could not find Game with id ${id}`)</span>
     }
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >updatePositionState </span>(id: number, box: Box) {
-    const repository = <span class="cstat-no" title="statement not covered" >AppDataSource.getRepository(dbBox)</span>
-<span class="cstat-no" title="statement not covered" >    if (box) {</span>
-<span class="cstat-no" title="statement not covered" >      await repository.save(box)</span>
-<span class="cstat-no" title="statement not covered" >      return box</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      throw new Error('Box Not found')</span>
-    }
+  async <span class="fstat-no" title="function not covered" >updateGame </span>(game: Game) {
+<span class="cstat-no" title="statement not covered" >    await this.repository.save(game)</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return game</span>
   }
 }
 &nbsp;</pre></td></tr></table></pre>

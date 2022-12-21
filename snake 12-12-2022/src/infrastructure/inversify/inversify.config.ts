@@ -29,16 +29,17 @@ const container = new Container()
 
 container.bind<IBoardRepository>('BoardData').to(BoardData)
 container.bind<IBoardService>('BoardService').to(BoardService)
+container.bind<IBoardController>('BoardController').to(BoardController)
+
 container.bind<ISnakeRepository>('SnakeData').to(SnakeData)
 container.bind<ISnakeService>('SnakeService').to(SnakeService)
 container.bind<ISnakeController>('ControllerSnake').to(SnakeControllers)
-container.bind<IBoardController>('BoardController').to(BoardController)
 
 container.bind<IBoxRepository>('BoxDataAcess').to(BoxData)
-container.bind<IBoxController>('BoxController').to(BoxController)
 container.bind<IBoxService>('BoxService').to(BoxService)
+container.bind<IBoxController>('BoxController').to(BoxController)
 
-container.bind<IGameController>('GameController').to(GameController)
 container.bind<IGameRepository>('GameData').to(GameData)
 container.bind<IGameService>('GameService').to(GameService)
+container.bind<IGameController>('GameController').to(GameController)
 export { container }

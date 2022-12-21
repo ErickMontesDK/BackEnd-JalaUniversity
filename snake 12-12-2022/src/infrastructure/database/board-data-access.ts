@@ -27,13 +27,11 @@ export default class BoardData implements IBoardRepository {
   }
 
   async delete (id: number) {
-    const boardById = await this.read(id)
-
-    if (boardById) {
-      await this.repository.delete({ id })
-      return { id, message: 'Snake deleted' }
+    const deleteResponse = await this.repository.delete({ id })
+    if (deleteResponse.affected !== 0) {
+      return { id, message: 'Board deleted' }
     } else {
-      return { id, message: 'Board not found' }
+      throw new Error('Board not found')
     }
   }
 }
