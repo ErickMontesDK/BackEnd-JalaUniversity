@@ -57,7 +57,28 @@ export default class GameController implements IGameController {
   async runGame (req:Request, res:Response): Promise<void> {
     try {
       const id = parseInt(req.params.id as string)
-      await this.GameService.runGameInLoopTillLose(id)
+      const gameRunningMsg = await this.GameService.runGameInLoopTillLose(id)
+      res.json(gameRunningMsg)
+    } catch (err:unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
+
+  async stopGame (req:Request, res:Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id as string)
+      const stopRunningMsg = await this.GameService.stateGameEnded(id)
+      res.json(stopRunningMsg)
+    } catch (err:unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
+
+  async resetGameScores (req:Request, res:Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id as string)
+      const resetGameMsg = await this.GameService.resetGame(id)
+      res.json(resetGameMsg)
     } catch (err:unknown) {
       if (err instanceof Error) res.json({ name: err.name, msg: err.message })
     }

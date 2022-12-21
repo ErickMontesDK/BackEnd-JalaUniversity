@@ -45,7 +45,7 @@ export default class GameService implements IGameService {
     return await this.gameData.read(id)
   }
 
-  async updateMovementFromAllElements (id: number) {
+  async getAllDataForTheGame (id: number) {
     const patternForGame = await this.read(id)
     const gameState = patternForGame.gameState
     const boardId = patternForGame.idBoard
@@ -58,7 +58,6 @@ export default class GameService implements IGameService {
 
     await GameMechanics.eatingFood(AllSnakesData, foodInGameDetails, id)
     const messageCollision = await GameMechanics.snakesCollide(AllSnakesData, id)
-    await GameMechanics.updateMovementForAllSnakes(AllSnakesData, boardInGameDetails.arregloX)
 
     return {
       boardInfo: boardInGameDetails,
@@ -69,8 +68,16 @@ export default class GameService implements IGameService {
     }
   }
 
+  async updateMovementFromAllElements (id: number) {
+    const gameElementsInfo = await this.getAllDataForTheGame(id)
+
+    await GameMechanics.updateMovementForAllSnakes(gameElementsInfo.snakesInfo, gameElementsInfo.boardInfo.arregloX)
+
+    return gameElementsInfo
+  }
+
   async displayBoardWithElements (id: number) {
-    const gameElementsInfo = await this.updateMovementFromAllElements(id)
+    const gameElementsInfo = await this.getAllDataForTheGame(id)
 
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(gameElementsInfo.boardInfo)
     const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(gameElementsInfo.foodInfo, boardDisplay)
@@ -111,17 +118,31 @@ export default class GameService implements IGameService {
     const gameSpeed = gameParameters.gameSpeed
     await this.stateGameRunning(gameId)
 
-    const loopOfGame = async () => {
+    const updateCycleGame = async () => {
       const newGameValues = await this.updateMovementFromAllElements(gameId)
-      console.log('running game')
       const gameState = newGameValues.gameState
-      // eslint-disable-next-line eqeqeq
-      if (gameState == 'Ended') {
-        clearInterval(loopGame)
-        console.log('GAME OVER')
+      const endCondiction: gameState = 'Ended'
+      console.log(gameState)
+      if (gameState === endCondiction) {
+        clearInterval(loopGameInterval)
       }
     }
 
-    const loopGame = setInterval(loopOfGame, gameSpeed)
+    const loopGameInterval = setInterval(updateCycleGame, gameSpeed)
+    return { id: gameId, message: `Game already running at one move per ${gameSpeed / 1000} seconds` }
+  }
+
+  async resetGame (gameId: number) {
+    const gameElementsInfo = await this.getAllDataForTheGame(gameId)
+    const gameInfo = await this.read(gameId)
+    const snakes = gameElementsInfo.snakesInfo
+
+    snakes.forEach(async (snake) => {
+      await this.snakeService.resetInitialValues(snake.id, gameElementsInfo.boardInfo.arregloX)
+    })
+    gameInfo.gameState = 'Ready to Start'
+    await this.gameData.updateGame(gameInfo)
+
+    return { id: gameId, message: 'Game reset' }
   }
 }

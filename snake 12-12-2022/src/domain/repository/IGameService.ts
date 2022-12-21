@@ -8,5 +8,6 @@ export default interface IGameService{
     updateFoodInGame(gameId: number): Promise<Game>
     stateGameRunning(gameId: number): Promise<Game>
     stateGameEnded(gameId: number): Promise<Game>
-    runGameInLoopTillLose(gameId: number): Promise<void>
+    runGameInLoopTillLose(gameId: number): Promise<msgFormat>
+    resetGame(gameId: number): Promise<msgFormat>
 }

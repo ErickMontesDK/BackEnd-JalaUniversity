@@ -81,6 +81,20 @@ export default class SnakeService implements ISnakeService {
     }
   }
 
+  async resetInitialValues (id: number, boardSize: number) {
+    const initialLength = 1
+    const x = randomPosition(boardSize) + initialLength
+    const y = randomPosition(boardSize) + initialLength
+
+    const snakeFound = await this.read(id)
+    snakeFound.length = 0
+    snakeFound.tailNodes = ''
+    snakeFound.coordX = x
+    snakeFound.coordY = y
+
+    await this.snakeData.update(snakeFound)
+  }
+
   async delete (id: number) {
     return await this.snakeData.delete(id)
   }
