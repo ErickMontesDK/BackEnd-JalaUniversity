@@ -53,4 +53,13 @@ export default class GameController implements IGameController {
       if (err instanceof Error) res.json({ name: err.name, msg: err.message })
     }
   }
+
+  async runGame (req:Request, res:Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id as string)
+      await this.GameService.runGameInLoopTillLose(id)
+    } catch (err:unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
 }

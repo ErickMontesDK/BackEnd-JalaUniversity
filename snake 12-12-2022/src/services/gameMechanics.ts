@@ -44,6 +44,14 @@ export default class GameMechanics {
     }
   }
 
+  static async updateMovementForAllSnakes (allSnakes:Snake[], boardSize:number):Promise<void> {
+    const snakeServices = new SnakeService()
+
+    allSnakes.forEach(async (snake) => {
+      await snakeServices.updateMovement(snake.id, boardSize)
+    })
+  }
+
   static async snakesCollide (AllSnakesData: Snake[], idGame:number):Promise<string> {
     const gameServices = new GameService()
 
@@ -74,7 +82,7 @@ export default class GameMechanics {
           endMessage = endMessage + `${AllSnakesData[l].user}: ${AllSnakesData[l].length}` + '\n'
 
           if (snakeCoords[0] === OtherSnakeCoords[0] && snakeCoords[1] === OtherSnakeCoords[1]) {
-            gameServices.endGame(idGame)
+            gameServices.stateGameEnded(idGame)
             return endMessage
           }
         }

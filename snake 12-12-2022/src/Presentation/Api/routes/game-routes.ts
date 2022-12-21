@@ -18,3 +18,6 @@ gameRoutes.post('/create/elements?', async (req, res) => {
 gameRoutes.put('/updateFood/:id', async (req, res) => {
   gameGenerator.changeFood(req, res)
 })
+gameRoutes.get('/start/:id', async (req, res) => {
+  gameGenerator.runGame(req, res)
+})

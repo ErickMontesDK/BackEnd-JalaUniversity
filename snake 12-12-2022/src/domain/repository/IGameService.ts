@@ -6,4 +6,7 @@ export default interface IGameService{
     read(id: number): Promise<Game>
     displayBoardWithElements(id: number): Promise<(string | string[][])[]>
     updateFoodInGame(gameId: number): Promise<Game>
+    stateGameRunning(gameId: number): Promise<Game>
+    stateGameEnded(gameId: number): Promise<Game>
+    runGameInLoopTillLose(gameId: number): Promise<void>
 }
