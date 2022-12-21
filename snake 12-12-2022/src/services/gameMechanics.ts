@@ -46,23 +46,30 @@ export default class GameMechanics {
 
   static async snakesCollide (AllSnakesData: Snake[]):Promise<string> {
     for (let i = 0; i < AllSnakesData.length; i++) {
-      const snakeCoords = [AllSnakesData[i].coordX - 1, AllSnakesData[i].coordY - 1]
+      const snakeCoords = [AllSnakesData[i].coordX, AllSnakesData[i].coordY]
 
       for (let j = 0; j < AllSnakesData.length; j++) {
-        if (j !== i) {
-          const tailElements = AllSnakesData[j].tailNodes.split(',')
+        const tailElements = AllSnakesData[j].tailNodes.split(',')
 
-          if (tailElements[0] !== '') {
-            for (let k = 0; k < tailElements.length; k++) {
-              const boxService = new BoxService()
-              const tailNodeId = parseInt(tailElements[k])
-              const tailNode = await boxService.read(tailNodeId)
-              const tailNodeCoords = [tailNode.coordX, tailNode.coordY]
+        if (tailElements[0] !== '') {
+          for (let k = 0; k < tailElements.length; k++) {
+            const boxService = new BoxService()
+            const tailNodeId = parseInt(tailElements[k])
+            const tailNode = await boxService.read(tailNodeId)
+            const tailNodeCoords = [tailNode.coordX, tailNode.coordY]
 
-              if (snakeCoords[0] === tailNodeCoords[0] && snakeCoords[1] === tailNodeCoords[1]) {
-                return 'Collision'
-              }
+            if (snakeCoords[0] === tailNodeCoords[0] && snakeCoords[1] === tailNodeCoords[1]) {
+              return 'Collision'
             }
+          }
+        }
+      }
+      for (let l = 0; l < AllSnakesData.length; l++) {
+        if (l !== i) {
+          const OtherSnakeCoords = [AllSnakesData[l].coordX, AllSnakesData[l].coordY]
+
+          if (snakeCoords[0] === OtherSnakeCoords[0] && snakeCoords[1] === OtherSnakeCoords[1]) {
+            return 'Collision'
           }
         }
       }
