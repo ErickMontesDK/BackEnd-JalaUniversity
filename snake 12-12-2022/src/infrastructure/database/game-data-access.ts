@@ -8,18 +8,19 @@ import Game from '../../domain/entities/game'
 
 @injectable()
 export default class GameData implements IGameRepository {
-  async create (newGame: dbGame) {
-    const repository = AppDataSource.getRepository(dbGame)
-    await repository.save(newGame)
+  protected repository = AppDataSource.getRepository(dbGame)
 
-    const idGame = await returnForId(repository)
+  async create (newGame: dbGame) {
+    await this.repository.save(newGame)
+
+    const idGame = await returnForId(this.repository)
 
     return { id: idGame, message: 'Created' }
   }
 
   async read (id: number) {
-    const repository = AppDataSource.getRepository(dbGame)
-    const GameFound = await repository.findOneBy({ id })
+    const GameFound = await this.repository.findOneBy({ id })
+
     if (GameFound) {
       return GameFound
     } else {
@@ -28,10 +29,8 @@ export default class GameData implements IGameRepository {
   }
 
   async updateGame (game: Game) {
-    const repository = AppDataSource.getRepository(dbGame)
+    await this.repository.save(game)
 
-    await repository.save(game)
-    console.log(game)
     return game
   }
 }

@@ -12,14 +12,14 @@ export default class BoxService implements IBoxService {
   boxData = container.get<IBoxRepository>('BoxDataAcess')
 
   async create (limitBoard: number) {
-    console.log(limitBoard)
+    const initialValue = 1
     const x = randomPosition(limitBoard)
     const y = randomPosition(limitBoard)
     const defaultState: boxState = 'food'
 
     const newFood = new Box()
-    newFood.coordX = x
-    newFood.coordY = y
+    newFood.coordX = x + initialValue
+    newFood.coordY = y + initialValue
     newFood.state = defaultState
     newFood.TailNode = 0
 
@@ -38,16 +38,4 @@ export default class BoxService implements IBoxService {
     foundBox.state = defaultState
     return await this.boxData.updatePositionState(id, foundBox)
   }
-
-  // async updateMovement (id: number, maxBoardValue:number) {
-  //   if (isNaN(maxBoardValue) === false) {
-  //     return await this.snakeData.startMoving(id, maxBoardValue)
-  //   } else {
-  //     throw new Error(`Unvalid limit value sent: ${maxBoardValue}`)
-  //   }
-  // }
-
-  // async delete (id: number) {
-  //   return await this.snakeData.delete(id)
-  // }
 }

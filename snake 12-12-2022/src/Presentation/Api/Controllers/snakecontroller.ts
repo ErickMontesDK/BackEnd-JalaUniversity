@@ -14,7 +14,9 @@ export default class SnakeControllers implements ISnakeController {
       if (req.query.limit && req.query.player) {
         const limitBoard = parseInt(req.query.limit as string)
         const player = req.query.player.toString()
+
         const newSnakeId = await this.snakeServices.create(limitBoard, player)
+
         res.json(newSnakeId)
       } else {
         throw new Error('not sent values')
@@ -28,6 +30,7 @@ export default class SnakeControllers implements ISnakeController {
     try {
       const id = parseInt(req.params.id as string)
       const updatedSnake = await this.snakeServices.read(id)
+
       res.json(updatedSnake)
     } catch (err:unknown) {
       if (err instanceof Error) res.json({ name: err.name, msg: err.message })

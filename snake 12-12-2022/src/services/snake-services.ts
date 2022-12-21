@@ -15,9 +15,9 @@ export default class SnakeService implements ISnakeService {
   snakeData = container.get<ISnakeRepository>('SnakeData')
 
   async create (limitBoard: number, player: string) {
-    const x = randomPosition(limitBoard)
-    const y = randomPosition(limitBoard)
     const initialLength = 1
+    const x = randomPosition(limitBoard) + initialLength
+    const y = randomPosition(limitBoard) + initialLength
 
     const directions:direction[] = ['up', 'down', 'left', 'right']
     const directionSnakeMove = directions[randomPosition(directions.length)]
@@ -39,47 +39,43 @@ export default class SnakeService implements ISnakeService {
 
   async updateDirection (id: number, direction: string) {
     const fixedTypeDirection = translateToDirection(direction)
+    const snakeToUpdate = await this.snakeData.read(id)
+
     if (fixedTypeDirection !== undefined) {
-      return await this.snakeData.updateDirection(id, fixedTypeDirection)
+      snakeToUpdate.direction = fixedTypeDirection
+
+      return await this.snakeData.update(snakeToUpdate)
     } else {
       throw new Error(`Unvalid direction sent: ${direction}`)
     }
   }
 
-  async updateMovement (id: number, maxBoardValue:number) {
-    if (isNaN(maxBoardValue) === false) {
-      const foundSnake = await this.snakeData.read(id)
+  async updateMovement (id: number, limitBoard:number) {
+    const SnakeFound = await this.snakeData.read(id)
 
-      if (foundSnake) {
-        const oldPositionHead = [foundSnake.coordX, foundSnake.coordY]
-        const updateSnake = movingInDirection(foundSnake, maxBoardValue)
+    if (isNaN(limitBoard) === false && SnakeFound) {
+      const oldPositionHead = [SnakeFound.coordX, SnakeFound.coordY]
+      const updateSnake = movingInDirection(SnakeFound, limitBoard)
+      const tailNodes = updateSnake.tailNodes.split(',')
 
-        const tailNodes = updateSnake.tailNodes.split(',')
-        tailNodesMovement(tailNodes, oldPositionHead)
+      tailNodesMovement(tailNodes, oldPositionHead)
 
-        return await this.snakeData.startMoving(updateSnake)
-      } else {
-        return { id, message: 'Not found' }
-      }
+      return await this.snakeData.update(updateSnake)
     } else {
-      throw new Error(`Unvalid limit value sent: ${maxBoardValue}`)
+      throw new Error(`Unvalid limit ot id value sent: ${limitBoard}, ${id}`)
     }
   }
 
   async updateLength (id: number, node:string) {
     const nodeToNumber = parseInt(node)
+    const snakeToGrow = await this.snakeData.read(id)
 
     if (isNaN(nodeToNumber) === false) {
-      const snakeToGrow = await this.snakeData.read(id)
       snakeToGrow.length++
 
-      if (snakeToGrow.tailNodes === '') {
-        snakeToGrow.tailNodes = snakeToGrow.tailNodes + `${node}`
-      } else {
-        snakeToGrow.tailNodes = snakeToGrow.tailNodes + `,${node}`
-      }
+      snakeToGrow.tailNodes = snakeToGrow.tailNodes === '' ? `${node}` : snakeToGrow.tailNodes + `,${node}`
 
-      return await this.snakeData.growSnake(snakeToGrow)
+      return await this.snakeData.update(snakeToGrow)
     } else {
       throw new Error(`Unvalid node value sent: ${node}`)
     }

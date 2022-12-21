@@ -13,28 +13,24 @@ import SnakeService from './snake-services'
 
 @injectable()
 export default class GameService implements IGameService {
-  gameData = container.get<IGameRepository>('GameData')
-  boardService = new BoardService()
-  snakeService = new SnakeService()
-  boxService = new BoxService()
+  protected gameData = container.get<IGameRepository>('GameData')
+  protected boardService = new BoardService()
+  protected snakeService = new SnakeService()
+  protected boxService = new BoxService()
 
-  async create (limitBoard: number, players:string, speed:number) {
-    const limitBoardInString = limitBoard.toString()
+  async create (boardSize: number, players:string, speed:number) {
+    const newBoardForThisGame = await this.boardService.create(boardSize)
+    const newFoodForThisGame = await this.boxService.create(boardSize)
+    const defaultGameState:gameState = 'Ready to Start'
     const playersForGame = players.split(',')
     let snakesForPlayersId = ''
-    const newBoardForThisGame = await this.boardService.create(limitBoardInString)
-    const newFoodForThisGame = await this.boxService.create(limitBoard)
 
     for (let i = 0; i < playersForGame.length; i++) {
-      const newSnake = await this.snakeService.create(limitBoard, playersForGame[i])
-      if (i === 0) {
-        snakesForPlayersId = `${newSnake.id}`
-      } else {
-        snakesForPlayersId = snakesForPlayersId + `,${newSnake.id}`
-      }
+      const newSnake = await this.snakeService.create(boardSize, playersForGame[i])
+
+      snakesForPlayersId = i === 0 ? `${newSnake.id}` : snakesForPlayersId + `,${newSnake.id}`
     }
 
-    const defaultGameState:gameState = 'Ready to Start'
     const newGame = new Game()
     newGame.gameState = defaultGameState
     newGame.gameSpeed = speed
@@ -49,34 +45,43 @@ export default class GameService implements IGameService {
     return await this.gameData.read(id)
   }
 
-  async displayBoardWithElements (id: number) {
+  async updateMovementFromAllElements (id: number) {
     const patternForGame = await this.read(id)
-
     const boardId = patternForGame.idBoard
     const idFood = patternForGame.idFood
-
     const idSnakes:string[] = patternForGame.idSnakes.split(',')
-    const AllSnakesData = await GameDisplayFunctions.returnAllSnakesInfo(idSnakes)
 
-    const boardDisplay = await GameDisplayFunctions.createBoardArrange(boardId)
-    const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(idFood, boardDisplay)
-    const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(AllSnakesData, DisplayWithFood)
-    const DisplayWithSnakesBodys = await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, AllSnakesData)
+    const boardInGameDetails = await this.boardService.read(boardId)
+    const foodInGameDetails = await this.boxService.read(idFood)
+    const AllSnakesData = await GameMechanics.returnAllSnakesInfo(idSnakes)
 
-    const gameMechanics = new GameMechanics()
-    gameMechanics.eatingFood(AllSnakesData, idFood, id)
-    const messageCollision = await gameMechanics.snakesCollide(AllSnakesData)
-    console.log(messageCollision)
-    return [DisplayWithSnakesBodys, messageCollision]
+    await GameMechanics.eatingFood(AllSnakesData, foodInGameDetails, id)
+    const messageCollision = await GameMechanics.snakesCollide(AllSnakesData)
+
+    return {
+      boardInfo: boardInGameDetails,
+      foodInfo: foodInGameDetails,
+      snakesInfo: AllSnakesData,
+      messageCollision
+    }
+  }
+
+  async displayBoardWithElements (id: number) {
+    const gameElementsInfo = await this.updateMovementFromAllElements(id)
+
+    const boardDisplay = await GameDisplayFunctions.createBoardArrange(gameElementsInfo.boardInfo)
+    const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(gameElementsInfo.foodInfo, boardDisplay)
+    const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(gameElementsInfo.snakesInfo, DisplayWithFood)
+    const DisplayWithSnakesBodys = await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, gameElementsInfo.snakesInfo)
+
+    return [DisplayWithSnakesBodys, gameElementsInfo.messageCollision]
   }
 
   async updateFoodInGame (gameId: number) {
     const gameFound = await this.read(gameId)
-    const boardService = new BoardService()
-    const foodService = new BoxService()
 
-    const boardSize = (await boardService.read(gameFound.idBoard)).arregloX
-    const newFood = await foodService.create(boardSize)
+    const boardSize = (await this.boardService.read(gameFound.idBoard)).arregloX
+    const newFood = await this.boxService.create(boardSize)
 
     const updateGame = gameFound
     updateGame.idFood = newFood.id

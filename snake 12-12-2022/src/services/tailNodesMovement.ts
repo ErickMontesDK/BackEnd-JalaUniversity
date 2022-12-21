@@ -2,8 +2,6 @@ import BoxService from './box-service'
 
 async function tailNodesMovement (nodes: string[], oldPositionHead:number[]): Promise<void> {
   const boxService = new BoxService()
-  oldPositionHead[0]--
-  oldPositionHead[1]--
   let oldPositionBody = oldPositionHead
 
   for (let i = 0; i < nodes.length; i++) {
@@ -15,7 +13,6 @@ async function tailNodesMovement (nodes: string[], oldPositionHead:number[]): Pr
       oldPositionBody = [nodeBoxData.coordX, nodeBoxData.coordY]
     }
   }
-  nodes = nodes.slice(1, nodes.length)
 }
 
 export { tailNodesMovement }

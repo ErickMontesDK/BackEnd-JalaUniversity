@@ -33,7 +33,7 @@ export default class BoxData implements IBoxRepository {
       await repository.save(box)
       return box
     } else {
-      return { id, message: 'Not found' }
+      throw new Error('Box Not found')
     }
   }
 

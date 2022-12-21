@@ -3,24 +3,24 @@ import { injectable } from 'inversify'
 import 'reflect-metadata'
 import ISnakeRepository from '../../domain/repository/ISnakeRepository'
 import dbSnake from './entities/dbSnake'
-import { direction } from '../../domain/types/types'
 import returnForId from '../utils/returnForId'
 import Snake from '../../domain/entities/snake'
 
 @injectable()
 export default class SnakeData implements ISnakeRepository {
-  async create (newSnake: dbSnake) {
-    const repository = AppDataSource.getRepository(dbSnake)
-    await repository.save(newSnake)
+  protected repository = AppDataSource.getRepository(dbSnake)
 
-    const idSnake = await returnForId(repository)
+  async create (newSnake: dbSnake) {
+    await this.repository.save(newSnake)
+
+    const idSnake = await returnForId(this.repository)
 
     return { id: idSnake, message: 'Created' }
   }
 
   async read (id: number) {
-    const repository = AppDataSource.getRepository(dbSnake)
-    const SnakeFound = await repository.findOneBy({ id })
+    const SnakeFound = await this.repository.findOneBy({ id })
+
     if (SnakeFound) {
       return SnakeFound
     } else {
@@ -28,52 +28,25 @@ export default class SnakeData implements ISnakeRepository {
     }
   }
 
-  async updateDirection (id: number, direction: direction) {
-    const repository = AppDataSource.getRepository(dbSnake)
-    const findedSnake = await repository.findOneBy({ id })
-    if (findedSnake) {
-      findedSnake.direction = direction
-      await repository.save(findedSnake)
-
-      return { id, message: `Snake moving to ${direction}` }
-    } else {
-      return { id, message: 'Not found' }
-    }
-  }
-
-  async startMoving (updateSnake: Snake) {
-    const repository = AppDataSource.getRepository(dbSnake)
-
-    await repository.save(updateSnake)
-    return updateSnake
-  }
-
-  async growSnake (snake:Snake) {
-    const repository = AppDataSource.getRepository(dbSnake)
-    const id = snake.id
-    const SnakeFound = await repository.findOneBy({ id })
-
+  async update (SnakeFound: Snake) {
     if (SnakeFound) {
-      SnakeFound.length = snake.length
-      SnakeFound.tailNodes = snake.tailNodes
-
-      await repository.save(SnakeFound)
+      await this.repository.save(SnakeFound)
 
       return SnakeFound
     } else {
-      return { id, message: 'Snake Not Found' }
+      throw new Error('Element not found')
     }
   }
 
   async delete (id: number) {
-    const repository = AppDataSource.getRepository(dbSnake)
-    const snakeById = await repository.findOneBy({ id })
+    const snakeById = await this.read(id)
+
     if (snakeById) {
-      await repository.delete({ id })
+      await this.repository.delete({ id })
 
       return { id, message: 'Snake deleted' }
     } else {
-      return { id, message: 'Snake not found' }
+      throw new Error(`Snake with id:${id} not found`)
     }
   }
 }

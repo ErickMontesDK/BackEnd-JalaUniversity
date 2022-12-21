@@ -9,11 +9,12 @@ import IBoardService from '../domain/repository/IBoardService'
 export default class BoardService implements IBoardService {
   boardData : IBoardRepository = container.get<IBoardRepository>('BoardData')
 
-  async create (elements: string) {
-    const number = parseInt(elements)
+  async create (boardSize: number) {
+    const size = boardSize
+
     const board = new Board()
-    board.arregloX = number
-    board.arregloY = number
+    board.arregloX = size
+    board.arregloY = size
 
     return await this.boardData.create(board)
   }

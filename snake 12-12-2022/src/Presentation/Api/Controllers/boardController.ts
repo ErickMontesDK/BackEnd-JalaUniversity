@@ -10,7 +10,8 @@ export default class BoardController implements IBoardController {
 
   async createBoard (req:Request, res:Response): Promise<void> {
     try {
-      const newBoard = await this.boardGenerator.create(req.params.elements)
+      const boardSize = parseInt(req.params.elements)
+      const newBoard = await this.boardGenerator.create(boardSize)
       res.json(newBoard)
     } catch (err: unknown) {
       if (err instanceof Error) res.json({ name: err.name, msg: err.message })
@@ -21,6 +22,7 @@ export default class BoardController implements IBoardController {
     try {
       const id = parseInt(req.params.id.toString())
       const boardFound = await this.boardGenerator.read(id)
+
       res.json(boardFound)
     } catch (err: unknown) {
       if (err instanceof Error) res.json({ name: err.name, msg: err.message })
@@ -31,6 +33,7 @@ export default class BoardController implements IBoardController {
     try {
       const id = parseInt(req.params.id.toString())
       const msgDelete = await this.boardGenerator.delete(id)
+
       res.json(msgDelete)
     } catch (err: unknown) {
       if (err instanceof Error) res.json({ name: err.name, msg: err.message })

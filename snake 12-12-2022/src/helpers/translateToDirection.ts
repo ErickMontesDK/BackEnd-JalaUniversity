@@ -3,12 +3,16 @@ import { direction } from '../domain/types/types'
 export default function translateToDirection (direction: string) {
   const directionsOptions:direction[] = ['down', 'up', 'left', 'right']
 
-  for (let i = 0; i < directionsOptions.length; i++) {
-    // eslint-disable-next-line eqeqeq
-    if (directionsOptions[i] == direction) {
-      return directionsOptions[i]
-    } else if (i === directionsOptions.length - 1) {
+  switch (direction) {
+    case 'down':
+      return directionsOptions[0]
+    case 'up':
+      return directionsOptions[1]
+    case 'left':
+      return directionsOptions[2]
+    case 'right':
+      return directionsOptions[3]
+    default:
       return undefined
-    }
   }
 }
