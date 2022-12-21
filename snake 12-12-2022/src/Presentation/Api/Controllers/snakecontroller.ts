@@ -37,6 +37,16 @@ export default class SnakeControllers implements ISnakeController {
     }
   }
 
+  async searchBestScores (req:Request, res:Response): Promise<void> {
+    try {
+      const updatedSnake = await this.snakeServices.getBestScores()
+
+      res.json(updatedSnake)
+    } catch (err:unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
+
   async updateDirection (req:Request, res:Response): Promise<void> {
     try {
       if (req.query.direction && req.params.id) {

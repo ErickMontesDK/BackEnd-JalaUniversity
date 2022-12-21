@@ -28,6 +28,22 @@ export default class SnakeData implements ISnakeRepository {
     }
   }
 
+  async readBestScores () {
+    const scoreSnakesFound = await this.repository.find({
+      take: 5,
+      order: {
+        length: 'DESC'
+      },
+      select: ['user', 'length']
+    })
+
+    if (scoreSnakesFound) {
+      return scoreSnakesFound
+    } else {
+      throw new Error('Could not find Scores')
+    }
+  }
+
   async update (SnakeFound: Snake) {
     if (SnakeFound) {
       await this.repository.save(SnakeFound)

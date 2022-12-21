@@ -95,6 +95,17 @@ export default class SnakeService implements ISnakeService {
     await this.snakeData.update(snakeFound)
   }
 
+  async getBestScores () {
+    const scores:string[] = []
+    const snakesLength = await this.snakeData.readBestScores()
+
+    snakesLength.forEach(snake =>{
+      const element = `PLAYER: ${snake.user} --> ${snake.length} POINTS`
+      scores.push(element)
+    })
+    return scores
+  }
+
   async delete (id: number) {
     return await this.snakeData.delete(id)
   }
