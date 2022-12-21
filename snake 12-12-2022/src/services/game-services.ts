@@ -47,6 +47,7 @@ export default class GameService implements IGameService {
 
   async updateMovementFromAllElements (id: number) {
     const patternForGame = await this.read(id)
+    const gameState = patternForGame.gameState
     const boardId = patternForGame.idBoard
     const idFood = patternForGame.idFood
     const idSnakes:string[] = patternForGame.idSnakes.split(',')
@@ -56,13 +57,14 @@ export default class GameService implements IGameService {
     const AllSnakesData = await GameMechanics.returnAllSnakesInfo(idSnakes)
 
     await GameMechanics.eatingFood(AllSnakesData, foodInGameDetails, id)
-    const messageCollision = await GameMechanics.snakesCollide(AllSnakesData)
+    const messageCollision = await GameMechanics.snakesCollide(AllSnakesData, id)
 
     return {
       boardInfo: boardInGameDetails,
       foodInfo: foodInGameDetails,
       snakesInfo: AllSnakesData,
-      messageCollision
+      messageCollision,
+      gameState
     }
   }
 
@@ -87,5 +89,19 @@ export default class GameService implements IGameService {
     updateGame.idFood = newFood.id
 
     return await this.gameData.updateGame(updateGame)
+  }
+
+  async startGame (gameId: number) {
+    const gameFound = await this.read(gameId)
+    gameFound.gameState = 'Playing'
+
+    return await this.gameData.updateGame(gameFound)
+  }
+
+  async endGame (gameId: number) {
+    const gameFound = await this.read(gameId)
+    gameFound.gameState = 'Ended'
+
+    return await this.gameData.updateGame(gameFound)
   }
 }

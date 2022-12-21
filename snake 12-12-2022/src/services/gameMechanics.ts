@@ -44,9 +44,13 @@ export default class GameMechanics {
     }
   }
 
-  static async snakesCollide (AllSnakesData: Snake[]):Promise<string> {
+  static async snakesCollide (AllSnakesData: Snake[], idGame:number):Promise<string> {
+    const gameServices = new GameService()
+
     for (let i = 0; i < AllSnakesData.length; i++) {
+      let endMessage = 'Collision. GAME OVER !\n Score: '
       const snakeCoords = [AllSnakesData[i].coordX, AllSnakesData[i].coordY]
+      endMessage = endMessage + `${AllSnakesData[i].user}: ${AllSnakesData[i].length}` + '\n'
 
       for (let j = 0; j < AllSnakesData.length; j++) {
         const tailElements = AllSnakesData[j].tailNodes.split(',')
@@ -59,7 +63,7 @@ export default class GameMechanics {
             const tailNodeCoords = [tailNode.coordX, tailNode.coordY]
 
             if (snakeCoords[0] === tailNodeCoords[0] && snakeCoords[1] === tailNodeCoords[1]) {
-              return 'Collision'
+              return endMessage
             }
           }
         }
@@ -67,9 +71,11 @@ export default class GameMechanics {
       for (let l = 0; l < AllSnakesData.length; l++) {
         if (l !== i) {
           const OtherSnakeCoords = [AllSnakesData[l].coordX, AllSnakesData[l].coordY]
+          endMessage = endMessage + `${AllSnakesData[l].user}: ${AllSnakesData[l].length}` + '\n'
 
           if (snakeCoords[0] === OtherSnakeCoords[0] && snakeCoords[1] === OtherSnakeCoords[1]) {
-            return 'Collision'
+            gameServices.endGame(idGame)
+            return endMessage
           }
         }
       }
