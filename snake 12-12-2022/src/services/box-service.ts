@@ -36,6 +36,6 @@ export default class BoxService implements IBoxService {
     foundBox.coordX = coords[0]
     foundBox.coordY = coords[1]
     foundBox.state = defaultState
-    return await this.boxData.updatePositionState(id, foundBox)
+    return await this.boxData.update(foundBox)
   }
 }

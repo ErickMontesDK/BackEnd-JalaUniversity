@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>11/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.69% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -89,48 +89,48 @@
 <a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Snake from '../../domain/entities/snake'
 import { direction } from '../../domain/types/types'
 &nbsp;
-export const movingInDirection = <span class="fstat-no" title="function not covered" >(S</span>nakeFound:Snake, limitBoardValue:number): Snake =&gt; {
-  const direction:direction = <span class="cstat-no" title="statement not covered" >SnakeFound.direction</span>
-  const firstBox = <span class="cstat-no" title="statement not covered" >1</span>
+export const movingInDirection = (SnakeFound:Snake, limitBoardValue:number): Snake =&gt; {
+  const direction:direction = SnakeFound.direction
+  const firstBox = 1
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  switch (direction) {</span>
+  switch (direction) {
     case 'up':
-<span class="cstat-no" title="statement not covered" >      SnakeFound.coordY = SnakeFound.coordY &gt;= limitBoardValue ? firstBox : SnakeFound.coordY + 1</span>
-<span class="cstat-no" title="statement not covered" >      break</span>
+      SnakeFound.coordY = SnakeFound.coordY &gt;= limitBoardValue ? firstBox : SnakeFound.coordY + 1
+      break
     case 'down':
-<span class="cstat-no" title="statement not covered" >      SnakeFound.coordY = SnakeFound.coordY &lt;= firstBox ? limitBoardValue : SnakeFound.coordY - 1</span>
-<span class="cstat-no" title="statement not covered" >      break</span>
+      SnakeFound.coordY = SnakeFound.coordY &lt;= firstBox ? <span class="branch-0 cbranch-no" title="branch not covered" >limitBoardValue </span>: SnakeFound.coordY - 1
+      break
     case 'left':
-<span class="cstat-no" title="statement not covered" >      SnakeFound.coordX = SnakeFound.coordX &lt;= firstBox ? limitBoardValue : SnakeFound.coordX - 1</span>
-<span class="cstat-no" title="statement not covered" >      break</span>
+      SnakeFound.coordX = SnakeFound.coordX &lt;= firstBox ? limitBoardValue : SnakeFound.coordX - 1
+      break
     case 'right':
-<span class="cstat-no" title="statement not covered" >      SnakeFound.coordX = SnakeFound.coordX &gt;= limitBoardValue ? firstBox : SnakeFound.coordX + 1</span>
-<span class="cstat-no" title="statement not covered" >      break</span>
+      SnakeFound.coordX = SnakeFound.coordX &gt;= limitBoardValue ? firstBox : SnakeFound.coordX + 1
+      break
   }
-<span class="cstat-no" title="statement not covered" >  return SnakeFound</span>
+  return SnakeFound
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -139,7 +139,7 @@ export const movingInDirection = <span class="fstat-no" title="function not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-21T20:25:26.398Z
+                at 2022-12-22T04:52:03.369Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

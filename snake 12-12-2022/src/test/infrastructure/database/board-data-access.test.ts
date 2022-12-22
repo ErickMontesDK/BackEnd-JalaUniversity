@@ -1,7 +1,7 @@
-import Board from '../../../src/domain/entities/board'
-import IBoardRepository from '../../../src/domain/repository/IBoardRepository'
-import { AppDataSource } from '../../../src/infrastructure/database/db-source'
-import { container } from '../../../src/infrastructure/inversify/inversify.config'
+import Board from '../../../domain/entities/board'
+import IBoardRepository from '../../../domain/repository/IBoardRepository'
+import { AppDataSource } from '../../../infrastructure/database/db-source'
+import { container } from '../../../infrastructure/inversify/inversify.config'
 
 describe('Unit test for board data access', () => {
   const boardDataAccess = container.get<IBoardRepository>('BoardData')

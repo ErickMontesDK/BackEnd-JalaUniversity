@@ -27,13 +27,8 @@ export default class BoxData implements IBoxRepository {
     }
   }
 
-  async updatePositionState (id: number, box: Box) {
-    const repository = AppDataSource.getRepository(dbBox)
-    if (box) {
-      await repository.save(box)
-      return box
-    } else {
-      throw new Error('Box Not found')
-    }
+  async update (box: Box) {
+    const updateBox = await this.repository.save(box)
+    return updateBox
   }
 }

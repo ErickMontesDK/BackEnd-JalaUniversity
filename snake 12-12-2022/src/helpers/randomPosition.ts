@@ -8,6 +8,7 @@ export const randomPosition = (max:number) => {
     counter++
     prevRand = randValue
     const ifString = randValue.toString()
+
     return parseInt(ifString)
   } else {
     throw new Error('Sent a invalid number')
