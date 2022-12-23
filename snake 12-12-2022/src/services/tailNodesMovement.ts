@@ -1,7 +1,8 @@
-import BoxService from './box-service'
+import IBoxService from '../domain/repository/IBoxService'
+import { container } from '../infrastructure/inversify/inversify.config'
 
-async function tailNodesMovement (nodes: string[], oldPositionHead:number[]): Promise<void> {
-  const boxService = new BoxService()
+async function tailNodesMovement (nodes: string[], oldPositionHead:number[]): Promise<number[]> {
+  const boxService = container.get<IBoxService>('BoxService')
   let oldPositionBody = oldPositionHead
 
   for (let i = 0; i < nodes.length; i++) {
@@ -13,6 +14,7 @@ async function tailNodesMovement (nodes: string[], oldPositionHead:number[]): Pr
       oldPositionBody = [nodeBoxData.coordX, nodeBoxData.coordY]
     }
   }
+  return oldPositionBody
 }
 
 export { tailNodesMovement }

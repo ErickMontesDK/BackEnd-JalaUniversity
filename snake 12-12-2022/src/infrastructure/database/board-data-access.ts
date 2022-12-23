@@ -11,14 +11,18 @@ export default class BoardData implements IBoardRepository {
 
   async create (board: dbBoard) {
     await this.repository.save(board)
-
     const idBoard = await returnForId(this.repository)
 
-    return { id: idBoard, message: 'Created' }
+    if (idBoard) {
+      return { id: idBoard, message: 'Created' }
+    } else {
+      throw new Error('Board was not created')
+    }
   }
 
   async read (id: number) {
     const boardFound = await this.repository.findOneBy({ id })
+
     if (boardFound) {
       return boardFound
     } else {
@@ -28,6 +32,7 @@ export default class BoardData implements IBoardRepository {
 
   async delete (id: number) {
     const deleteResponse = await this.repository.delete({ id })
+
     if (deleteResponse.affected !== 0) {
       return { id, message: 'Board deleted' }
     } else {

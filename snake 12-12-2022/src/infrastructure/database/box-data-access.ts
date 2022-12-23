@@ -14,12 +14,16 @@ export default class BoxData implements IBoxRepository {
     await this.repository.save(newFoodBox)
 
     const idBox = await returnForId(this.repository)
-
-    return { id: idBox, message: 'Created' }
+    if (idBox) {
+      return { id: idBox, message: 'Created' }
+    } else {
+      throw new Error('Box was not created')
+    }
   }
 
   async read (id: number) {
     const BoxFound = await this.repository.findOneBy({ id })
+
     if (BoxFound) {
       return BoxFound
     } else {

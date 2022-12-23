@@ -1,6 +1,5 @@
-import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
-import { injectable } from 'inversify'
+import { inject, injectable } from 'inversify'
 import { randomPosition } from '../helpers/randomPosition'
 import { boxState } from '../domain/types/types'
 import Box from '../domain/entities/box'
@@ -9,7 +8,10 @@ import IBoxRepository from '../domain/repository/IBoxRepository'
 
 @injectable()
 export default class BoxService implements IBoxService {
-  boxData = container.get<IBoxRepository>('BoxDataAcess')
+  protected boxData: IBoxRepository
+  constructor (@inject('BoxDataAcess') box: IBoxRepository) {
+    this.boxData = box
+  }
 
   async create (limitBoard: number) {
     const initialValue = 1

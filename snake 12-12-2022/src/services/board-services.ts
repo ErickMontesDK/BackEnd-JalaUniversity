@@ -1,13 +1,17 @@
 import IBoardRepository from '../domain/repository/IBoardRepository'
-import { container } from '../infrastructure/inversify/inversify.config'
+// import { container } from '../infrastructure/inversify/inversify.config'
+import { inject, injectable } from 'inversify'
 import 'reflect-metadata'
-import { injectable } from 'inversify'
 import Board from '../domain/entities/board'
 import IBoardService from '../domain/repository/IBoardService'
 
 @injectable()
 export default class BoardService implements IBoardService {
-  boardData : IBoardRepository = container.get<IBoardRepository>('BoardData')
+  // boardData : IBoardRepository = container.get<IBoardRepository>('BoardData')
+  protected boardData: IBoardRepository
+  constructor (@inject('BoardData') board: IBoardRepository) {
+    this.boardData = board
+  }
 
   async create (boardSize: number) {
     const size = boardSize

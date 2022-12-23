@@ -1,7 +1,8 @@
 import Snake from '../domain/entities/snake'
-import BoxService from './box-service'
 import Board from '../domain/entities/board'
 import Box from '../domain/entities/box'
+import IBoxService from '../domain/repository/IBoxService'
+import { container } from '../infrastructure/inversify/inversify.config'
 
 export default class GameDisplayFunctions {
   static async createBoardArrange (boardInfo: Board): Promise<string[][]> {
@@ -40,7 +41,7 @@ export default class GameDisplayFunctions {
   }
 
   static async addSnakesBodys (board:string[][], snakes:Snake[]): Promise<string[][]> {
-    const boxService = new BoxService()
+    const boxService = container.get<IBoxService>('BoxService')
     const initialBoardValue = 1
 
     for (let i = 0; i < snakes.length; i++) {

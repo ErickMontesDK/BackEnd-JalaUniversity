@@ -1,26 +1,31 @@
 import Snake from '../domain/entities/snake'
-import BoxService from './box-service'
-import GameService from './game-services'
-import SnakeService from './snake-services'
 import Box from '../domain/entities/box'
+import IBoxService from '../domain/repository/IBoxService'
+import ISnakeService from '../domain/repository/ISnakeService'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export default class GameMechanics {
-  static async returnAllSnakesInfo (idSnakes:string[]):Promise<Snake[]> {
-    const snakeService = new SnakeService()
+  protected boxServices: IBoxService
+  protected snakeServices: ISnakeService
+
+  constructor (@inject('BoxService') box: IBoxService,
+  @inject('SnakeService') snake: ISnakeService) {
+    this.boxServices = box
+    this.snakeServices = snake
+  }
+
+  async returnAllSnakesInfo (idSnakes:string[]):Promise<Snake[]> {
     const Snakes: Snake[] = []
 
     for (let i = 0; i < idSnakes.length; i++) {
-      const snake = await snakeService.read(parseInt(idSnakes[i]))
+      const snake = await this.snakeServices.read(parseInt(idSnakes[i]))
       Snakes.push(snake)
     }
     return Snakes
   }
 
-  static async eatingFood (allSnakes:Snake[], food: Box, idGame:number): Promise<void> {
-    const boxServices = new BoxService()
-    const snakeServices = new SnakeService()
-    const gameServices = new GameService()
-
+  async eatingFood (allSnakes:Snake[], food: Box): Promise<boolean> {
     const foodCoords = [food.coordX, food.coordY]
 
     for (let i = 0; i < allSnakes.length; i++) {
@@ -32,46 +37,40 @@ export default class GameMechanics {
 
         if (snakeTailNodes[0] !== '') {
           const idSnakeLastTailNode = parseInt(snakeTailNodes[snakeTailNodes.length - 1])
-          const SnakeLastTailNode = await boxServices.read(idSnakeLastTailNode)
+          const SnakeLastTailNode = await this.boxServices.read(idSnakeLastTailNode)
 
           SnakeLastTailNodeCoords = [SnakeLastTailNode.coordX, SnakeLastTailNode.coordY]
         }
 
-        await boxServices.updateToTail(food.id, SnakeLastTailNodeCoords)
-        await snakeServices.updateLength(allSnakes[i].id, food.id.toString())
-        await gameServices.updateFoodInGame(idGame)
+        await this.boxServices.updateToTail(food.id, SnakeLastTailNodeCoords)
+        await this.snakeServices.updateLength(allSnakes[i].id, food.id.toString())
+        return true
       }
     }
+    return false
   }
 
-  static async updateMovementForAllSnakes (allSnakes:Snake[], boardSize:number):Promise<void> {
-    const snakeServices = new SnakeService()
-
+  async updateMovementForAllSnakes (allSnakes:Snake[], boardSize:number):Promise<void> {
     allSnakes.forEach(async (snake) => {
-      await snakeServices.updateMovement(snake.id, boardSize)
+      await this.snakeServices.updateMovement(snake.id, boardSize)
     })
   }
 
-  static async snakesCollide (AllSnakesData: Snake[], idGame:number):Promise<string> {
-    const gameServices = new GameService()
-
+  async snakesCollide (AllSnakesData: Snake[]):Promise<boolean> {
     for (let i = 0; i < AllSnakesData.length; i++) {
-      let endMessage = 'Collision. GAME OVER !\n Score: '
       const snakeCoords = [AllSnakesData[i].coordX, AllSnakesData[i].coordY]
-      endMessage = endMessage + `${AllSnakesData[i].user}: ${AllSnakesData[i].length}` + '\n'
 
       for (let j = 0; j < AllSnakesData.length; j++) {
         const tailElements = AllSnakesData[j].tailNodes.split(',')
 
         if (tailElements[0] !== '') {
           for (let k = 0; k < tailElements.length; k++) {
-            const boxService = new BoxService()
             const tailNodeId = parseInt(tailElements[k])
-            const tailNode = await boxService.read(tailNodeId)
+            const tailNode = await this.boxServices.read(tailNodeId)
             const tailNodeCoords = [tailNode.coordX, tailNode.coordY]
 
             if (snakeCoords[0] === tailNodeCoords[0] && snakeCoords[1] === tailNodeCoords[1]) {
-              return endMessage
+              return true
             }
           }
         }
@@ -79,15 +78,13 @@ export default class GameMechanics {
       for (let l = 0; l < AllSnakesData.length; l++) {
         if (l !== i) {
           const OtherSnakeCoords = [AllSnakesData[l].coordX, AllSnakesData[l].coordY]
-          endMessage = endMessage + `${AllSnakesData[l].user}: ${AllSnakesData[l].length}` + '\n'
 
           if (snakeCoords[0] === OtherSnakeCoords[0] && snakeCoords[1] === OtherSnakeCoords[1]) {
-            gameServices.stateGameEnded(idGame)
-            return endMessage
+            return true
           }
         }
       }
     }
-    return 'Game running...'
+    return false
   }
 }

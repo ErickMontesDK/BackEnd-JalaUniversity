@@ -1,22 +1,37 @@
-import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
-import { injectable } from 'inversify'
+import { inject, injectable } from 'inversify'
 import IGameService from '../domain/repository/IGameService'
 import Game from '../domain/entities/game'
 import { gameState } from '../domain/types/types'
 import IGameRepository from '../domain/repository/IGameRepository'
 import GameDisplayFunctions from './gameDisplay'
 import GameMechanics from './gameMechanics'
-import BoxService from './box-service'
-import BoardService from './board-services'
-import SnakeService from './snake-services'
+// import BoxService from './box-service'
+// import BoardService from './board-services'
+// import SnakeService from './snake-services'
+import IBoxService from '../domain/repository/IBoxService'
+import IBoardService from '../domain/repository/IBoardService'
+import ISnakeService from '../domain/repository/ISnakeService'
 
 @injectable()
 export default class GameService implements IGameService {
-  protected gameData = container.get<IGameRepository>('GameData')
-  protected boardService = new BoardService()
-  protected snakeService = new SnakeService()
-  protected boxService = new BoxService()
+  protected gameData: IGameRepository
+  protected boardService: IBoardService
+  protected snakeService: ISnakeService
+  protected boxService: IBoxService
+  protected gameMechanics: GameMechanics
+
+  constructor (@inject('BoardService') board: IBoardService,
+  @inject('SnakeService') snake:ISnakeService,
+  @inject('BoxService') box:IBoxService,
+  @inject('GameData') game: IGameRepository,
+  @inject('GameMechanics') gameMechanics: GameMechanics) {
+    this.boardService = board
+    this.snakeService = snake
+    this.boxService = box
+    this.gameData = game
+    this.gameMechanics = gameMechanics
+  }
 
   async create (boardSize: number, players:string, speed:number) {
     const newBoardForThisGame = await this.boardService.create(boardSize)
@@ -54,16 +69,21 @@ export default class GameService implements IGameService {
 
     const boardInGameDetails = await this.boardService.read(boardId)
     const foodInGameDetails = await this.boxService.read(idFood)
-    const AllSnakesData = await GameMechanics.returnAllSnakesInfo(idSnakes)
+    const AllSnakesData = await this.gameMechanics.returnAllSnakesInfo(idSnakes)
 
-    await GameMechanics.eatingFood(AllSnakesData, foodInGameDetails, id)
-    const messageCollision = await GameMechanics.snakesCollide(AllSnakesData, id)
+    const DidSomeoneAte = await this.gameMechanics.eatingFood(AllSnakesData, foodInGameDetails)
+    const DidSomeoneCrash = await this.gameMechanics.snakesCollide(AllSnakesData)
+
+    if (DidSomeoneAte) {
+      console.log('eat the food')
+      this.updateFoodInGame(id)
+    }
+    if (DidSomeoneCrash && DidSomeoneAte === false) this.stateGameEnded(id)
 
     return {
       boardInfo: boardInGameDetails,
       foodInfo: foodInGameDetails,
       snakesInfo: AllSnakesData,
-      messageCollision,
       gameState
     }
   }
@@ -71,7 +91,7 @@ export default class GameService implements IGameService {
   async updateMovementFromAllElements (id: number) {
     const gameElementsInfo = await this.getAllDataForTheGame(id)
 
-    await GameMechanics.updateMovementForAllSnakes(gameElementsInfo.snakesInfo, gameElementsInfo.boardInfo.arregloX)
+    await this.gameMechanics.updateMovementForAllSnakes(gameElementsInfo.snakesInfo, gameElementsInfo.boardInfo.arregloX)
 
     return gameElementsInfo
   }
@@ -84,7 +104,7 @@ export default class GameService implements IGameService {
     const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(gameElementsInfo.snakesInfo, DisplayWithFood)
     const DisplayWithSnakesBodys = await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, gameElementsInfo.snakesInfo)
 
-    return [DisplayWithSnakesBodys, gameElementsInfo.messageCollision]
+    return [DisplayWithSnakesBodys, gameElementsInfo.gameState]
   }
 
   async updateFoodInGame (gameId: number) {
@@ -95,6 +115,7 @@ export default class GameService implements IGameService {
 
     const updateGame = gameFound
     updateGame.idFood = newFood.id
+    console.log(gameFound.id, updateGame.idFood)
 
     return await this.gameData.updateGame(updateGame)
   }

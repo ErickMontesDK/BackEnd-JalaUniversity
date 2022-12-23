@@ -24,6 +24,7 @@ import IGameRepository from '../../domain/repository/IGameRepository'
 import GameData from '../database/game-data-access'
 import IGameService from '../../domain/repository/IGameService'
 import GameService from '../../services/game-services'
+import GameMechanics from '../../services/gameMechanics'
 
 const container = new Container()
 
@@ -42,4 +43,6 @@ container.bind<IBoxController>('BoxController').to(BoxController)
 container.bind<IGameRepository>('GameData').to(GameData)
 container.bind<IGameService>('GameService').to(GameService)
 container.bind<IGameController>('GameController').to(GameController)
+container.bind<GameMechanics>('GameMechanics').to(GameMechanics)
+
 export { container }

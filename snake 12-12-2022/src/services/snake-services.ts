@@ -1,6 +1,6 @@
-import { container } from '../infrastructure/inversify/inversify.config'
+// import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
-import { injectable } from 'inversify'
+import { inject, injectable } from 'inversify'
 import ISnakeService from '../domain/repository/ISnakeService'
 import { randomPosition } from '../helpers/randomPosition'
 import { direction } from '../domain/types/types'
@@ -12,7 +12,11 @@ import { tailNodesMovement } from './tailNodesMovement'
 
 @injectable()
 export default class SnakeService implements ISnakeService {
-  snakeData = container.get<ISnakeRepository>('SnakeData')
+  // snakeData = container.get<ISnakeRepository>('SnakeData')
+  protected snakeData: ISnakeRepository
+  constructor (@inject('SnakeData') snake: ISnakeRepository) {
+    this.snakeData = snake
+  }
 
   async create (limitBoard: number, player: string) {
     const initialLength = 1
@@ -87,12 +91,12 @@ export default class SnakeService implements ISnakeService {
     const y = randomPosition(boardSize) + initialLength
 
     const snakeFound = await this.read(id)
-    snakeFound.length = 0
+    snakeFound.length = 1
     snakeFound.tailNodes = ''
     snakeFound.coordX = x
     snakeFound.coordY = y
 
-    await this.snakeData.update(snakeFound)
+    return await this.snakeData.update(snakeFound)
   }
 
   async getBestScores () {

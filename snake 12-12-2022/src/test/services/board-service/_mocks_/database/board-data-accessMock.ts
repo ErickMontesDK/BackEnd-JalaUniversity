@@ -1,8 +1,10 @@
 import 'reflect-metadata'
-import IBoardRepository from '../../domain/repository/IBoardRepository'
-import Board from '../../domain/entities/board'
-import dbBoard from '../../infrastructure/database/entities/dbBoard'
+import { injectable } from 'inversify'
+import IBoardRepository from '../../../../../domain/repository/IBoardRepository'
+import dbBoard from '../../../../../infrastructure/database/entities/dbBoard'
+import Board from '../../../../../domain/entities/board'
 
+@injectable()
 export class BoardDataMock implements IBoardRepository {
   private createMock: jest.Mock
   private readMock: jest.Mock

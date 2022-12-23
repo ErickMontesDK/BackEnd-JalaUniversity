@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/15</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.46% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/13</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,62 +92,74 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import IBoardRepository from '../domain/repository/IBoardRepository'
-import { container } from '../infrastructure/inversify/inversify.config'
+// import { container } from '../infrastructure/inversify/inversify.config'
+import { inject, injectable } from 'inversify'
 import 'reflect-metadata'
-import { injectable } from 'inversify'
 import Board from '../domain/entities/board'
 import IBoardService from '../domain/repository/IBoardService'
 &nbsp;
 @injectable()
-export default <span class="fstat-no" title="function not covered" >class B</span>oardService implements IBoardService {
-<span class="cstat-no" title="statement not covered" >  boardData : IBoardRepository = container.get&lt;IBoardRepository&gt;('BoardData')</span>
-&nbsp;
-  async <span class="fstat-no" title="function not covered" >create </span>(boardSize: number) {
-    const size = <span class="cstat-no" title="statement not covered" >boardSize</span>
-&nbsp;
-    const board = <span class="cstat-no" title="statement not covered" >new Board()</span>
-<span class="cstat-no" title="statement not covered" >    board.arregloX = size</span>
-<span class="cstat-no" title="statement not covered" >    board.arregloY = size</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return await this.boardData.create(board)</span>
+export default class BoardService implements IBoardService {
+  // boardData : IBoardRepository = container.get&lt;IBoardRepository&gt;('BoardData')
+  protected boardData: IBoardRepository
+  constructor (@inject('BoardData') board: IBoardRepository) {
+    this.boardData = board
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >read </span>(id: number) {
-<span class="cstat-no" title="statement not covered" >    return await this.boardData.read(id)</span>
+  async create (boardSize: number) {
+    const size = boardSize
+&nbsp;
+    const board = new Board()
+    board.arregloX = size
+    board.arregloY = size
+&nbsp;
+    return await this.boardData.create(board)
   }
 &nbsp;
-  async <span class="fstat-no" title="function not covered" >delete </span>(id: number) {
-<span class="cstat-no" title="statement not covered" >    return await this.boardData.delete(id)</span>
+  async read (id: number) {
+    return await this.boardData.read(id)
+  }
+&nbsp;
+  async delete (id: number) {
+    return await this.boardData.delete(id)
   }
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -157,7 +169,7 @@ export default <span class="fstat-no" title="function not covered" >class B</spa
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-22T04:52:03.369Z
+                at 2022-12-23T04:08:18.452Z
             </div>
         <script src="../prettify.js"></script>
         <script>
