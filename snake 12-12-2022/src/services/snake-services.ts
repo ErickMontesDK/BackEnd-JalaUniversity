@@ -1,4 +1,3 @@
-// import { container } from '../infrastructure/inversify/inversify.config'
 import 'reflect-metadata'
 import { inject, injectable } from 'inversify'
 import ISnakeService from '../domain/repository/ISnakeService'
@@ -12,7 +11,6 @@ import { tailNodesMovement } from './tailNodesMovement'
 
 @injectable()
 export default class SnakeService implements ISnakeService {
-  // snakeData = container.get<ISnakeRepository>('SnakeData')
   protected snakeData: ISnakeRepository
   constructor (@inject('SnakeData') snake: ISnakeRepository) {
     this.snakeData = snake

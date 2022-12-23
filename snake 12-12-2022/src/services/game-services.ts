@@ -104,7 +104,13 @@ export default class GameService implements IGameService {
     const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(gameElementsInfo.snakesInfo, DisplayWithFood)
     const DisplayWithSnakesBodys = await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, gameElementsInfo.snakesInfo)
 
-    return [DisplayWithSnakesBodys, gameElementsInfo.gameState]
+    const Scores:object[] = []
+    gameElementsInfo.snakesInfo.forEach((snake) => {
+      Scores.push({ PLAYER: snake.user, SCORE: snake.length })
+    })
+    const Display = [DisplayWithSnakesBodys, gameElementsInfo.gameState, Scores]
+
+    return Display
   }
 
   async updateFoodInGame (gameId: number) {
@@ -115,7 +121,6 @@ export default class GameService implements IGameService {
 
     const updateGame = gameFound
     updateGame.idFood = newFood.id
-    console.log(gameFound.id, updateGame.idFood)
 
     return await this.gameData.updateGame(updateGame)
   }

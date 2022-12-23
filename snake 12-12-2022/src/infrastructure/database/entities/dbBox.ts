@@ -15,7 +15,4 @@ export default class dbBox implements Box {
 
     @Column()
       state! : boxState
-
-    @Column()
-      TailNode!: number
 }

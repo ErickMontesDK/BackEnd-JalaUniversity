@@ -3,5 +3,4 @@ import Position from './position'
 
 export default class Box extends Position {
   state!: boxState
-  TailNode!: number
 }

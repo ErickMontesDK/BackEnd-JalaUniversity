@@ -38,7 +38,6 @@ export default class GameMechanics {
         if (snakeTailNodes[0] !== '') {
           const idSnakeLastTailNode = parseInt(snakeTailNodes[snakeTailNodes.length - 1])
           const SnakeLastTailNode = await this.boxServices.read(idSnakeLastTailNode)
-
           SnakeLastTailNodeCoords = [SnakeLastTailNode.coordX, SnakeLastTailNode.coordY]
         }
 

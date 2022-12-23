@@ -19,7 +19,6 @@ export class BoxDataMock implements IBoxRepository {
 
   async create (newFoodBox: dbBox) {
     this.createMock(newFoodBox)
-    console.log(newFoodBox)
     const newId = 6
     return { id: newId, message: 'mock return' }
   }

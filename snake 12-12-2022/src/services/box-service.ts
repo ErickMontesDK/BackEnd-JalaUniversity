@@ -23,7 +23,6 @@ export default class BoxService implements IBoxService {
     newFood.coordX = x + initialValue
     newFood.coordY = y + initialValue
     newFood.state = defaultState
-    newFood.TailNode = 0
 
     return await this.boxData.create(newFood)
   }

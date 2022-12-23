@@ -11,7 +11,6 @@ describe('Unit test for board data access', () => {
   testBox.coordX = testCoordParameter
   testBox.coordY = testCoordParameter
   testBox.state = 'food'
-  testBox.TailNode = 0
 
   beforeAll(async () => {
     await AppDataSource.initialize()
