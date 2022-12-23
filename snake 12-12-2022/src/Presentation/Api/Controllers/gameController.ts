@@ -44,6 +44,16 @@ export default class GameController implements IGameController {
     }
   }
 
+  async showAllDataElementsInGame (req:Request, res:Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id as string)
+      const gameFound = await this.GameService.getAllDataForTheGame(id)
+      res.json(gameFound)
+    } catch (err:unknown) {
+      if (err instanceof Error) res.json({ name: err.name, msg: err.message })
+    }
+  }
+
   async changeFood (req:Request, res:Response): Promise<void> {
     try {
       const id = parseInt(req.params.id as string)

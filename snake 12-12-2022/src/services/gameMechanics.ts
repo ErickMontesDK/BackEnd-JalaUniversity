@@ -25,6 +25,17 @@ export default class GameMechanics {
     return Snakes
   }
 
+  async getScores (AllSnakes:Snake[]) {
+    const Scores:object[] = []
+
+    AllSnakes.forEach((snake) => {
+      const fixScoreParameter = 1
+      Scores.push({ PLAYER: snake.user, SCORE: snake.length - fixScoreParameter })
+    })
+
+    return Scores
+  }
+
   async eatingFood (allSnakes:Snake[], food: Box): Promise<boolean> {
     const foodCoords = [food.coordX, food.coordY]
 

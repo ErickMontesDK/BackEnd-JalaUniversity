@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">74.44% </span>
+                <span class="strong">70.83% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>67/90</span>
+                <span class='fraction'>68/96</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>10/15</span>
+                <span class='fraction'>10/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">71.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>63/84</span>
+                <span class='fraction'>64/90</span>
             </div>
         
             
@@ -232,7 +232,13 @@
 <a name='L167'></a><a href='#L167'>167</a>
 <a name='L168'></a><a href='#L168'>168</a>
 <a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
@@ -240,9 +246,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -304,12 +307,13 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -320,6 +324,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -336,6 +342,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -347,7 +360,6 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -409,9 +421,6 @@ import { gameState } from '../domain/types/types'
 import IGameRepository from '../domain/repository/IGameRepository'
 import GameDisplayFunctions from './gameDisplay'
 import GameMechanics from './gameMechanics'
-// import BoxService from './box-service'
-// import BoardService from './board-services'
-// import SnakeService from './snake-services'
 import IBoxService from '../domain/repository/IBoxService'
 import IBoardService from '../domain/repository/IBoardService'
 import ISnakeService from '../domain/repository/ISnakeService'
@@ -473,6 +482,7 @@ export default class GameService implements IGameService {
     const boardInGameDetails = await this.boardService.read(boardId)
     const foodInGameDetails = await this.boxService.read(idFood)
     const AllSnakesData = await this.gameMechanics.returnAllSnakesInfo(idSnakes)
+    const Scores = await this.gameMechanics.getScores(AllSnakesData)
 &nbsp;
     const DidSomeoneAte = await this.gameMechanics.eatingFood(AllSnakesData, foodInGameDetails)
     const DidSomeoneCrash = await this.gameMechanics.snakesCollide(AllSnakesData)
@@ -483,12 +493,14 @@ export default class GameService implements IGameService {
     }
     <span class="missing-if-branch" title="if path not taken" >I</span>if (DidSomeoneCrash &amp;&amp; DidSomeoneAte === false) <span class="cstat-no" title="statement not covered" >this.stateGameEnded(id)</span>
 &nbsp;
-    return {
+    const report = {
       boardInfo: boardInGameDetails,
       foodInfo: foodInGameDetails,
       snakesInfo: AllSnakesData,
-      gameState
+      gameState,
+      scores: Scores
     }
+    return report
   }
 &nbsp;
   async <span class="fstat-no" title="function not covered" >updateMovementFromAllElements </span>(id: number) {
@@ -507,7 +519,14 @@ export default class GameService implements IGameService {
     const DisplayWithSnakes = <span class="cstat-no" title="statement not covered" >await GameDisplayFunctions.addSnakesInDisplay(gameElementsInfo.snakesInfo, DisplayWithFood)</span>
     const DisplayWithSnakesBodys = <span class="cstat-no" title="statement not covered" >await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, gameElementsInfo.snakesInfo)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return [DisplayWithSnakesBodys, gameElementsInfo.gameState]</span>
+    const Scores:object[] = <span class="cstat-no" title="statement not covered" >[]</span>
+<span class="cstat-no" title="statement not covered" >    gameElementsInfo.snakesInfo.forEach(<span class="fstat-no" title="function not covered" >(s</span>nake) =&gt; {</span>
+      const fixScoreParameter = <span class="cstat-no" title="statement not covered" >1</span>
+<span class="cstat-no" title="statement not covered" >      Scores.push({ PLAYER: snake.user, SCORE: snake.length - fixScoreParameter })</span>
+    })
+    const Display = <span class="cstat-no" title="statement not covered" >[DisplayWithSnakesBodys, gameElementsInfo.gameState, Scores]</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return Display</span>
   }
 &nbsp;
   async updateFoodInGame (gameId: number) {
@@ -518,7 +537,6 @@ export default class GameService implements IGameService {
 &nbsp;
     const updateGame = gameFound
     updateGame.idFood = newFood.id
-    console.log(gameFound.id, updateGame.idFood)
 &nbsp;
     return await this.gameData.updateGame(updateGame)
   }
@@ -577,7 +595,7 @@ export default class GameService implements IGameService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-23T04:08:18.452Z
+                at 2022-12-23T14:37:17.033Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -98,11 +98,12 @@ export default class SnakeService implements ISnakeService {
   }
 
   async getBestScores () {
-    const scores:string[] = []
+    const scores:{Player:string, Score:number}[] = []
     const snakesLength = await this.snakeData.readBestScores()
 
     snakesLength.forEach(snake => {
-      const element = `PLAYER: ${snake.user} --> ${snake.length} POINTS`
+      const fixScoreParameter = 1
+      const element = { Player: snake.user, Score: snake.length - fixScoreParameter }
       scores.push(element)
     })
     return scores

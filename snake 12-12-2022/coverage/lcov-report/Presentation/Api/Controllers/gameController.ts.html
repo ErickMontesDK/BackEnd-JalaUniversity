@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.53% </span>
+                <span class="strong">10.34% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/52</span>
+                <span class='fraction'>6/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">9.3% </span>
+                <span class="strong">8.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/43</span>
+                <span class='fraction'>4/48</span>
             </div>
         
             
@@ -149,7 +149,17 @@
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -170,6 +180,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -274,8 +294,18 @@ export default <span class="fstat-no" title="function not covered" >class G</spa
   async <span class="fstat-no" title="function not covered" >showBoardGame </span>(req:Request, res:Response): Promise&lt;void&gt; {
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const id = <span class="cstat-no" title="statement not covered" >parseInt(req.params.id as string)</span>
-      const BoxFound = <span class="cstat-no" title="statement not covered" >await this.GameService.displayBoardWithElements(id)</span>
-<span class="cstat-no" title="statement not covered" >      res.json(BoxFound)</span>
+      const gameFound = <span class="cstat-no" title="statement not covered" >await this.GameService.displayBoardWithElements(id)</span>
+<span class="cstat-no" title="statement not covered" >      res.json(gameFound)</span>
+    } catch (err:unknown) {
+<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (err instanceof Error) <span class="cstat-no" title="statement not covered" >res.json({ name: err.name, msg: err.message })</span></span>
+    }
+  }
+&nbsp;
+  async <span class="fstat-no" title="function not covered" >showAllDataElementsInGame </span>(req:Request, res:Response): Promise&lt;void&gt; {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      const id = <span class="cstat-no" title="statement not covered" >parseInt(req.params.id as string)</span>
+      const gameFound = <span class="cstat-no" title="statement not covered" >await this.GameService.getAllDataForTheGame(id)</span>
+<span class="cstat-no" title="statement not covered" >      res.json(gameFound)</span>
     } catch (err:unknown) {
 <span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (err instanceof Error) <span class="cstat-no" title="statement not covered" >res.json({ name: err.name, msg: err.message })</span></span>
     }
@@ -328,7 +358,7 @@ export default <span class="fstat-no" title="function not covered" >class G</spa
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-23T04:08:18.452Z
+                at 2022-12-23T14:37:17.033Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

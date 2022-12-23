@@ -4,6 +4,7 @@ export default interface IGameController {
     createGame(req: Request, res: Response): Promise <void>
     searchById(req: Request, res: Response): Promise<void>
     showBoardGame(req: Request, res: Response): Promise<void>
+    showAllDataElementsInGame(req: Request, res: Response): Promise<void>
     changeFood(req: Request, res: Response): Promise<void>
     runGame(req: Request, res: Response): Promise<void>
     stopGame(req: Request, res: Response): Promise<void>

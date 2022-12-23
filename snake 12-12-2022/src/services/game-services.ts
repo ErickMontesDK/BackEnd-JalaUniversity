@@ -6,9 +6,6 @@ import { gameState } from '../domain/types/types'
 import IGameRepository from '../domain/repository/IGameRepository'
 import GameDisplayFunctions from './gameDisplay'
 import GameMechanics from './gameMechanics'
-// import BoxService from './box-service'
-// import BoardService from './board-services'
-// import SnakeService from './snake-services'
 import IBoxService from '../domain/repository/IBoxService'
 import IBoardService from '../domain/repository/IBoardService'
 import ISnakeService from '../domain/repository/ISnakeService'
@@ -70,22 +67,28 @@ export default class GameService implements IGameService {
     const boardInGameDetails = await this.boardService.read(boardId)
     const foodInGameDetails = await this.boxService.read(idFood)
     const AllSnakesData = await this.gameMechanics.returnAllSnakesInfo(idSnakes)
+    const Scores = await this.gameMechanics.getScores(AllSnakesData)
 
     const DidSomeoneAte = await this.gameMechanics.eatingFood(AllSnakesData, foodInGameDetails)
     const DidSomeoneCrash = await this.gameMechanics.snakesCollide(AllSnakesData)
 
     if (DidSomeoneAte) {
-      console.log('eat the food')
+      console.log('Someone earns 1 point')
       this.updateFoodInGame(id)
     }
-    if (DidSomeoneCrash && DidSomeoneAte === false) this.stateGameEnded(id)
+    if (DidSomeoneCrash) this.stateGameEnded(id)
 
-    return {
+    const report = {
       boardInfo: boardInGameDetails,
       foodInfo: foodInGameDetails,
       snakesInfo: AllSnakesData,
-      gameState
+      gameState,
+      scores: Scores,
+      DidSomeoneAte,
+      DidSomeoneCrash
     }
+    console.log(report)
+    return report
   }
 
   async updateMovementFromAllElements (id: number) {
@@ -97,17 +100,14 @@ export default class GameService implements IGameService {
   }
 
   async displayBoardWithElements (id: number) {
-    const gameElementsInfo = await this.getAllDataForTheGame(id)
+    const gameElementsInfo = await this.updateMovementFromAllElements(id)
 
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(gameElementsInfo.boardInfo)
     const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(gameElementsInfo.foodInfo, boardDisplay)
     const DisplayWithSnakes = await GameDisplayFunctions.addSnakesInDisplay(gameElementsInfo.snakesInfo, DisplayWithFood)
     const DisplayWithSnakesBodys = await GameDisplayFunctions.addSnakesBodys(DisplayWithSnakes, gameElementsInfo.snakesInfo)
 
-    const Scores:object[] = []
-    gameElementsInfo.snakesInfo.forEach((snake) => {
-      Scores.push({ PLAYER: snake.user, SCORE: snake.length })
-    })
+    const Scores = gameElementsInfo.scores
     const Display = [DisplayWithSnakesBodys, gameElementsInfo.gameState, Scores]
 
     return Display
@@ -145,9 +145,10 @@ export default class GameService implements IGameService {
     await this.stateGameRunning(gameId)
 
     const updateCycleGame = async () => {
-      const newGameValues = await this.updateMovementFromAllElements(gameId)
-      const gameState = newGameValues.gameState
+      const display = await this.displayBoardWithElements(gameId)
+      const gameState = await (await this.read(gameId)).gameState
       const endCondiction: gameState = 'Ended'
+      console.log(display)
       console.log(gameState)
       if (gameState === endCondiction) {
         clearInterval(loopGameInterval)

@@ -9,6 +9,9 @@ const gameGenerator = container.get<IGameController>('GameController')
 gameRoutes.get('/:id', async (req, res) => {
   gameGenerator.searchById(req, res)
 })
+gameRoutes.get('/fullInfoGame/:id', async (req, res) => {
+  gameGenerator.showAllDataElementsInGame(req, res)
+})
 gameRoutes.get('/display/:id', async (req, res) => {
   gameGenerator.showBoardGame(req, res)
 })
