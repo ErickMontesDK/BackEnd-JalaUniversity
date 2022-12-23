@@ -1,11 +1,11 @@
 import 'reflect-metadata'
 import { inject, injectable } from 'inversify'
 import ISnakeService from '../domain/repository/ISnakeService'
-import { randomPosition } from '../helpers/randomPosition'
+import { randomPosition } from './helpers/randomPosition'
 import { direction } from '../domain/types/types'
 import Snake from '../domain/entities/snake'
 import ISnakeRepository from '../domain/repository/ISnakeRepository'
-import translateToDirection from '../helpers/translateToDirection'
+import translateToDirection from './helpers/translateToDirection'
 import { movingInDirection } from '../infrastructure/utils/movingDirection'
 import { tailNodesMovement } from './tailNodesMovement'
 

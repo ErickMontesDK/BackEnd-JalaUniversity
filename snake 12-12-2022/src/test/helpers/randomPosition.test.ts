@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { randomPosition } from '../../helpers/randomPosition'
+import { randomPosition } from '../../services/helpers/randomPosition'
 
 describe('Unit test randomPosition function', () => {
   it('Should return a random number less than the sent value', async () => {

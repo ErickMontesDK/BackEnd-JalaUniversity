@@ -68,27 +68,22 @@ export default class GameService implements IGameService {
     const foodInGameDetails = await this.boxService.read(idFood)
     const AllSnakesData = await this.gameMechanics.returnAllSnakesInfo(idSnakes)
     const Scores = await this.gameMechanics.getScores(AllSnakesData)
-
     const DidSomeoneAte = await this.gameMechanics.eatingFood(AllSnakesData, foodInGameDetails)
     const DidSomeoneCrash = await this.gameMechanics.snakesCollide(AllSnakesData)
 
     if (DidSomeoneAte) {
-      console.log('Someone earns 1 point')
+      console.log('eat the food')
       this.updateFoodInGame(id)
     }
-    if (DidSomeoneCrash) this.stateGameEnded(id)
+    if (DidSomeoneCrash && DidSomeoneAte === false) this.stateGameEnded(id)
 
-    const report = {
+    return {
       boardInfo: boardInGameDetails,
       foodInfo: foodInGameDetails,
       snakesInfo: AllSnakesData,
       gameState,
-      scores: Scores,
-      DidSomeoneAte,
-      DidSomeoneCrash
+      scores: Scores
     }
-    console.log(report)
-    return report
   }
 
   async updateMovementFromAllElements (id: number) {
@@ -100,7 +95,7 @@ export default class GameService implements IGameService {
   }
 
   async displayBoardWithElements (id: number) {
-    const gameElementsInfo = await this.updateMovementFromAllElements(id)
+    const gameElementsInfo = await this.getAllDataForTheGame(id)
 
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(gameElementsInfo.boardInfo)
     const DisplayWithFood = await GameDisplayFunctions.addFoodInDisplay(gameElementsInfo.foodInfo, boardDisplay)
@@ -145,10 +140,9 @@ export default class GameService implements IGameService {
     await this.stateGameRunning(gameId)
 
     const updateCycleGame = async () => {
-      const display = await this.displayBoardWithElements(gameId)
-      const gameState = await (await this.read(gameId)).gameState
+      const newGameValues = await this.updateMovementFromAllElements(gameId)
+      const gameState = newGameValues.gameState
       const endCondiction: gameState = 'Ended'
-      console.log(display)
       console.log(gameState)
       if (gameState === endCondiction) {
         clearInterval(loopGameInterval)

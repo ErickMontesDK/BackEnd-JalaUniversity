@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { inject, injectable } from 'inversify'
-import { randomPosition } from '../helpers/randomPosition'
+import { randomPosition } from './helpers/randomPosition'
 import { boxState } from '../domain/types/types'
 import Box from '../domain/entities/box'
 import IBoxService from '../domain/repository/IBoxService'

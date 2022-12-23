@@ -14,9 +14,3 @@ boxRoutes.get('/:id', async (req, res) => {
 boxRoutes.put('/update/:id/:coordx/:coordy', async (req, res) => {
   boxController.turnIntoTail(req, res)
 })
-// snakeRoutes.put('/start/:id/:max', async (req, res) => {
-//   snakeController.startRunning(req, res)
-// })
-// snakeRoutes.delete('/delete/:id', async (req, res) => {
-//   snakeController.deleteById(req, res)
-// })

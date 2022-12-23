@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import translateToDirection from '../../helpers/translateToDirection'
+import translateToDirection from '../../services/helpers/translateToDirection'
 import { direction } from '../../domain/types/types'
 
 describe('Unit test translateToDirection function', () => {

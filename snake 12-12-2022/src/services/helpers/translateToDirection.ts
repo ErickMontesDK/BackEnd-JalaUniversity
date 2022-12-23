@@ -1,4 +1,4 @@
-import { direction } from '../domain/types/types'
+import { direction } from '../../domain/types/types'
 
 export default function translateToDirection (direction: string) {
   const directionsOptions:direction[] = ['down', 'up', 'left', 'right']
