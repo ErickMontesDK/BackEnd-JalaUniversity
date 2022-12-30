@@ -1,6 +1,6 @@
 import { PrimaryColumn, Column, Entity } from 'typeorm'
-import { direction } from '../../../domain/types/types'
-import Snake from '../../../domain/entities/snake'
+import { direction } from '../../../../domain/types/types'
+import Snake from '../../../../domain/entities/snake'
 
 @Entity()
 export default class dbSnake implements Snake {

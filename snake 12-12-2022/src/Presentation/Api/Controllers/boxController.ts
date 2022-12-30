@@ -22,7 +22,7 @@ export default class BoxController implements IBoxController {
 
   async searchById (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const BoxFound = await this.BoxService.read(id)
       res.json(BoxFound)
     } catch (err:unknown) {
@@ -32,7 +32,7 @@ export default class BoxController implements IBoxController {
 
   async turnIntoTail (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const coordx = parseInt(req.params.coordx as string)
       const coordy = parseInt(req.params.coordy as string)
       const UpdatedBox = await this.BoxService.updateToTail(id, [coordx, coordy])

@@ -4,7 +4,7 @@ export default class Game {
   id!: number
   gameState!: gameState
   gameSpeed!: number
-  idBoard!:number
+  idBoard!:string
   idSnakes!:string
-  idFood!:number
+  idFood!:string
 }

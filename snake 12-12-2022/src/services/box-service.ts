@@ -27,11 +27,11 @@ export default class BoxService implements IBoxService {
     return await this.boxData.create(newFood)
   }
 
-  async read (id: number) {
+  async read (id: string) {
     return await this.boxData.read(id)
   }
 
-  async updateToTail (id: number, coords: number[]) {
+  async updateToTail (id: string, coords: number[]) {
     const defaultState: boxState = 'snake'
     const foundBox = await this.boxData.read(id)
     foundBox.coordX = coords[0]

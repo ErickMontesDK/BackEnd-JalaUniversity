@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { injectable } from 'inversify'
 import testGame from './gameMock'
 import IGameRepository from '../../../../../domain/repository/IGameRepository'
-import dbGame from '../../../../../infrastructure/database/entities/dbGame'
+import dbGame from '../../../../../infrastructure/database/sqlite/entities/dbGame'
 import Game from '../../../../../domain/entities/game'
 
 @injectable()

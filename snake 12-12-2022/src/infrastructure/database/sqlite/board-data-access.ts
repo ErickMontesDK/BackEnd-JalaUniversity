@@ -1,9 +1,9 @@
 import { AppDataSource } from './db-source'
-import IBoardRepository from '../../domain/repository/IBoardRepository'
-import dbBoard from './entities/dbBoard'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
-import returnForId from '../utils/returnForId'
+import IBoardRepository from '../../../domain/repository/IBoardRepository'
+import dbBoard from './entities/dbBoard'
+import returnForId from '../../utils/returnForId'
 
 @injectable()
 export default class BoardData implements IBoardRepository {
@@ -11,7 +11,7 @@ export default class BoardData implements IBoardRepository {
 
   async create (board: dbBoard) {
     await this.repository.save(board)
-    const idBoard = await returnForId(this.repository)
+    const idBoard = await returnForId(this.repository).toString()
 
     if (idBoard) {
       return { id: idBoard, message: 'Created' }
@@ -20,8 +20,9 @@ export default class BoardData implements IBoardRepository {
     }
   }
 
-  async read (id: number) {
-    const boardFound = await this.repository.findOneBy({ id })
+  async read (id: string) {
+    const fixedId = parseInt(id)
+    const boardFound = await this.repository.findOneBy({ id: fixedId })
 
     if (boardFound) {
       return boardFound
@@ -30,8 +31,9 @@ export default class BoardData implements IBoardRepository {
     }
   }
 
-  async delete (id: number) {
-    const deleteResponse = await this.repository.delete({ id })
+  async delete (id: string) {
+    const fixedId = parseInt(id)
+    const deleteResponse = await this.repository.delete({ id: fixedId })
 
     if (deleteResponse.affected !== 0) {
       return { id, message: 'Board deleted' }

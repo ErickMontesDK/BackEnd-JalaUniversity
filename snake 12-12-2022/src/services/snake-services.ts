@@ -35,11 +35,11 @@ export default class SnakeService implements ISnakeService {
     return await this.snakeData.create(newSnake)
   }
 
-  async read (id: number) {
+  async read (id: string) {
     return await this.snakeData.read(id)
   }
 
-  async updateDirection (id: number, direction: string) {
+  async updateDirection (id: string, direction: string) {
     const fixedTypeDirection = translateToDirection(direction)
     const snakeToUpdate = await this.snakeData.read(id)
 
@@ -52,7 +52,7 @@ export default class SnakeService implements ISnakeService {
     }
   }
 
-  async updateMovement (id: number, limitBoard:number) {
+  async updateMovement (id: string, limitBoard:number) {
     const SnakeFound = await this.snakeData.read(id)
 
     if (isNaN(limitBoard) === false && SnakeFound) {
@@ -68,7 +68,7 @@ export default class SnakeService implements ISnakeService {
     }
   }
 
-  async updateLength (id: number, node:string) {
+  async updateLength (id: string, node:string) {
     const nodeToNumber = parseInt(node)
     const snakeToGrow = await this.snakeData.read(id)
 
@@ -83,7 +83,7 @@ export default class SnakeService implements ISnakeService {
     }
   }
 
-  async resetInitialValues (id: number, boardSize: number) {
+  async resetInitialValues (id: string, boardSize: number) {
     const initialLength = 1
     const x = randomPosition(boardSize) + initialLength
     const y = randomPosition(boardSize) + initialLength
@@ -109,7 +109,7 @@ export default class SnakeService implements ISnakeService {
     return scores
   }
 
-  async delete (id: number) {
+  async delete (id: string) {
     return await this.snakeData.delete(id)
   }
 }

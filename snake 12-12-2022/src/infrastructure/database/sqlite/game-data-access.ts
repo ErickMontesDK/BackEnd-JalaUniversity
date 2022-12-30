@@ -1,10 +1,10 @@
 import { AppDataSource } from './db-source'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
-import returnForId from '../utils/returnForId'
+import IGameRepository from '../../../domain/repository/IGameRepository'
 import dbGame from './entities/dbGame'
-import IGameRepository from '../../domain/repository/IGameRepository'
-import Game from '../../domain/entities/game'
+import returnForId from '../../utils/returnForId'
+import Game from '../../../domain/entities/game'
 
 @injectable()
 export default class GameData implements IGameRepository {
@@ -13,13 +13,14 @@ export default class GameData implements IGameRepository {
   async create (newGame: dbGame) {
     await this.repository.save(newGame)
 
-    const idGame = await returnForId(this.repository)
+    const idGame = await returnForId(this.repository).toString()
 
     return { id: idGame, message: 'Created' }
   }
 
-  async read (id: number) {
-    const GameFound = await this.repository.findOneBy({ id })
+  async read (id: string) {
+    const fixedId = parseInt(id)
+    const GameFound = await this.repository.findOneBy({ id: fixedId })
 
     if (GameFound) {
       return GameFound

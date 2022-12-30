@@ -6,12 +6,12 @@ import { msgFormat, gameState } from '../types/types'
 
 export default interface IGameService{
     create(limitBoard: number, players:string, speed:number): Promise<msgFormat>
-    read(id: number): Promise<Game>
-    getAllDataForTheGame(id: number): Promise<{boardInfo:Board, foodInfo:Box, snakesInfo:Snake[], gameState:gameState, scores:object[]}>
-    displayBoardWithElements(id: number): Promise<(string | string[][] | object[])[]>
-    updateFoodInGame(gameId: number): Promise<Game>
-    stateGameRunning(gameId: number): Promise<Game>
-    stateGameEnded(gameId: number): Promise<Game>
-    runGameInLoopTillLose(gameId: number): Promise<msgFormat>
-    resetGame(gameId: number): Promise<msgFormat>
+    read(id: string): Promise<Game>
+    getAllDataForTheGame(id: string): Promise<{boardInfo:Board, foodInfo:Box, snakesInfo:Snake[], gameState:gameState, scores:object[]}>
+    displayBoardWithElements(id: string): Promise<(string | string[][] | object[])[]>
+    updateFoodInGame(gameId: string): Promise<Game>
+    stateGameRunning(gameId: string): Promise<Game>
+    stateGameEnded(gameId: string): Promise<Game>
+    runGameInLoopTillLose(gameId: string): Promise<msgFormat>
+    resetGame(gameId: string): Promise<msgFormat>
 }

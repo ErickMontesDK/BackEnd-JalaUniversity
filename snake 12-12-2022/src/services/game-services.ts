@@ -53,19 +53,19 @@ export default class GameService implements IGameService {
     return await this.gameData.create(newGame)
   }
 
-  async read (id: number) {
+  async read (id: string) {
     return await this.gameData.read(id)
   }
 
-  async getAllDataForTheGame (id: number) {
+  async getAllDataForTheGame (id: string) {
     const patternForGame = await this.read(id)
     const gameState = patternForGame.gameState
     const boardId = patternForGame.idBoard
     const idFood = patternForGame.idFood
     const idSnakes:string[] = patternForGame.idSnakes.split(',')
 
-    const boardInGameDetails = await this.boardService.read(boardId)
-    const foodInGameDetails = await this.boxService.read(idFood)
+    const boardInGameDetails = await this.boardService.read(boardId.toString())
+    const foodInGameDetails = await this.boxService.read(idFood.toString())
     const AllSnakesData = await this.gameMechanics.returnAllSnakesInfo(idSnakes)
     const Scores = await this.gameMechanics.getScores(AllSnakesData)
     const DidSomeoneAte = await this.gameMechanics.eatingFood(AllSnakesData, foodInGameDetails)
@@ -86,7 +86,7 @@ export default class GameService implements IGameService {
     }
   }
 
-  async updateMovementFromAllElements (id: number) {
+  async updateMovementFromAllElements (id: string) {
     const gameElementsInfo = await this.getAllDataForTheGame(id)
 
     await this.gameMechanics.updateMovementForAllSnakes(gameElementsInfo.snakesInfo, gameElementsInfo.boardInfo.arregloX)
@@ -94,7 +94,7 @@ export default class GameService implements IGameService {
     return gameElementsInfo
   }
 
-  async displayBoardWithElements (id: number) {
+  async displayBoardWithElements (id: string) {
     const gameElementsInfo = await this.getAllDataForTheGame(id)
 
     const boardDisplay = await GameDisplayFunctions.createBoardArrange(gameElementsInfo.boardInfo)
@@ -108,10 +108,10 @@ export default class GameService implements IGameService {
     return Display
   }
 
-  async updateFoodInGame (gameId: number) {
+  async updateFoodInGame (gameId: string) {
     const gameFound = await this.read(gameId)
 
-    const boardSize = (await this.boardService.read(gameFound.idBoard)).arregloX
+    const boardSize = (await this.boardService.read(gameFound.idBoard.toString())).arregloX
     const newFood = await this.boxService.create(boardSize)
 
     const updateGame = gameFound
@@ -120,21 +120,21 @@ export default class GameService implements IGameService {
     return await this.gameData.updateGame(updateGame)
   }
 
-  async stateGameRunning (gameId: number) {
+  async stateGameRunning (gameId: string) {
     const gameFound = await this.read(gameId)
     gameFound.gameState = 'Playing'
 
     return await this.gameData.updateGame(gameFound)
   }
 
-  async stateGameEnded (gameId: number) {
+  async stateGameEnded (gameId: string) {
     const gameFound = await this.read(gameId)
     gameFound.gameState = 'Ended'
 
     return await this.gameData.updateGame(gameFound)
   }
 
-  async runGameInLoopTillLose (gameId: number) {
+  async runGameInLoopTillLose (gameId: string) {
     const gameParameters = await this.read(gameId)
     const gameSpeed = gameParameters.gameSpeed
     await this.stateGameRunning(gameId)
@@ -153,13 +153,13 @@ export default class GameService implements IGameService {
     return { id: gameId, message: `Game already running at one move per ${gameSpeed / 1000} seconds` }
   }
 
-  async resetGame (gameId: number) {
+  async resetGame (gameId: string) {
     const gameElementsInfo = await this.getAllDataForTheGame(gameId)
     const gameInfo = await this.read(gameId)
     const snakes = gameElementsInfo.snakesInfo
 
     snakes.forEach(async (snake) => {
-      await this.snakeService.resetInitialValues(snake.id, gameElementsInfo.boardInfo.arregloX)
+      await this.snakeService.resetInitialValues(snake.id.toString(), gameElementsInfo.boardInfo.arregloX)
     })
     gameInfo.gameState = 'Ready to Start'
     await this.gameData.updateGame(gameInfo)

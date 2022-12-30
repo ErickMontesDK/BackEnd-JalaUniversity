@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { injectable } from 'inversify'
 import testBox from './boxMock'
 import IBoxRepository from '../../../../../domain/repository/IBoxRepository'
-import dbBox from '../../../../../infrastructure/database/entities/dbBox'
+import dbBox from '../../../../../infrastructure/database/sqlite/entities/dbBox'
 import Box from '../../../../../domain/entities/box'
 
 @injectable()

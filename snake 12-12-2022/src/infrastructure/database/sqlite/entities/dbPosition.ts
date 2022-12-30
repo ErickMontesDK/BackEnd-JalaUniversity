@@ -1,4 +1,4 @@
-import Position from '../../../domain/entities/position'
+import Position from '../../../../domain/entities/position'
 import { PrimaryColumn, Column, Entity } from 'typeorm'
 
 @Entity()

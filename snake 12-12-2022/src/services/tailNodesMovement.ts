@@ -7,7 +7,7 @@ async function tailNodesMovement (nodes: string[], oldPositionHead:number[]): Pr
 
   for (let i = 0; i < nodes.length; i++) {
     if (nodes[0] !== '') {
-      const nodeInt = parseInt(nodes[i])
+      const nodeInt = nodes[i]
 
       const nodeBoxData = await boxService.read(nodeInt)
       boxService.updateToTail(nodeInt, oldPositionBody)

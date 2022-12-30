@@ -28,7 +28,7 @@ export default class SnakeControllers implements ISnakeController {
 
   async searchById (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const updatedSnake = await this.snakeServices.read(id)
 
       res.json(updatedSnake)
@@ -50,7 +50,7 @@ export default class SnakeControllers implements ISnakeController {
   async updateDirection (req:Request, res:Response): Promise<void> {
     try {
       if (req.query.direction && req.params.id) {
-        const id = parseInt(req.params.id as string)
+        const id = req.params.id as string
         const direction = req.query.direction.toString()
 
         const msg = await this.snakeServices.updateDirection(id, direction)
@@ -63,7 +63,7 @@ export default class SnakeControllers implements ISnakeController {
 
   async startRunning (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const maxBoardValue = parseInt(req.params.max)
 
       const updateSnake = await this.snakeServices.updateMovement(id, maxBoardValue)
@@ -75,7 +75,7 @@ export default class SnakeControllers implements ISnakeController {
 
   async growingTail (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const node = req.params.node.toString()
 
       const updateSnake = await this.snakeServices.updateLength(id, node)
@@ -87,7 +87,7 @@ export default class SnakeControllers implements ISnakeController {
 
   async deleteById (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
 
       const msgDelete = await this.snakeServices.delete(id)
       res.json(msgDelete)

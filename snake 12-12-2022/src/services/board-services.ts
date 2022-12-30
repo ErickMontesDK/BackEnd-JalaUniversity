@@ -23,11 +23,11 @@ export default class BoardService implements IBoardService {
     return await this.boardData.create(board)
   }
 
-  async read (id: number) {
+  async read (id: string) {
     return await this.boardData.read(id)
   }
 
-  async delete (id: number) {
+  async delete (id: string) {
     return await this.boardData.delete(id)
   }
 }

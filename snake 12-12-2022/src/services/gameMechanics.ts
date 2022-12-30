@@ -19,7 +19,7 @@ export default class GameMechanics {
     const Snakes: Snake[] = []
 
     for (let i = 0; i < idSnakes.length; i++) {
-      const snake = await this.snakeServices.read(parseInt(idSnakes[i]))
+      const snake = await this.snakeServices.read(idSnakes[i])
       Snakes.push(snake)
     }
     return Snakes
@@ -47,13 +47,13 @@ export default class GameMechanics {
         let SnakeLastTailNodeCoords = snakeCoords
 
         if (snakeTailNodes[0] !== '') {
-          const idSnakeLastTailNode = parseInt(snakeTailNodes[snakeTailNodes.length - 1])
+          const idSnakeLastTailNode = snakeTailNodes[snakeTailNodes.length - 1]
           const SnakeLastTailNode = await this.boxServices.read(idSnakeLastTailNode)
           SnakeLastTailNodeCoords = [SnakeLastTailNode.coordX, SnakeLastTailNode.coordY]
         }
 
-        await this.boxServices.updateToTail(food.id, SnakeLastTailNodeCoords)
-        await this.snakeServices.updateLength(allSnakes[i].id, food.id.toString())
+        await this.boxServices.updateToTail(food.id.toString(), SnakeLastTailNodeCoords)
+        await this.snakeServices.updateLength(allSnakes[i].id.toString(), food.id.toString())
         return true
       }
     }
@@ -62,7 +62,7 @@ export default class GameMechanics {
 
   async updateMovementForAllSnakes (allSnakes:Snake[], boardSize:number):Promise<void> {
     allSnakes.forEach(async (snake) => {
-      await this.snakeServices.updateMovement(snake.id, boardSize)
+      await this.snakeServices.updateMovement(snake.id.toString(), boardSize)
     })
   }
 
@@ -75,7 +75,7 @@ export default class GameMechanics {
 
         if (tailElements[0] !== '') {
           for (let k = 0; k < tailElements.length; k++) {
-            const tailNodeId = parseInt(tailElements[k])
+            const tailNodeId = tailElements[k]
             const tailNode = await this.boxServices.read(tailNodeId)
             const tailNodeCoords = [tailNode.coordX, tailNode.coordY]
 

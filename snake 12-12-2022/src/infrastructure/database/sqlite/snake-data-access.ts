@@ -1,10 +1,10 @@
 import { AppDataSource } from './db-source'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
-import ISnakeRepository from '../../domain/repository/ISnakeRepository'
+import ISnakeRepository from '../../../domain/repository/ISnakeRepository'
 import dbSnake from './entities/dbSnake'
-import returnForId from '../utils/returnForId'
-import Snake from '../../domain/entities/snake'
+import returnForId from '../../utils/returnForId'
+import Snake from '../../../domain/entities/snake'
 
 @injectable()
 export default class SnakeData implements ISnakeRepository {
@@ -13,13 +13,14 @@ export default class SnakeData implements ISnakeRepository {
   async create (newSnake: dbSnake) {
     await this.repository.save(newSnake)
 
-    const idSnake = await returnForId(this.repository)
+    const idSnake = await returnForId(this.repository).toString()
 
     return { id: idSnake, message: 'Created' }
   }
 
-  async read (id: number) {
-    const SnakeFound = await this.repository.findOneBy({ id })
+  async read (id: string) {
+    const fixedId = parseInt(id)
+    const SnakeFound = await this.repository.findOneBy({ id: fixedId })
 
     if (SnakeFound) {
       return SnakeFound
@@ -54,11 +55,12 @@ export default class SnakeData implements ISnakeRepository {
     }
   }
 
-  async delete (id: number) {
+  async delete (id: string) {
+    const fixedId = parseInt(id)
     const snakeById = await this.read(id)
 
     if (snakeById) {
-      await this.repository.delete({ id })
+      await this.repository.delete({ id: fixedId })
 
       return { id, message: 'Snake deleted' }
     } else {

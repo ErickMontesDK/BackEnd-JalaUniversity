@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import { injectable } from 'inversify'
 import IBoardRepository from '../../../../../domain/repository/IBoardRepository'
-import dbBoard from '../../../../../infrastructure/database/entities/dbBoard'
+import dbBoard from '../../../../../infrastructure/database/sqlite/entities/dbBoard'
 import Board from '../../../../../domain/entities/board'
 
 @injectable()

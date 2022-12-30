@@ -26,7 +26,7 @@ export default class GameController implements IGameController {
 
   async searchById (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const BoxFound = await this.GameService.read(id)
       res.json(BoxFound)
     } catch (err:unknown) {
@@ -36,7 +36,7 @@ export default class GameController implements IGameController {
 
   async showBoardGame (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const gameFound = await this.GameService.displayBoardWithElements(id)
       res.json(gameFound)
     } catch (err:unknown) {
@@ -46,7 +46,7 @@ export default class GameController implements IGameController {
 
   async showAllDataElementsInGame (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const gameFound = await this.GameService.getAllDataForTheGame(id)
       res.json(gameFound)
     } catch (err:unknown) {
@@ -56,7 +56,7 @@ export default class GameController implements IGameController {
 
   async changeFood (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const gameFound = await this.GameService.updateFoodInGame(id)
       res.json(gameFound)
     } catch (err:unknown) {
@@ -66,7 +66,7 @@ export default class GameController implements IGameController {
 
   async runGame (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const gameRunningMsg = await this.GameService.runGameInLoopTillLose(id)
       res.json(gameRunningMsg)
     } catch (err:unknown) {
@@ -76,7 +76,7 @@ export default class GameController implements IGameController {
 
   async stopGame (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const stopRunningMsg = await this.GameService.stateGameEnded(id)
       res.json(stopRunningMsg)
     } catch (err:unknown) {
@@ -86,7 +86,7 @@ export default class GameController implements IGameController {
 
   async resetGameScores (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id as string)
+      const id = req.params.id as string
       const resetGameMsg = await this.GameService.resetGame(id)
       res.json(resetGameMsg)
     } catch (err:unknown) {

@@ -3,6 +3,6 @@ import { msgFormat } from '../types/types'
 
 export default interface IGameRepository{
     create(game: Game):Promise<msgFormat>
-    read(id: number): Promise<Game>
+    read(id: string): Promise<Game>
     updateGame(game: Game): Promise <Game>
 }

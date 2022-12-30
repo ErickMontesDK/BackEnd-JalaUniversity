@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { injectable } from 'inversify'
 import { testSnake } from './snakeMock'
 import ISnakeRepository from '../../../../../domain/repository/ISnakeRepository'
-import dbSnake from '../../../../../infrastructure/database/entities/dbSnake'
+import dbSnake from '../../../../../infrastructure/database/sqlite/entities/dbSnake'
 import Snake from '../../../../../domain/entities/snake'
 
 @injectable()

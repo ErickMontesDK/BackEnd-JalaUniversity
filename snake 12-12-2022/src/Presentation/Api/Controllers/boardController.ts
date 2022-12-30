@@ -20,7 +20,7 @@ export default class BoardController implements IBoardController {
 
   async searchById (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id.toString())
+      const id = req.params.id.toString()
       const boardFound = await this.boardGenerator.read(id)
 
       res.json(boardFound)
@@ -31,7 +31,7 @@ export default class BoardController implements IBoardController {
 
   async deleteById (req:Request, res:Response): Promise<void> {
     try {
-      const id = parseInt(req.params.id.toString())
+      const id = req.params.id.toString()
       const msgDelete = await this.boardGenerator.delete(id)
 
       res.json(msgDelete)

@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import Game from '../../../domain/entities/game'
-import { gameState } from '../../../domain/types/types'
+import Game from '../../../../domain/entities/game'
+import { gameState } from '../../../../domain/types/types'
 
 @Entity()
 export default class dbGame implements Game {
@@ -14,11 +14,11 @@ export default class dbGame implements Game {
       gameSpeed!: number
 
     @Column()
-      idBoard! : number
+      idBoard! : string
 
     @Column()
       idSnakes!: string
 
     @Column()
-      idFood!: number
+      idFood!: string
 }

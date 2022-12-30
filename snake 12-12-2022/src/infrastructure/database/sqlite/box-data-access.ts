@@ -1,10 +1,10 @@
 import { AppDataSource } from './db-source'
 import { injectable } from 'inversify'
 import 'reflect-metadata'
-import IBoxRepository from '../../domain/repository/IBoxRepository'
-import returnForId from '../utils/returnForId'
+import IBoxRepository from '../../../domain/repository/IBoxRepository'
 import dbBox from './entities/dbBox'
-import Box from '../../domain/entities/box'
+import returnForId from '../../utils/returnForId'
+import Box from '../../../domain/entities/box'
 
 @injectable()
 export default class BoxData implements IBoxRepository {
@@ -13,7 +13,7 @@ export default class BoxData implements IBoxRepository {
   async create (newFoodBox: dbBox) {
     await this.repository.save(newFoodBox)
 
-    const idBox = await returnForId(this.repository)
+    const idBox = await returnForId(this.repository).toString()
     if (idBox) {
       return { id: idBox, message: 'Created' }
     } else {
@@ -21,8 +21,9 @@ export default class BoxData implements IBoxRepository {
     }
   }
 
-  async read (id: number) {
-    const BoxFound = await this.repository.findOneBy({ id })
+  async read (id: string) {
+    const fixedId = parseInt(id)
+    const BoxFound = await this.repository.findOneBy({ id: fixedId })
 
     if (BoxFound) {
       return BoxFound

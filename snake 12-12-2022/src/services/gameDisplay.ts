@@ -49,7 +49,7 @@ export default class GameDisplayFunctions {
 
       if (tailElements[0] !== '') {
         for (let j = 0; j < tailElements.length; j++) {
-          const idNode = parseInt(tailElements[j])
+          const idNode = tailElements[j]
           const Node = await boxService.read(idNode)
 
           const coordY = board.length - Node.coordY
