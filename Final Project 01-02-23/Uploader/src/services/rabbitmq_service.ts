@@ -1,10 +1,10 @@
 import amqp = require('amqplib/callback_api');
-import dotenv from 'dotenv'
 import { resolve } from 'path'
+import dotenv from 'dotenv'
 
-dotenv.config({ path: resolve(__dirname, './../.env') })
+dotenv.config({ path: resolve(__dirname, '../../../.env') })
 
-export default class rabbitMqService {
+export default class RabbitMqService {
   protocol:string
   hostname: string
   port: number
@@ -43,23 +43,40 @@ export default class rabbitMqService {
           throw error1
         }
 
-        channel.assertQueue('Uploader_service', { durable: false })
-        channel.assertQueue('Downloader_service', { durable: false })
+        const queue = 'Uploader_service'
+        channel.assertQueue(queue, { durable: false })
 
         console.log('Waiting for messages...')
 
-        channel.consume('Uploader_service', function (message:any) {
-          console.log('Received from Uploader ' + message!.content.toString())
-        }, {
-          noAck: true
-        })
-
-        channel.consume('Downloader_service', function (message:any) {
-          console.log('Received from Downloader ' + message!.content.toString())
+        channel.consume(queue, function (message:any) {
+          console.log('message received ' + message!.content.toString())
         }, {
           noAck: true
         })
       })
+    })
+  }
+
+  senderService = () => {
+    this.connecToRabbitMQ().then((connection:any) => {
+      connection.createChannel(function (error1:any, channel:any) {
+        if (error1) {
+          throw error1
+        }
+
+        const queue = 'Uploader_service'
+        const message = 'Message from uploader'
+
+        channel.assertQueue(queue, { durable: false })
+
+        channel.sendToQueue(queue, Buffer.from(message))
+
+        console.log('message sent: ' + message)
+      })
+
+      setTimeout(function () {
+        connection.close()
+      }, 500)
     })
   }
 }

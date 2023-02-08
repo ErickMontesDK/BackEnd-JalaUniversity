@@ -1,17 +1,19 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
+import FileEntity from './entities/file.entity'
 import dotenv from 'dotenv'
-import { Student } from './entities/dbStudent'
+import { resolve } from 'path'
+import AccountEntity from './entities/account.entity'
 
-dotenv.config()
+dotenv.config({ path: resolve(__dirname, '../../.env') })
 
 export const AppDataSource = new DataSource({
   type: 'mongodb',
-  url: "mongodb+srv://Admin:killerkiller@uploader.ehxrcgs.mongodb.net/?retryWrites=true&w=majority",
+  url: process.env.MONGO_CONNECTION as string,
   useNewUrlParser: true,
   synchronize: true,
   useUnifiedTopology: true,
   logging: true,
   ssl: true,
-  entities: [Student]
+  entities: [FileEntity, AccountEntity]
 })

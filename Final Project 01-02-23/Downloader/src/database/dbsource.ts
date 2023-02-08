@@ -4,9 +4,14 @@ import { Student } from './entities/dbStudent'
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  url: "localhost",
+  host: 'localhost',
+  port: 5433,
+  username: 'ErickDK',
+  password: 'killerkiller',
+  database: 'downloaderService',
   synchronize: true,
   logging: true,
-  ssl: true,
-  entities: [Student]
+  entities: [Student],
+  subscribers: [],
+  migrations: []
 })

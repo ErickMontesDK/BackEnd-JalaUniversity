@@ -1,13 +1,13 @@
 import { Entity, ObjectID, ObjectIdColumn, Column } from 'typeorm'
 
 @Entity()
-export class Student {
+export default class AccountEntity {
    @ObjectIdColumn()
      id!: ObjectID
 
    @Column()
-     Name!: string
+     email!: string
 
    @Column()
-     Country!: string
+     driveKey!: string
 }

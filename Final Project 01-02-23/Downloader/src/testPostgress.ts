@@ -1,14 +1,15 @@
 import { AppDataSource } from './database/dbsource'
 import { Student } from './database/entities/dbStudent'
-import ConnectionMongo from './database/dbconnection'
+import ConnectionPostgres from './database/dbconnection'
 
 console.log('Inserting a new tweet into the database...')
 const tweet = new Student()
+tweet.id = 'id1'
 tweet.Name = 'Johny'
 tweet.Country = 'United States'
 
 const repository = AppDataSource.getRepository(Student)
-ConnectionMongo.initServerConnection().then(() => meh())
+ConnectionPostgres.initServerConnection().then(() => meh())
 
 const meh = async () => {
   await repository.save(tweet)

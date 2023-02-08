@@ -1,5 +1,5 @@
 import { app } from './API'
-import RabbitMqService from './rabbitService'
+import RabbitMqService from './services/rabbitmq_service'
 
 const port = process.env.PORT || 6000
 
