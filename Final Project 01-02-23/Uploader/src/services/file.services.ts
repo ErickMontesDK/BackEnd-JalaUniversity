@@ -1,5 +1,5 @@
-import FileEntity from './../database/entities/file.entity'
-import { FileRepository } from '../database/repository/file.repository'
+import FileEntity from './../database/entities/file.entity';
+import { FileRepository } from '../database/repository/file.repository';
 
 type FileValues = {
   name: string,
@@ -8,36 +8,36 @@ type FileValues = {
 }
 
 export default class FileService {
-  protected fileRepository: FileRepository
+  protected fileRepository: FileRepository;
 
   constructor () {
-    this.fileRepository = new FileRepository()
+    this.fileRepository = new FileRepository();
   }
 
   async createFile (fileValues: FileValues) {
-    const newfile = new FileEntity()
-    newfile.name = fileValues.name
-    newfile.status = fileValues.status
-    newfile.driveId = fileValues.driveId
+    const newfile = new FileEntity();
+    newfile.name = fileValues.name;
+    newfile.status = fileValues.status;
+    newfile.driveId = fileValues.driveId;
 
-    return await this.fileRepository.createFile(newfile)
+    return await this.fileRepository.createFile(newfile);
   }
 
   async getFileById (id: string) {
-    return await this.fileRepository.readFile(id)
+    return await this.fileRepository.readFile(id);
   }
 
   async updateFileById (id: string, fileValues: FileValues) {
-    const updateFile = await this.getFileById(id)
+    const updateFile = await this.getFileById(id);
 
-    updateFile.name = fileValues.name === '' ? updateFile.name : fileValues.name
-    updateFile.status = fileValues.status === '' ? updateFile.status : fileValues.status
-    updateFile.driveId = fileValues.driveId === '' ? updateFile.driveId : fileValues.driveId
+    updateFile.name = fileValues.name === '' ? updateFile.name : fileValues.name;
+    updateFile.status = fileValues.status === '' ? updateFile.status : fileValues.status;
+    updateFile.driveId = fileValues.driveId === '' ? updateFile.driveId : fileValues.driveId;
 
-    return await this.fileRepository.updateFile(updateFile)
+    return await this.fileRepository.updateFile(updateFile);
   }
 
   async deleteFileById (id: string) {
-    return await this.fileRepository.deleteFile(id)
+    return await this.fileRepository.deleteFile(id);
   }
 }

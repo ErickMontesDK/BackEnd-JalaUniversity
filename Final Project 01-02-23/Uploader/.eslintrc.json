@@ -12,5 +12,7 @@
       "ecmaVersion": "latest"
     },
     "plugins": ["@typescript-eslint"],
-    "rules": {}
+    "rules": {
+      "semi": ["error", "always"]
+    }
 }
