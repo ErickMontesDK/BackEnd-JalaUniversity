@@ -1,9 +1,6 @@
 import { app } from './API'
-import RabbitMqService from './services/rabbitmq_service'
+import ConnectionPostgres from './database/dbconnection'
 const port = process.env.PORT || 5000
 
-const service = new RabbitMqService()
-
-service.senderService()
-
+ConnectionPostgres.initServerConnection()
 app.listen(port, () => console.log('Downloader server listening on port ' + port))
