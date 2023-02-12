@@ -9,17 +9,24 @@ export default class AccountControllers {
     this.accountService = new AccountService()
   }
 
-  async createAccount (req: Request, res: Response) {
-    const { email, drivekey } = req.body
+  async getAllAccounts (req: Request, res: Response) {
+    const meh = await this.accountService.getAllAccounts()
+    console.log(meh)
+  }
 
-    if (!email || !drivekey) {
+  async createAccount (req: Request, res: Response) {
+    const { email, clientid, secret, token } = req.body
+
+    if (!email || !clientid || !secret || !token) {
       return res.status(400).json({ error: 'Email and driveKey are required.' })
     }
 
     try {
       const AccountValues = {
         email,
-        driveKey: drivekey
+        clientid,
+        secret,
+        token
       }
 
       const newAccount = await this.accountService.createAccount(AccountValues)
@@ -49,12 +56,14 @@ export default class AccountControllers {
 
     if (!id) return res.status(400).json({ error: 'The Account id is required.' })
 
-    const accountValues = {
-      email: req.body.email || '',
-      driveKey: req.body.drivekey || ''
-    }
-
     try {
+      const accountValues = {
+        email: req.body.email || undefined,
+        clientid: req.body.drivekey || undefined,
+        secret: req.body.secret || undefined,
+        token: req.body.token || undefined
+      }
+
       const updatedAccount = await this.accountService.updateAccountById(id, accountValues)
 
       return res.status(200).json({ data: updatedAccount, message: 'Account updated successfully.' })

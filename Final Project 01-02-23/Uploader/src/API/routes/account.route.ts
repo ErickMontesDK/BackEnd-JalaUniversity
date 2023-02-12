@@ -16,3 +16,6 @@ accountRoute.put('/:id', async (req, res) => {
 accountRoute.delete('/:id', async (req, res) => {
   accountController.deleteAccountById(req, res)
 })
+accountRoute.get('/', async (req, res) => {
+  accountController.getAllAccounts(req, res)
+})

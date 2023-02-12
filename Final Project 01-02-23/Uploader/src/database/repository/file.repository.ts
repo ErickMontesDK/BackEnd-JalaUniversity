@@ -1,3 +1,4 @@
+import { ObjectID } from 'mongodb'
 import { AppDataSource } from './../dbsource'
 import FileEntity from './../entities/file.entity'
 const mongodb = require('mongodb')
@@ -34,5 +35,26 @@ export class FileRepository {
     } else {
       throw new Error(`File with id:${id} not found`)
     }
+  }
+
+  async getFileFromGridFS (idFile:ObjectID) {
+    const client = await mongodb.MongoClient.connect(
+      'mongodb+srv://Admin:killerkiller@uploader.ehxrcgs.mongodb.net/?retryWrites=true&w=majority',
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }
+    )
+
+    const db = client.db('test')
+    const chunksCollection = db.collection('fs.chunks')
+
+    const chunks = await chunksCollection
+      .find({ files_id: new mongodb.ObjectID(idFile) })
+      .sort({ n: 1 })
+      .toArray()
+
+    const fileBuffer = Buffer.concat(chunks.map((chunk:any) => Buffer.from(chunk.data.buffer)))
+    return fileBuffer
   }
 }

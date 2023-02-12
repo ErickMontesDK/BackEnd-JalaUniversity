@@ -1,26 +1,70 @@
-import FileEntity from './../database/entities/file.entity'
+import FileEntity, { driveInfo } from './../database/entities/file.entity'
 import { FileRepository } from '../database/repository/file.repository'
+import DriveServices from './drive.services'
+import { ObjectID } from 'mongodb'
+import AccountService from './account.services'
 
-type FileValues = {
-  name: string,
-  status:string,
-  driveId: string
+interface FileValues {
+  name?: string,
+  filename?: string,
+  status?: string,
+  size?: number,
+  mimetype?: string,
+  driveFile?: driveInfo[],
+  gridFsId?: ObjectID
 }
 
 export default class FileService {
   protected fileRepository: FileRepository
+  protected accountService: AccountService
 
   constructor () {
     this.fileRepository = new FileRepository()
+    this.accountService = new AccountService()
   }
 
-  async createFile (fileValues: FileValues) {
-    const newfile = new FileEntity()
-    newfile.name = fileValues.name
-    newfile.status = fileValues.status
-    newfile.driveId = fileValues.driveId
+  async uploadingFile (fileValues: FileValues) {
+    const fileFromGridFS: Buffer = await this.fileRepository.getFileFromGridFS(fileValues.gridFsId!)
 
-    return await this.fileRepository.createFile(newfile)
+    const todayDate = new Date()
+    const day = todayDate.getUTCDate()
+    const month = todayDate.getUTCMonth()
+    const year = todayDate.getUTCFullYear()
+
+    const newfile = new FileEntity()
+    newfile.name = fileValues.name!
+    newfile.filename = `${year}-${month}-${day}-${fileValues.name}`
+    newfile.status = 'replicating'
+    newfile.size = fileValues.size!
+    newfile.mimetype = fileValues.mimetype!
+
+    const fileFromMongo = await this.fileRepository.createFile(newfile)
+    await this.uploadToDriveAccounts(fileFromGridFS, fileFromMongo)
+    return fileFromMongo
+  }
+
+  async uploadToDriveAccounts (fileBuffer: Buffer, fileObject: FileEntity) {
+    const accounts = await this.accountService.getAllAccounts()
+    const driveFile = []
+
+    for (const account of accounts) {
+      const driveService = new DriveServices(account)
+      const response = await driveService.uploadFile(fileBuffer, fileObject)
+      const urlFile = await driveService.generatePublicUrl(response.id)
+
+      const driveInfo = {
+        accountId: account.id,
+        contentLink: urlFile.data.webContentLink,
+        driveId: response.id
+      }
+      driveFile.push(driveInfo)
+    }
+
+    const updateFile = fileObject
+    updateFile.driveFile = driveFile
+    updateFile.status = 'uploaded'
+
+    this.updateFileById(fileObject.id.toString(), updateFile)
   }
 
   async getFileById (id: string) {
@@ -30,14 +74,26 @@ export default class FileService {
   async updateFileById (id: string, fileValues: FileValues) {
     const updateFile = await this.getFileById(id)
 
-    updateFile.name = fileValues.name === '' ? updateFile.name : fileValues.name
-    updateFile.status = fileValues.status === '' ? updateFile.status : fileValues.status
-    updateFile.driveId = fileValues.driveId === '' ? updateFile.driveId : fileValues.driveId
+    updateFile.name = fileValues.name ? fileValues.name : updateFile.name
+    updateFile.filename = fileValues.filename ? fileValues.filename : updateFile.filename
+    updateFile.driveFile = fileValues.driveFile ? fileValues.driveFile : updateFile.driveFile
+    updateFile.status = fileValues.status ? fileValues.status : updateFile.status
 
     return await this.fileRepository.updateFile(updateFile)
   }
 
   async deleteFileById (id: string) {
+    const file = await this.getFileById(id)
+
+    file.driveFile.forEach(async (drive) => {
+      const account = await this.accountService.getAccountById(drive.accountId.toString())
+      if (account) {
+        const driveService = new DriveServices(account)
+
+        await driveService.deleteFile(drive.driveId)
+      }
+    })
+
     return await this.fileRepository.deleteFile(id)
   }
 }

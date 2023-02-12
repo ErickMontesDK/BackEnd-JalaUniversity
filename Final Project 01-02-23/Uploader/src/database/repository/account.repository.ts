@@ -10,6 +10,11 @@ export class AccountRepository {
     return await this.repository.save(newAccount)
   }
 
+  async readAll () {
+    const driveAccounts = await this.repository.find()
+    return driveAccounts
+  }
+
   async readAccount (id: string): Promise<AccountEntity> {
     const objectId = new ObjectId(id)
     const foundAccount = await this.repository.findOneBy({ _id: objectId })
