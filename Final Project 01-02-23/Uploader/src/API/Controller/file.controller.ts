@@ -1,6 +1,7 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import 'reflect-metadata'
 import FileService from '../../services/file.services'
+import { ErrorBuild } from '../../utils/errorBuild'
 
 export default class FileControllers {
   protected fileService: FileService
@@ -10,8 +11,13 @@ export default class FileControllers {
   }
 
   async createFile (req: Request, res: Response) {
+    const fileFromFs: any = req.file
+    console.log(fileFromFs)
+    // if (!req.file) {
+    //   next(ErrorBuild.badRequest('Not file received, please check you file and try again'))
+    //   return
+    // }
     try {
-      const fileFromFs: any = req.file
       const { id, originalname, mimetype, size, uploadDate } = fileFromFs
 
       const fileValues = {
@@ -25,8 +31,10 @@ export default class FileControllers {
       const newFile = await this.fileService.uploadingFile(fileValues)
 
       return res.status(201).json({ message: 'File created successfully.', data: newFile })
-    } catch (error:unknown) {
-      if (error instanceof Error) return res.status(400).json({ message: error.message })
+    } catch (error) {
+      if (error instanceof ErrorBuild) {
+        // next(error)
+      }
     }
   }
 

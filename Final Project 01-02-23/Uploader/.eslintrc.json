@@ -12,5 +12,5 @@
       "ecmaVersion": "latest"
     },
     "plugins": ["@typescript-eslint"],
-    "rules": {}
+    "rules": {    }
 }
