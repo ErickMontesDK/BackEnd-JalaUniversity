@@ -1,6 +1,7 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import 'reflect-metadata'
 import AccountService from '../../services/account.services'
+import { ErrorBuild } from '../../utils/errorBuild'
 
 export default class AccountControllers {
   protected accountService: AccountService
@@ -9,16 +10,21 @@ export default class AccountControllers {
     this.accountService = new AccountService()
   }
 
-  async getAllAccounts (req: Request, res: Response) {
-    const meh = await this.accountService.getAllAccounts()
-    console.log(meh)
+  async getAllAccounts (req: Request, res: Response, next:NextFunction) {
+    try {
+      const dataAccounts = await this.accountService.getAllAccounts()
+      return res.status(200).json({ message: 'Accounts found.', data: dataAccounts })
+    } catch (error) {
+      next(error)
+    }
   }
 
-  async createAccount (req: Request, res: Response) {
+  async createAccount (req: Request, res: Response, next:NextFunction) {
     const { email, clientid, secret, token } = req.body
 
     if (!email || !clientid || !secret || !token) {
-      return res.status(400).json({ error: 'Email and driveKey are required.' })
+      next(ErrorBuild.badRequest('One or more parameters were not send. (email, clientid, secret or token)'))
+      return
     }
 
     try {
@@ -32,29 +38,35 @@ export default class AccountControllers {
       const newAccount = await this.accountService.createAccount(AccountValues)
 
       return res.status(201).json({ account: newAccount, message: 'Account created successfully.' })
-    } catch (error:unknown) {
-      if (error instanceof Error) return res.status(400).json({ message: error.message })
+    } catch (error) {
+      next(error)
     }
   }
 
-  async getAccountById (req: Request, res: Response) {
+  async getAccountById (req: Request, res: Response, next:NextFunction) {
     const { id } = req.params
 
-    if (!id) return res.status(400).json({ error: 'The Account id is required.' })
+    if (!id) {
+      next(ErrorBuild.badRequest('Not Account id received, please send a valid id and try again'))
+      return
+    }
 
     try {
       const foundAccount = await this.accountService.getAccountById(id)
 
       return res.status(200).json({ file: foundAccount, message: 'Account found successfully.' })
-    } catch (error:unknown) {
-      if (error instanceof Error) return res.status(404).json({ message: error.message })
+    } catch (error) {
+      next(error)
     }
   }
 
-  async updateAccountById (req: Request, res: Response) {
+  async updateAccountById (req: Request, res: Response, next:NextFunction) {
     const { id } = req.params
 
-    if (!id) return res.status(400).json({ error: 'The Account id is required.' })
+    if (!id) {
+      next(ErrorBuild.badRequest('Not Account id received, please send a valid id and try again'))
+      return
+    }
 
     try {
       const accountValues = {
@@ -67,22 +79,25 @@ export default class AccountControllers {
       const updatedAccount = await this.accountService.updateAccountById(id, accountValues)
 
       return res.status(200).json({ data: updatedAccount, message: 'Account updated successfully.' })
-    } catch (error:unknown) {
-      if (error instanceof Error) return res.status(400).json({ message: error.message })
+    } catch (error) {
+      next(error)
     }
   }
 
-  async deleteAccountById (req: Request, res: Response) {
+  async deleteAccountById (req: Request, res: Response, next:NextFunction) {
     const { id } = req.params
 
-    if (!id) return res.status(400).json({ error: 'The Account id is required.' })
+    if (!id) {
+      next(ErrorBuild.badRequest('Not Account id received, please send a valid id and try again'))
+      return
+    }
 
     try {
-      const deletedAccount = await this.accountService.deleteAccountById(id)
+      await this.accountService.deleteAccountById(id)
 
-      return res.status(200).json({ id: deletedAccount, message: 'Account deleted successfully.' })
-    } catch (error:unknown) {
-      if (error instanceof Error) return res.status(400).json({ message: error.message })
+      return res.status(204).json({ message: 'Account deleted successfully.' })
+    } catch (error) {
+      next(error)
     }
   }
 }

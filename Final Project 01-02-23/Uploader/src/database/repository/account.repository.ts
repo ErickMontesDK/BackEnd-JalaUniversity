@@ -1,5 +1,6 @@
 import AccountEntity from '../entities/account.entity'
 import { AppDataSource } from './../dbsource'
+import { ErrorBuild } from '../../utils/errorBuild'
 const mongodb = require('mongodb')
 const ObjectId = mongodb.ObjectId
 
@@ -12,7 +13,11 @@ export class AccountRepository {
 
   async readAll () {
     const driveAccounts = await this.repository.find()
-    return driveAccounts
+    if (driveAccounts) {
+      return driveAccounts
+    } else {
+      throw ErrorBuild.badRequest('Accounts Information was not found in Database')
+    }
   }
 
   async readAccount (id: string): Promise<AccountEntity> {
@@ -22,12 +27,18 @@ export class AccountRepository {
     if (foundAccount) {
       return foundAccount
     } else {
-      throw new Error(`Account with id:${id} not found`)
+      throw ErrorBuild.badRequest('Account not found in Database')
     }
   }
 
   async updateAccount (account: AccountEntity) {
-    return await this.repository.save(account)
+    const updateAccount = await this.repository.save(account)
+
+    if (updateAccount) {
+      return updateAccount
+    } else {
+      throw ErrorBuild.internalServerError('File was not updated')
+    }
   }
 
   async deleteAccount (id: string) {
@@ -37,7 +48,7 @@ export class AccountRepository {
     if (deletedAccount) {
       return deletedAccount.value._id
     } else {
-      throw new Error(`Account with id:${id} not found`)
+      throw ErrorBuild.badRequest('File not found in Database')
     }
   }
 }

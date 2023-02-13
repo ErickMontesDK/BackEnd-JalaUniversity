@@ -9,5 +9,5 @@ export default function errorHandler (err:any, req: Request, res: Response, next
     return
   }
 
-  res.status(500).json('Something went wrong')
+  res.status(500).json(`${err.message}`)
 }

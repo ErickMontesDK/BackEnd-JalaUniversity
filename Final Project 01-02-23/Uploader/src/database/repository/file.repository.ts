@@ -1,4 +1,5 @@
 import { ObjectID } from 'mongodb'
+import { ErrorBuild } from '../../utils/errorBuild'
 import { AppDataSource } from './../dbsource'
 import FileEntity from './../entities/file.entity'
 const mongodb = require('mongodb')
@@ -18,12 +19,18 @@ export class FileRepository {
     if (foundFile) {
       return foundFile
     } else {
-      throw new Error(`File with id:${id} not found`)
+      throw ErrorBuild.badRequest('File not found in Database')
     }
   }
 
   async updateFile (file: FileEntity) {
-    return await this.repository.save(file)
+    const updatedFile = await this.repository.save(file)
+
+    if (updatedFile) {
+      return updatedFile
+    } else {
+      throw ErrorBuild.internalServerError('File was not updated')
+    }
   }
 
   async deleteFile (id: string) {
@@ -33,7 +40,7 @@ export class FileRepository {
     if (deletedFile) {
       return deletedFile.value._id
     } else {
-      throw new Error(`File with id:${id} not found`)
+      throw ErrorBuild.badRequest('File not found in Database')
     }
   }
 
@@ -55,6 +62,10 @@ export class FileRepository {
       .toArray()
 
     const fileBuffer = Buffer.concat(chunks.map((chunk:any) => Buffer.from(chunk.data.buffer)))
-    return fileBuffer
+    if (fileBuffer) {
+      return fileBuffer
+    } else {
+      throw (ErrorBuild.badRequest('File not found in GridFS'))
+    }
   }
 }
