@@ -4,12 +4,14 @@ import { resolve } from 'path'
 
 dotenv.config({ path: resolve(__dirname, './../../.env') })
 
-export default class rabbitMqService {
+export default class RabbitMqService {
   protocol:string
   hostname: string
   port: number
   username: string
   password: string
+  private downloadQueue: string
+  private uploadQueue: string
 
   constructor () {
     this.protocol = 'amqp'
@@ -17,6 +19,8 @@ export default class rabbitMqService {
     this.port = 5672
     this.username = process.env.RABBIT_USER as string
     this.password = process.env.RABBIT_PASSWORD as string
+    this.downloadQueue = 'downloader_queue'
+    this.uploadQueue = 'uploader_queue'
   }
 
   connecToRabbitMQ () {

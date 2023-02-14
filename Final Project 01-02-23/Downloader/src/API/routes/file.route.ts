@@ -4,15 +4,15 @@ import FileControllers from '../Controller/file.controller'
 export const filesRoute = Router()
 const fileControllers = new FileControllers()
 
-filesRoute.post('/', async (req, res) => {
-  fileControllers.createFile(req, res)
+filesRoute.post('/', async (req, res, next) => {
+  fileControllers.createFile(req, res, next)
 })
-filesRoute.get('/', async (req, res) => {
-  fileControllers.getAllFiles(req, res)
+filesRoute.get('/', async (req, res, next) => {
+  fileControllers.getAllFiles(req, res, next)
 })
-filesRoute.get('/:id', async (req, res) => {
-  fileControllers.getFileById(req, res)
+filesRoute.get('/:id', async (req, res, next) => {
+  fileControllers.getFileById(req, res, next)
 })
-filesRoute.get('/uploader/:id', async (req, res) => {
-  fileControllers.getFilesByUploaderId(req, res)
+filesRoute.get('/uploader/:id', async (req, res, next) => {
+  fileControllers.getFilesByUploaderId(req, res, next)
 })

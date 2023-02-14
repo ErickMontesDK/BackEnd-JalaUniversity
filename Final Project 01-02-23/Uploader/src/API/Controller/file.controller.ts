@@ -21,13 +21,12 @@ export default class FileControllers {
     try {
       const { id, originalname, mimetype, size, uploadDate } = fileFromFs
       const fileValues = {
-        gridFsId: id,
         name: originalname,
         mimetype,
         size,
         uploadDate
       }
-      const newFile = await this.fileService.uploadingFile(fileValues)
+      const newFile = await this.fileService.uploadingFile(id, fileValues)
 
       return res.status(201).json({ message: 'File created successfully.', data: newFile })
     } catch (error) {

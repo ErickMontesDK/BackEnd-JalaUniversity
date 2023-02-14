@@ -4,7 +4,7 @@ import { injectable } from 'inversify'
 import { container } from '../containers/inversify.config'
 
 @injectable()
-export default class UserService implements IUserRepository {
+export default class UserService {
   userData: IUserRepository = container.get<IUserRepository>('UserData')
 
   async create (user: User) {

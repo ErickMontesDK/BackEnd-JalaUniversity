@@ -16,7 +16,7 @@ class Test {
     const userAccess = UserService
     await userAccess.create(newUser)
 
-    const userLoaded = await userAccess.read(4)
+    const userLoaded = await userAccess.read(13)
     console.log(userLoaded)
 
     if (userLoaded) {
@@ -24,7 +24,7 @@ class Test {
       userAccess.update(userLoaded)
       console.log(userLoaded)
     }
-    console.log(await userAccess.delete(4))
+    console.log(await userAccess.delete(15))
   }
 }
 

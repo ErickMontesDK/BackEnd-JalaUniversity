@@ -10,8 +10,7 @@ interface FileValues {
   status?: string,
   size?: number,
   mimetype?: string,
-  driveFile?: driveInfo[],
-  gridFsId?: ObjectID
+  driveFile?: driveInfo[]
 }
 
 export default class FileService {
@@ -23,9 +22,7 @@ export default class FileService {
     this.accountService = new AccountService()
   }
 
-  async uploadingFile (fileValues: FileValues) {
-    const fileFromGridFS: Buffer = await this.fileRepository.getFileFromGridFS(fileValues.gridFsId!)
-
+  async uploadingFile (idGridFile:ObjectID, fileValues: FileValues) {
     const todayDate = new Date()
     const day = todayDate.getUTCDate()
     const month = todayDate.getUTCMonth()
@@ -37,19 +34,22 @@ export default class FileService {
     newfile.status = 'replicating'
     newfile.size = fileValues.size!
     newfile.mimetype = fileValues.mimetype!
+    newfile.driveFile = []
 
     const fileFromMongo = await this.fileRepository.createFile(newfile)
-    await this.uploadToDriveAccounts(fileFromGridFS, fileFromMongo)
+    this.uploadToDriveAccounts(idGridFile, fileFromMongo)
     return fileFromMongo
   }
 
-  async uploadToDriveAccounts (fileBuffer: Buffer, fileObject: FileEntity) {
+  async uploadToDriveAccounts (idFileFromFs: ObjectID, fileObject: FileEntity) {
+    const fileFromGridFS: Buffer = await this.fileRepository.getFileFromGridFS(idFileFromFs)
+
     const accounts = await this.accountService.getAllAccounts()
     const driveFile = []
 
     for (const account of accounts) {
       const driveService = new DriveServices(account)
-      const response = await driveService.uploadFile(fileBuffer, fileObject)
+      const response = await driveService.uploadFile(fileFromGridFS, fileObject)
       const urlFile = await driveService.generatePublicUrl(response.id)
 
       const driveInfo = {

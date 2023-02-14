@@ -1,22 +1,22 @@
-
 {
     "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
-      "moduleResolution": "node",
-      "rootDir": "src",
-      "sourceMap": true,
-      "outDir": "dist",
-      "lib": ["ES2016"],
-      "strict": true,
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "noImplicitAny": true,
-      "skipLibCheck": true,
-      "emitDecoratorMetadata":true,
-      "experimentalDecorators":true
-    },
-    "include": ["src", "app.ts"],
-    "exclude": ["node_modules"]
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "sourceMap": true,
+   "outDir": "dist",
+    "lib": ["ES2016"],
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "emitDecoratorMetadata":true,
+    "experimentalDecorators":true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+
 }
 

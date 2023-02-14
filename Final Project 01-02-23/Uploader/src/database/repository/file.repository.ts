@@ -2,11 +2,26 @@ import { ObjectID } from 'mongodb'
 import { ErrorBuild } from '../../utils/errorBuild'
 import { AppDataSource } from './../dbsource'
 import FileEntity from './../entities/file.entity'
+import dotenv from 'dotenv'
+import { resolve } from 'path'
 const mongodb = require('mongodb')
 const ObjectId = mongodb.ObjectId
 
+dotenv.config({ path: resolve(__dirname, '../../.env') })
+
 export class FileRepository {
   protected repository = AppDataSource.getMongoRepository(FileEntity)
+
+  async connectionMongo () {
+    const client = await mongodb.MongoClient.connect(
+      `${process.env.MONGO_CONNECTION}`,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      }
+    )
+    return client
+  }
 
   async createFile (newFile: FileEntity) {
     return await this.repository.save(newFile)
@@ -45,14 +60,7 @@ export class FileRepository {
   }
 
   async getFileFromGridFS (idFile:ObjectID) {
-    const client = await mongodb.MongoClient.connect(
-      'mongodb+srv://Admin:killerkiller@uploader.ehxrcgs.mongodb.net/?retryWrites=true&w=majority',
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-      }
-    )
-
+    const client = await this.connectionMongo()
     const db = client.db('test')
     const chunksCollection = db.collection('fs.chunks')
 

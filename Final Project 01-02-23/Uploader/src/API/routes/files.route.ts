@@ -1,11 +1,13 @@
 import { Request, Router } from 'express'
 import FileControllers from '../Controller/file.controller'
 import { GridFsStorage } from 'multer-gridfs-storage'
+import dotenv from 'dotenv'
+import { resolve } from 'path'
+dotenv.config({ path: resolve(__dirname, '../../.env') })
 
 const multer = require('multer')
-
 const storage = new GridFsStorage({
-  url: 'mongodb+srv://Admin:killerkiller@uploader.ehxrcgs.mongodb.net/?retryWrites=true&w=majority',
+  url: `${process.env.MONGO_CONNECTION}`,
   file: (req:Request, file:any) => {
     return new Promise((resolve) => {
       const filename = file.originalname.trim()
