@@ -4,9 +4,6 @@ import FileControllers from '../Controller/file.controller'
 export const filesRoute = Router()
 const fileControllers = new FileControllers()
 
-filesRoute.post('/', async (req, res, next) => {
-  fileControllers.createFile(req, res, next)
-})
 filesRoute.get('/', async (req, res, next) => {
   fileControllers.getAllFiles(req, res, next)
 })

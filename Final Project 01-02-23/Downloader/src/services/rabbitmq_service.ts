@@ -1,26 +1,31 @@
 import amqp = require('amqplib/callback_api');
 import dotenv from 'dotenv'
 import { resolve } from 'path'
+import FileService from './file.services'
 
 dotenv.config({ path: resolve(__dirname, './../../.env') })
 
 export default class RabbitMqService {
+  protected fileService: FileService
   protocol:string
   hostname: string
   port: number
   username: string
   password: string
-  private downloadQueue: string
-  private uploadQueue: string
+  connection!: amqp.Connection | null
+  channel!: amqp.Channel | null
+  downloadQueue: string
 
   constructor () {
+    this.fileService = new FileService()
     this.protocol = 'amqp'
     this.hostname = 'localhost'
     this.port = 5672
     this.username = process.env.RABBIT_USER as string
     this.password = process.env.RABBIT_PASSWORD as string
-    this.downloadQueue = 'downloader_queue'
-    this.uploadQueue = 'uploader_queue'
+    this.connection = null
+    this.channel = null
+    this.downloadQueue = 'Downloader_service'
   }
 
   connecToRabbitMQ () {
@@ -40,47 +45,43 @@ export default class RabbitMqService {
     })
   }
 
-  listeningService = () => {
-    this.connecToRabbitMQ().then((connection:any) => {
-      connection.createChannel(function (error1:any, channel:any) {
-        if (error1) {
-          throw error1
-        }
+  createChannel () {
+    return new Promise((resolve, reject) => {
+      if (this.channel) {
+        resolve(this.channel)
+      }
 
-        const queue = 'Downloader_service'
-        channel.assertQueue(queue, { durable: false })
-
-        console.log('Waiting for messages...')
-
-        channel.consume(queue, function (message:any) {
-          console.log('message received ' + message!.content.toString())
-        }, {
-          noAck: true
+      this.connecToRabbitMQ().then((connection:any) => {
+        connection.createChannel((err:any, channel:any) => {
+          if (err) {
+            reject(err)
+            return
+          }
+          this.channel = channel
+          channel.assertQueue(this.downloadQueue, { durable: false })
+          resolve(channel)
         })
+      }).catch((err:any) => {
+        reject(err)
       })
     })
   }
 
-  senderService = () => {
-    this.connecToRabbitMQ().then((connection:any) => {
-      connection.createChannel(function (error1:any, channel:any) {
-        if (error1) {
-          throw error1
+  listeningService = () => {
+    this.createChannel().then((channel:any) => {
+      console.log('Waiting for messages...')
+
+      channel.consume(this.downloadQueue, (message:any) => {
+        const receivedObj = JSON.parse(message.content.toString())
+        console.log(receivedObj)
+        if (receivedObj.action === 'update') {
+          this.fileService.createFileById(receivedObj.file)
+        } else {
+          this.fileService.deleteFile(receivedObj.file.id)
         }
-
-        const queue = 'Downloader_service'
-        const message = 'Message from downloader'
-
-        channel.assertQueue(queue, { durable: false })
-
-        channel.sendToQueue(queue, Buffer.from(message))
-
-        console.log('message sent: ' + message)
+      }, {
+        noAck: true
       })
-
-      setTimeout(function () {
-        connection.close()
-      }, 500)
     })
   }
 }

@@ -7,8 +7,19 @@ export default class FileService {
     this.fileRepository = new FileRepository()
   }
 
-  async createFileById (newFile: FileEntity) {
-    return await this.fileRepository.createFile(newFile)
+  async createFileById (newFile: any) {
+    const contentLinks = newFile.driveFile.map((entry:any) => {
+      return entry.contentLink
+    })
+    const formatFile = new FileEntity()
+    formatFile.name = newFile.name
+    formatFile.status = newFile.status
+    formatFile.size = newFile.size
+    formatFile.contentLinks = contentLinks
+    formatFile.uploaderId = newFile.id.toString()
+
+    const newEntry = await this.fileRepository.createFile(formatFile)
+    console.log(newEntry)
   }
 
   async getAllFiles () {
@@ -21,5 +32,11 @@ export default class FileService {
 
   async getFileByUploaderId (id:string) {
     return await this.fileRepository.readFileByUploaderId(id)
+  }
+
+  async deleteFile (id:string) {
+    const foundFile = await this.getFileByUploaderId(id)
+    const deletedFile = await this.fileRepository.deleteFile(foundFile.id)
+    console.log(deletedFile)
   }
 }

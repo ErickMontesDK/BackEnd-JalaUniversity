@@ -3,6 +3,7 @@ import { FileRepository } from '../database/repository/file.repository'
 import DriveServices from './drive.services'
 import { ObjectID } from 'mongodb'
 import AccountService from './account.services'
+import RabbitMqService from './rabbitmq_service'
 
 interface FileValues {
   name?: string,
@@ -16,10 +17,12 @@ interface FileValues {
 export default class FileService {
   protected fileRepository: FileRepository
   protected accountService: AccountService
+  protected rabbitService: RabbitMqService
 
   constructor () {
     this.fileRepository = new FileRepository()
     this.accountService = new AccountService()
+    this.rabbitService = new RabbitMqService()
   }
 
   async uploadingFile (idGridFile:ObjectID, fileValues: FileValues) {
@@ -79,7 +82,9 @@ export default class FileService {
     updateFile.driveFile = fileValues.driveFile ? fileValues.driveFile : updateFile.driveFile
     updateFile.status = fileValues.status ? fileValues.status : updateFile.status
 
-    return await this.fileRepository.updateFile(updateFile)
+    const updatedFile = await this.fileRepository.updateFile(updateFile)
+    this.sendToRabbit(updateFile, 'update')
+    return updatedFile
   }
 
   async deleteFileById (id: string) {
@@ -93,7 +98,11 @@ export default class FileService {
         await driveService.deleteFile(drive.driveId)
       }
     })
-
+    this.sendToRabbit(file, 'delete')
     return await this.fileRepository.deleteFile(id)
+  }
+
+  sendToRabbit (file: FileEntity, action: string) {
+    this.rabbitService.sendMessage(file, action)
   }
 }

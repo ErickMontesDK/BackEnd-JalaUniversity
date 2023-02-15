@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import FileEntity from '../../database/entities/file.entity'
 import FileService from './../../services/file.services'
 import { ErrorBuild } from '../../utils/errorBuild'
 
@@ -8,28 +7,6 @@ export default class FileControllers {
 
   constructor () {
     this.fileService = new FileService()
-  }
-
-  async createFile (req: Request, res: Response, next: NextFunction) {
-    const { name, status, size, contentLinks, uploaderId } = req.body
-    if (!name || !status || !size || !contentLinks || !uploaderId) {
-      next(ErrorBuild.badRequest('One or more parameters were not send. (name, status, size, contentLinks or uploaderId)'))
-      return
-    }
-
-    try {
-      const fileValues = new FileEntity()
-      fileValues.name = name
-      fileValues.status = status
-      fileValues.size = parseInt(size)
-      fileValues.contentLinks = contentLinks
-      fileValues.uploaderId = uploaderId
-
-      const newFileId = await this.fileService.createFileById(fileValues)
-      res.status(201).json({ message: 'File created', id: newFileId })
-    } catch (error) {
-      next(error)
-    }
   }
 
   async getAllFiles (req: Request, res: Response, next: NextFunction) {

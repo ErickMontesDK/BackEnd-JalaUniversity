@@ -1,6 +1,7 @@
 import amqp = require('amqplib/callback_api');
 import { resolve } from 'path'
 import dotenv from 'dotenv'
+import FileEntity from '../database/entities/file.entity'
 
 dotenv.config({ path: resolve(__dirname, '../../../.env') })
 
@@ -10,6 +11,9 @@ export default class RabbitMqService {
   port: number
   username: string
   password: string
+  connection!: amqp.Connection | null
+  channel!: amqp.Channel | null
+  downloadQueue: string
 
   constructor () {
     this.protocol = 'amqp'
@@ -17,6 +21,9 @@ export default class RabbitMqService {
     this.port = 5672
     this.username = process.env.RABBIT_USER as string
     this.password = process.env.RABBIT_PASSWORD as string
+    this.connection = null
+    this.channel = null
+    this.downloadQueue = 'Downloader_service'
   }
 
   connecToRabbitMQ () {
@@ -36,47 +43,39 @@ export default class RabbitMqService {
     })
   }
 
-  listeningService = () => {
-    this.connecToRabbitMQ().then((connection:any) => {
-      connection.createChannel(function (error1:any, channel:any) {
-        if (error1) {
-          throw error1
-        }
+  createChannel () {
+    return new Promise((resolve, reject) => {
+      if (this.channel) {
+        resolve(this.channel)
+      }
 
-        const queue = 'Uploader_service'
-        channel.assertQueue(queue, { durable: false })
-
-        console.log('Waiting for messages...')
-
-        channel.consume(queue, function (message:any) {
-          console.log('message received ' + message!.content.toString())
-        }, {
-          noAck: true
+      this.connecToRabbitMQ().then((connection:any) => {
+        connection.createChannel((err:any, channel:any) => {
+          if (err) {
+            reject(err)
+            return
+          }
+          this.channel = channel
+          channel.assertQueue(this.downloadQueue, { durable: false })
+          resolve(channel)
         })
+      }).catch((err:any) => {
+        reject(err)
       })
     })
   }
 
-  senderService = () => {
-    this.connecToRabbitMQ().then((connection:any) => {
-      connection.createChannel(function (error1:any, channel:any) {
-        if (error1) {
-          throw error1
-        }
+  sendMessage (file: FileEntity, action: string): void {
+    const sentObject = {
+      action,
+      file
+    }
 
-        const queue = 'Uploader_service'
-        const message = 'Message from uploader'
-
-        channel.assertQueue(queue, { durable: false })
-
-        channel.sendToQueue(queue, Buffer.from(message))
-
-        console.log('message sent: ' + message)
-      })
-
-      setTimeout(function () {
-        connection.close()
-      }, 500)
+    const messageString = JSON.stringify(sentObject)
+    console.log(sentObject)
+    this.createChannel().then((channel:any) => {
+      channel.sendToQueue(this.downloadQueue, Buffer.from(messageString))
+      console.log(`Sent message to queue ${this.downloadQueue}`)
     })
   }
 }
