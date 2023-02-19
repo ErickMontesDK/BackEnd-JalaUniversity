@@ -31,7 +31,7 @@ export default class AccountService {
     newAccount.refresh_token = accountValues.token!
 
     const account = await this.accountRepository.createAccount(newAccount)
-    this.rabbitService.sendMessage(account, 'update account')
+    this.rabbitService.sendMessage(account, 'update account', 'downloader')
     return account
   }
 
@@ -48,13 +48,13 @@ export default class AccountService {
     updateAccount.refresh_token = accountValues.token ? accountValues.token : updateAccount.refresh_token
 
     const updatedAccount = await this.accountRepository.updateAccount(updateAccount)
-    this.rabbitService.sendMessage(updatedAccount, 'update account')
+    this.rabbitService.sendMessage(updatedAccount, 'update account', 'downloader')
     return updatedAccount
   }
 
   async deleteAccountById (id: string) {
     const deletedAccount = await this.accountRepository.deleteAccount(id)
-    this.rabbitService.sendMessage(id, 'delete account')
+    this.rabbitService.sendMessage(id, 'delete account', 'downloader')
     return deletedAccount
   }
 }

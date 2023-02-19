@@ -7,6 +7,7 @@ const rabbitService = new RabbitMqService()
 ConnectionMongo.initServerConnection()
 rabbitService.connecToRabbitMQ().then((connection) => {
   console.log('Connected to RabbitMQ!')
+  // rabbitService.listeningService()
 }).catch((err) => {
   console.error('Error connecting to RabbitMQ:', err)
 })

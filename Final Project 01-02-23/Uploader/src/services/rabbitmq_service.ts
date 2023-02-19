@@ -3,10 +3,13 @@ import { resolve } from 'path'
 import dotenv from 'dotenv'
 import FileEntity from '../database/entities/file.entity'
 import AccountEntity from '../database/entities/account.entity'
+import UploadHandlerService from './uploadHandler.service'
 
 dotenv.config({ path: resolve(__dirname, '../../../.env') })
 
 export default class RabbitMqService {
+  protected uploadHandlerService: UploadHandlerService
+
   protocol:string
   hostname: string
   port: number
@@ -18,6 +21,7 @@ export default class RabbitMqService {
   uploaderQueue: string
 
   constructor () {
+    this.uploadHandlerService = new UploadHandlerService()
     this.protocol = 'amqp'
     this.hostname = 'localhost'
     this.port = 5672
@@ -85,21 +89,21 @@ export default class RabbitMqService {
     console.log(sentObject)
     this.createChannel().then((channel:any) => {
       channel.sendToQueue(queue, Buffer.from(messageString))
-      console.log(`Sent message to queue DOWNLOADER ${queue}`)
+      console.log(`Sent message to queue ${destiny}: ${queue}`)
     })
   }
 
-  sendMessageToUploader (body: FileEntity | AccountEntity | string, action: string): void {
-    const sentObject = {
-      action,
-      body
-    }
-
-    const messageString = JSON.stringify(sentObject)
-    console.log(sentObject)
+  listeningService = () => {
     this.createChannel().then((channel:any) => {
-      channel.sendToQueue(this.uploaderQueue, Buffer.from(messageString))
-      console.log(`Sent message to queue UPLOADER ${this.uploaderQueue}`)
+      console.log('Waiting for messages...')
+
+      channel.consume(this.downloadQueue, (message:any) => {
+        const receivedObj = JSON.parse(message.content.toString())
+
+        this.uploadHandlerService.rabbitMqReceiveMessage(receivedObj)
+      }, {
+        noAck: true
+      })
     })
   }
 }

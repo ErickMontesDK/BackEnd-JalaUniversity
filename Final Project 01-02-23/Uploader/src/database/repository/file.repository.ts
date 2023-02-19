@@ -1,4 +1,4 @@
-import { ObjectID } from 'mongodb'
+import { ObjectID } from 'typeorm'
 import { ErrorBuild } from '../../utils/errorBuild'
 import { AppDataSource } from './../dbsource'
 import FileEntity from './../entities/file.entity'

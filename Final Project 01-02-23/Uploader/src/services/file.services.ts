@@ -40,12 +40,14 @@ export default class FileService {
     newfile.driveFile = []
 
     const fileFromMongo = await this.fileRepository.createFile(newfile)
-    this.uploadToDriveAccounts(idGridFile, fileFromMongo)
+    this.uploadToDriveAccounts(fileFromMongo)
+    this.rabbitService.sendMessage(fileFromMongo, 'upload drive', 'uploader')
+
     return fileFromMongo
   }
 
-  async uploadToDriveAccounts (idFileFromFs: ObjectID, fileObject: FileEntity) {
-    const fileFromGridFS: Buffer = await this.fileRepository.getFileFromGridFS(idFileFromFs)
+  async uploadToDriveAccounts (fileObject: FileEntity) {
+    const fileFromGridFS: Buffer = await this.fileRepository.getFileFromGridFS(fileObject.idGridFile)
 
     const accounts = await this.accountService.getAllAccounts()
     const driveFile = []
@@ -83,7 +85,7 @@ export default class FileService {
     updateFile.status = fileValues.status ? fileValues.status : updateFile.status
 
     const updatedFile = await this.fileRepository.updateFile(updateFile)
-    this.rabbitService.sendMessage(updateFile, 'update file')
+    this.rabbitService.sendMessage(updateFile, 'update file', 'downloader')
 
     return updatedFile
   }
@@ -101,7 +103,7 @@ export default class FileService {
     })
 
     const deleteFile = await this.fileRepository.deleteFile(id)
-    this.rabbitService.sendMessage(id, 'delete file')
+    this.rabbitService.sendMessage(id, 'delete file', 'downloader')
     return deleteFile
   }
 }
