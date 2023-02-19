@@ -1,6 +1,7 @@
 import AccountEntity from '../database/entities/account.entity'
 
 import { AccountRepository } from '../database/repository/account.repository'
+import RabbitMqService from './rabbitmq_service'
 
 type AccountValues = {
   email?: string,
@@ -11,9 +12,11 @@ type AccountValues = {
 
 export default class AccountService {
   protected accountRepository: AccountRepository
+  protected rabbitService: RabbitMqService
 
   constructor () {
     this.accountRepository = new AccountRepository()
+    this.rabbitService = new RabbitMqService()
   }
 
   async getAllAccounts () {
@@ -27,7 +30,9 @@ export default class AccountService {
     newAccount.client_secret = accountValues.secret!
     newAccount.refresh_token = accountValues.token!
 
-    return await this.accountRepository.createAccount(newAccount)
+    const account = await this.accountRepository.createAccount(newAccount)
+    this.rabbitService.sendMessage(account, 'update account')
+    return account
   }
 
   async getAccountById (id: string) {
@@ -42,10 +47,14 @@ export default class AccountService {
     updateAccount.client_secret = accountValues.secret ? accountValues.secret : updateAccount.client_secret
     updateAccount.refresh_token = accountValues.token ? accountValues.token : updateAccount.refresh_token
 
-    return await this.accountRepository.updateAccount(updateAccount)
+    const updatedAccount = await this.accountRepository.updateAccount(updateAccount)
+    this.rabbitService.sendMessage(updatedAccount, 'update account')
+    return updatedAccount
   }
 
   async deleteAccountById (id: string) {
-    return await this.accountRepository.deleteAccount(id)
+    const deletedAccount = await this.accountRepository.deleteAccount(id)
+    this.rabbitService.sendMessage(id, 'delete account')
+    return deletedAccount
   }
 }

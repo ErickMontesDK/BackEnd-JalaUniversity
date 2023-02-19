@@ -2,11 +2,14 @@ import amqp = require('amqplib/callback_api');
 import dotenv from 'dotenv'
 import { resolve } from 'path'
 import FileService from './file.services'
+import UploadHandlerService from './UploadHandlerService'
 
 dotenv.config({ path: resolve(__dirname, './../../.env') })
 
 export default class RabbitMqService {
   protected fileService: FileService
+  protected uploadHandlerService: UploadHandlerService
+
   protocol:string
   hostname: string
   port: number
@@ -18,6 +21,7 @@ export default class RabbitMqService {
 
   constructor () {
     this.fileService = new FileService()
+    this.uploadHandlerService = new UploadHandlerService()
     this.protocol = 'amqp'
     this.hostname = 'localhost'
     this.port = 5672
@@ -73,12 +77,8 @@ export default class RabbitMqService {
 
       channel.consume(this.downloadQueue, (message:any) => {
         const receivedObj = JSON.parse(message.content.toString())
-        console.log(receivedObj)
-        if (receivedObj.action === 'update') {
-          this.fileService.createFileById(receivedObj.file)
-        } else {
-          this.fileService.deleteFile(receivedObj.file.id)
-        }
+
+        this.uploadHandlerService.rabbitMqReceiveMessage(receivedObj)
       }, {
         noAck: true
       })

@@ -83,7 +83,8 @@ export default class FileService {
     updateFile.status = fileValues.status ? fileValues.status : updateFile.status
 
     const updatedFile = await this.fileRepository.updateFile(updateFile)
-    this.sendToRabbit(updateFile, 'update')
+    this.rabbitService.sendMessage(updateFile, 'update file')
+
     return updatedFile
   }
 
@@ -98,11 +99,9 @@ export default class FileService {
         await driveService.deleteFile(drive.driveId)
       }
     })
-    this.sendToRabbit(file, 'delete')
-    return await this.fileRepository.deleteFile(id)
-  }
 
-  sendToRabbit (file: FileEntity, action: string) {
-    this.rabbitService.sendMessage(file, action)
+    const deleteFile = await this.fileRepository.deleteFile(id)
+    this.rabbitService.sendMessage(id, 'delete file')
+    return deleteFile
   }
 }

@@ -2,6 +2,7 @@ import amqp = require('amqplib/callback_api');
 import { resolve } from 'path'
 import dotenv from 'dotenv'
 import FileEntity from '../database/entities/file.entity'
+import AccountEntity from '../database/entities/account.entity'
 
 dotenv.config({ path: resolve(__dirname, '../../../.env') })
 
@@ -14,6 +15,7 @@ export default class RabbitMqService {
   connection!: amqp.Connection | null
   channel!: amqp.Channel | null
   downloadQueue: string
+  uploaderQueue: string
 
   constructor () {
     this.protocol = 'amqp'
@@ -24,6 +26,7 @@ export default class RabbitMqService {
     this.connection = null
     this.channel = null
     this.downloadQueue = 'Downloader_service'
+    this.uploaderQueue = 'Uploader_service'
   }
 
   connecToRabbitMQ () {
@@ -65,17 +68,38 @@ export default class RabbitMqService {
     })
   }
 
-  sendMessage (file: FileEntity, action: string): void {
+  sendMessage (body: FileEntity | AccountEntity | string, action: string, destiny:string): void {
     const sentObject = {
       action,
-      file
+      body
+    }
+    let queue: string
+
+    if (destiny === 'downloader') {
+      queue = this.downloadQueue
+    } else {
+      queue = this.uploaderQueue
     }
 
     const messageString = JSON.stringify(sentObject)
     console.log(sentObject)
     this.createChannel().then((channel:any) => {
-      channel.sendToQueue(this.downloadQueue, Buffer.from(messageString))
-      console.log(`Sent message to queue ${this.downloadQueue}`)
+      channel.sendToQueue(queue, Buffer.from(messageString))
+      console.log(`Sent message to queue DOWNLOADER ${queue}`)
+    })
+  }
+
+  sendMessageToUploader (body: FileEntity | AccountEntity | string, action: string): void {
+    const sentObject = {
+      action,
+      body
+    }
+
+    const messageString = JSON.stringify(sentObject)
+    console.log(sentObject)
+    this.createChannel().then((channel:any) => {
+      channel.sendToQueue(this.uploaderQueue, Buffer.from(messageString))
+      console.log(`Sent message to queue UPLOADER ${this.uploaderQueue}`)
     })
   }
 }
