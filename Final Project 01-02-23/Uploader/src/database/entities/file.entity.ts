@@ -11,8 +11,8 @@ export default class FileEntity {
   @ObjectIdColumn()
     id!: ObjectID
 
-  @ObjectIdColumn()
-    idGridFile!: ObjectID
+  @Column()
+    gridFsId!: string
 
   @Column()
     name!: string

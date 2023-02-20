@@ -1,4 +1,3 @@
-import { ObjectID } from 'typeorm'
 import { ErrorBuild } from '../../utils/errorBuild'
 import { AppDataSource } from './../dbsource'
 import FileEntity from './../entities/file.entity'
@@ -59,13 +58,15 @@ export class FileRepository {
     }
   }
 
-  async getFileFromGridFS (idFile:ObjectID) {
+  async getFileFromGridFS (idFile:string) {
+    const formatId = new ObjectId(idFile)
+
     const client = await this.connectionMongo()
     const db = client.db('test')
     const chunksCollection = db.collection('fs.chunks')
 
     const chunks = await chunksCollection
-      .find({ files_id: new mongodb.ObjectID(idFile) })
+      .find({ files_id: new mongodb.ObjectID(formatId) })
       .sort({ n: 1 })
       .toArray()
 

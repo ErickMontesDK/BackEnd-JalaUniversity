@@ -1,12 +1,12 @@
 import amqp = require('amqplib/callback_api');
 import { resolve } from 'path'
 import dotenv from 'dotenv'
-import FileEntity from '../database/entities/file.entity'
-import AccountEntity from '../database/entities/account.entity'
+import UploadHandlerService from './uploadHandler.service'
 
 dotenv.config({ path: resolve(__dirname, '../../../.env') })
 
-export default class RabbitMqService {
+export default class RabbitMqReceiverService {
+  private uploadHandlerService : UploadHandlerService
   protocol:string
   hostname: string
   port: number
@@ -18,6 +18,8 @@ export default class RabbitMqService {
   uploaderQueue: string
 
   constructor () {
+    this.uploadHandlerService = new UploadHandlerService()
+
     this.protocol = 'amqp'
     this.hostname = 'localhost'
     this.port = 5672
@@ -59,9 +61,7 @@ export default class RabbitMqService {
             return
           }
           this.channel = channel
-          channel.assertQueue(this.downloadQueue, { durable: false })
           channel.assertQueue(this.uploaderQueue, { durable: false })
-
           resolve(channel)
         })
       }).catch((err:any) => {
@@ -70,24 +70,17 @@ export default class RabbitMqService {
     })
   }
 
-  sendMessage (body: FileEntity | AccountEntity | string, action: string, destiny:string): void {
-    const sentObject = {
-      action,
-      body
-    }
-    let queue: string
-
-    if (destiny === 'downloader') {
-      queue = this.downloadQueue
-    } else {
-      queue = this.uploaderQueue
-    }
-
-    const messageString = JSON.stringify(sentObject)
-    console.log(sentObject)
+  listeningService = () => {
     this.createChannel().then((channel:any) => {
-      channel.sendToQueue(queue, Buffer.from(messageString))
-      console.log(`Sent message to queue ${destiny} ${queue}`)
+      console.log('Waiting for messages...')
+
+      channel.consume(this.uploaderQueue, (message:any) => {
+        const receivedObj = JSON.parse(message.content.toString())
+
+        this.uploadHandlerService.rabbitMqReceiveMessage(receivedObj)
+      }, {
+        noAck: true
+      })
     })
   }
 }

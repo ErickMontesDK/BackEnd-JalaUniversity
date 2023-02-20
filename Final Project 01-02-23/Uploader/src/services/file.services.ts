@@ -1,7 +1,7 @@
 import FileEntity, { driveInfo } from './../database/entities/file.entity'
 import { FileRepository } from '../database/repository/file.repository'
 import DriveServices from './drive.services'
-import { ObjectID } from 'mongodb'
+import { ObjectID } from 'typeorm'
 import AccountService from './account.services'
 import RabbitMqService from './rabbitmq_service'
 
@@ -38,16 +38,15 @@ export default class FileService {
     newfile.size = fileValues.size!
     newfile.mimetype = fileValues.mimetype!
     newfile.driveFile = []
+    newfile.gridFsId = idGridFile.toString()
 
     const fileFromMongo = await this.fileRepository.createFile(newfile)
-    this.uploadToDriveAccounts(fileFromMongo)
     this.rabbitService.sendMessage(fileFromMongo, 'upload drive', 'uploader')
-
     return fileFromMongo
   }
 
   async uploadToDriveAccounts (fileObject: FileEntity) {
-    const fileFromGridFS: Buffer = await this.fileRepository.getFileFromGridFS(fileObject.idGridFile)
+    const fileFromGridFS: Buffer = await this.fileRepository.getFileFromGridFS(fileObject.gridFsId)
 
     const accounts = await this.accountService.getAllAccounts()
     const driveFile = []
