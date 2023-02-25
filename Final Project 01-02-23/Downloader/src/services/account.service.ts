@@ -79,4 +79,9 @@ export default class AccountService {
     })
     return filterAccounts
   }
+
+  async dailyUpdateDownloads () {
+    this.accountRepository.dailyUpdate()
+    console.log('actualizando accounts')
+  }
 }

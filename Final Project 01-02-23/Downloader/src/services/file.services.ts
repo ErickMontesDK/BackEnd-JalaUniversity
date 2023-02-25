@@ -59,4 +59,8 @@ export default class FileService {
       })
     }
   }
+
+  async dailyUpdateDownloads () {
+    this.fileRepository.dailyUpdate()
+  }
 }

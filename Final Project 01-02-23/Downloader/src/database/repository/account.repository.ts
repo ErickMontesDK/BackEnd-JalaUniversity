@@ -67,4 +67,8 @@ export class AccountRepository {
       throw ErrorBuild.badRequest('Account not found in Database')
     }
   }
+
+  async dailyUpdate () {
+    await this.repository.update({}, { downloadsToday: 0, sizeDownloadsToday: 0 })
+  }
 }

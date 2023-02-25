@@ -57,4 +57,9 @@ export class FileRepository {
       throw ErrorBuild.badRequest('File not found in Database')
     }
   }
+
+  async dailyUpdate () {
+    await this.repository.update({}, { downloadsToday: 0 })
+    console.log('actualizando files')
+  }
 }
