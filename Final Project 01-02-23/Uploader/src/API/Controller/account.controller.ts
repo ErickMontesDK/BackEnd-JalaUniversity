@@ -93,9 +93,9 @@ export default class AccountControllers {
     }
 
     try {
-      await this.accountService.deleteAccountById(id)
+      const message = await this.accountService.deleteAccountProcess(id)
 
-      return res.status(204).json({ message: 'Account deleted successfully.' })
+      return res.status(204).json({ message })
     } catch (error) {
       next(error)
     }

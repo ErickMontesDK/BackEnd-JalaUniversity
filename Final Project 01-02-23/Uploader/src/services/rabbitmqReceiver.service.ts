@@ -76,7 +76,7 @@ export default class RabbitMqReceiverService {
 
       channel.consume(this.uploaderQueue, (message:any) => {
         const receivedObj = JSON.parse(message.content.toString())
-
+        console.log('it this an id?', receivedObj)
         this.uploadHandlerService.rabbitMqReceiveMessage(receivedObj)
       }, {
         noAck: true

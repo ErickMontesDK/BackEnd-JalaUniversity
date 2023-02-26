@@ -37,6 +37,15 @@ export class FileRepository {
     }
   }
 
+  async readAll () {
+    const allFiles = await this.repository.find()
+    if (allFiles) {
+      return allFiles
+    } else {
+      throw ErrorBuild.badRequest('No Files found in Database')
+    }
+  }
+
   async updateFile (file: FileEntity) {
     const updatedFile = await this.repository.save(file)
 

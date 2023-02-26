@@ -84,7 +84,6 @@ export default class RabbitMqService {
     }
 
     const messageString = JSON.stringify(sentObject)
-    console.log(sentObject)
     this.createChannel().then((channel:any) => {
       channel.sendToQueue(queue, Buffer.from(messageString))
       console.log(`Sent message to queue ${destiny} ${queue}`)

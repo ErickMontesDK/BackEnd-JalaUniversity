@@ -46,7 +46,7 @@ export class AccountRepository {
     const deletedAccount = await this.repository.findOneAndDelete({ _id: objectId })
 
     if (deletedAccount) {
-      return deletedAccount.value._id
+      return id
     } else {
       throw ErrorBuild.badRequest('File not found in Database')
     }

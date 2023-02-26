@@ -2,8 +2,8 @@ import express from 'express'
 import { routes } from './routes'
 import { filesRoute } from './routes/file.route'
 import errorHandler from '../utils/errorHandler'
-import { fileAccountRoutes } from './routes/relation-file-account.route'
 import { downloaderRoute } from './routes/downloader.route'
+import { accountStatsRoute } from './routes/accountStats.route'
 const bodyParser = require('body-parser')
 
 export const app = express()
@@ -14,5 +14,5 @@ app.use(bodyParser.json())
 app.use(`${initialRoute}`, routes)
 app.use(`${initialRoute}/files`, filesRoute)
 app.use(`${initialRoute}/balance`, downloaderRoute)
-app.use(`${initialRoute}/files-accounts`, fileAccountRoutes)
+app.use(`${initialRoute}/account-stats`, accountStatsRoute)
 app.use(errorHandler)

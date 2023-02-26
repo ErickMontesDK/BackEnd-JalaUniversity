@@ -24,15 +24,7 @@ export class FileRepository {
     const allFiles = await this.repository.find()
 
     if (allFiles) {
-      const nameAndLinks = allFiles.map((file) => {
-        const infoFile = {
-          name: file.name,
-          id: file.id,
-          uploaderId: file.uploaderId
-        }
-        return infoFile
-      })
-      return nameAndLinks
+      return allFiles
     } else {
       throw ErrorBuild.badRequest('Files not found in Database')
     }

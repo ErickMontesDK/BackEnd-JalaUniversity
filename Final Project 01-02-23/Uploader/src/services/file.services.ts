@@ -4,6 +4,8 @@ import DriveServices from './drive.services'
 import { ObjectID } from 'typeorm'
 import AccountService from './account.services'
 import RabbitMqService from './rabbitmq_service'
+const mongodb = require('mongodb')
+const ObjectId = mongodb.ObjectId
 
 interface FileValues {
   name?: string,
@@ -48,8 +50,25 @@ export default class FileService {
   async uploadToDriveAccounts (fileObject: FileEntity) {
     const fileFromGridFS: Buffer = await this.fileRepository.getFileFromGridFS(fileObject.gridFsId)
 
-    const accounts = await this.accountService.getAllAccounts()
-    const driveFile = []
+    const driveFile = fileObject.driveFile.map((drive) => {
+      const driveFile: driveInfo = {
+        accountId: new ObjectId(drive.accountId),
+        contentLink: drive.contentLink,
+        driveId: drive.driveId
+      }
+      return driveFile
+    })
+
+    let accounts = await this.accountService.getAllAccounts()
+
+    if (driveFile.length > 0) {
+      accounts = accounts.filter((account) => {
+        return !fileObject.driveFile.some((driveFile) => {
+          const driveFileElement = driveFile.accountId.toString()
+          return driveFileElement === account.id.toString()
+        })
+      })
+    }
 
     for (const account of accounts) {
       const driveService = new DriveServices(account)
@@ -104,5 +123,22 @@ export default class FileService {
     const deleteFile = await this.fileRepository.deleteFile(id)
     this.rabbitService.sendMessage(id, 'delete file', 'downloader')
     return deleteFile
+  }
+
+  async deleteAccountFromFile (file: FileEntity, accountId: ObjectID) {
+    const index = file.driveFile.findIndex((info: driveInfo) => {
+      console.log(info.accountId, accountId, info.accountId.toString() === accountId.toString())
+      return info.accountId.toString() === accountId.toString()
+    })
+    console.log(index)
+    if (index !== -1) {
+      file.driveFile.splice(index, 1)
+
+      this.updateFileById(file.id.toString(), file)
+    }
+  }
+
+  async getAllFiles () {
+    return await this.fileRepository.readAll()
   }
 }
