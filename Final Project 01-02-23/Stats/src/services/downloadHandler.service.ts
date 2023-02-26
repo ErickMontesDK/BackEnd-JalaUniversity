@@ -11,20 +11,21 @@ export default class DownloadHandlerService {
   }
 
   rabbitMqReceiveMessage (newMessage: any) {
-    const { file, account } = newMessage
+    try {
+      const { file, account } = newMessage
 
-    if (account && file) {
       account.downloadsTotal += 1
       account.downloadsToday += 1
       account.sizeDownloadTotal += file.size
       account.sizeDownloadsToday += file.size
       account.consecutiveDownloads += 1
-
       file.downloadsToday += 1
       file.downloadsTotal += 1
 
       this.rabbitService.sendMessage(file, account)
-      this.influxDB.writePoint(file)
+      this.influxDB.writePoint(file, account)
+    } catch (error) {
+      console.error('Error in stats when receive data:', error)
     }
   }
 }
