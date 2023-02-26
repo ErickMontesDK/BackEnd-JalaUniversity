@@ -1,10 +1,13 @@
 import RabbitMqService from './rabbitmq_service'
+import InfluxDBClient from './influxDb.service'
 
 export default class DownloadHandlerService {
   private rabbitService: RabbitMqService
+  private influxDB: InfluxDBClient
 
   constructor (rabbitService: RabbitMqService) {
     this.rabbitService = rabbitService
+    this.influxDB = new InfluxDBClient()
   }
 
   rabbitMqReceiveMessage (newMessage: any) {
@@ -20,8 +23,8 @@ export default class DownloadHandlerService {
       file.downloadsToday += 1
       file.downloadsTotal += 1
 
-      console.log(account, file)
       this.rabbitService.sendMessage(file, account)
+      this.influxDB.writePoint(file)
     }
   }
 }

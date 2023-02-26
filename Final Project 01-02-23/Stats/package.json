@@ -12,11 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@influxdata/influxdb-client": "^1.33.2",
     "@types/amqplib": "^0.10.1",
+    "@types/node": "^18.11.18",
     "amqplib": "^0.10.3",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "@types/node": "^18.11.18",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
