@@ -3,6 +3,10 @@ import { resolve } from 'path'
 import dotenv from 'dotenv'
 import FileEntity from '../database/entities/file.entity'
 import AccountEntity from '../database/entities/account.entity'
+import { messageRabbit, rabbitAction, rabbitDestiny } from '../utils/types'
+import AccountService from './account.services'
+import FileService from './file.services'
+import { ErrorBuild } from '../utils/errorBuild'
 
 dotenv.config({ path: resolve(__dirname, '../../../.env') })
 
@@ -70,8 +74,8 @@ export default class RabbitMqService {
     })
   }
 
-  sendMessage (body: FileEntity | AccountEntity | string, action: string, destiny:string): void {
-    const sentObject = {
+  sendMessage (body: FileEntity | AccountEntity | string, action: rabbitAction, destiny: rabbitDestiny) {
+    const sentObject: messageRabbit = {
       action,
       body
     }
@@ -88,5 +92,40 @@ export default class RabbitMqService {
       channel.sendToQueue(queue, Buffer.from(messageString))
       console.log(`Sent message to queue ${destiny} ${queue}`)
     })
+  }
+
+  listeningService = () => {
+    this.createChannel().then((channel:any) => {
+      console.log('Waiting for messages...')
+
+      channel.consume(this.uploaderQueue, (message:any) => {
+        const receivedObj = JSON.parse(message.content.toString())
+        console.log('it this an id?', receivedObj)
+        this.uploaderHandler(receivedObj)
+      }, {
+        noAck: true
+      })
+    })
+  }
+
+  uploaderHandler (newMessage: any) {
+    const fileService = new FileService()
+    const accountService = new AccountService()
+    const { action, body } = newMessage
+
+    switch (action) {
+      case 'upload drive':
+        fileService.uploadToDriveAccounts(body)
+        break
+      case 'delete drive':
+        fileService.deleteFileById(body.id)
+        break
+      case 'delete account':
+        console.log('uploader')
+        accountService.deleteAccountById(body)
+        break
+      default:
+        throw ErrorBuild.internalServerError('Action not received')
+    }
   }
 }

@@ -19,12 +19,10 @@ interface FileValues {
 export default class FileService {
   protected fileRepository: FileRepository
   protected accountService: AccountService
-  protected rabbitService: RabbitMqService
 
   constructor () {
     this.fileRepository = new FileRepository()
     this.accountService = new AccountService()
-    this.rabbitService = new RabbitMqService()
   }
 
   async uploadingFile (idGridFile:ObjectID, fileValues: FileValues) {
@@ -32,6 +30,7 @@ export default class FileService {
     const day = todayDate.getUTCDate()
     const month = todayDate.getUTCMonth()
     const year = todayDate.getUTCFullYear()
+    const rabbitService = new RabbitMqService()
 
     const newfile = new FileEntity()
     newfile.name = fileValues.name!
@@ -43,7 +42,7 @@ export default class FileService {
     newfile.gridFsId = idGridFile.toString()
 
     const fileFromMongo = await this.fileRepository.createFile(newfile)
-    this.rabbitService.sendMessage(fileFromMongo, 'upload drive', 'uploader')
+    rabbitService.sendMessage(fileFromMongo, 'upload drive', 'uploader')
     return fileFromMongo
   }
 
@@ -96,6 +95,7 @@ export default class FileService {
 
   async updateFileById (id: string, fileValues: FileValues) {
     const updateFile = await this.getFileById(id)
+    const rabbitService = new RabbitMqService()
 
     updateFile.name = fileValues.name ? fileValues.name : updateFile.name
     updateFile.filename = fileValues.filename ? fileValues.filename : updateFile.filename
@@ -103,13 +103,14 @@ export default class FileService {
     updateFile.status = fileValues.status ? fileValues.status : updateFile.status
 
     const updatedFile = await this.fileRepository.updateFile(updateFile)
-    this.rabbitService.sendMessage(updateFile, 'update file', 'downloader')
+    rabbitService.sendMessage(updateFile, 'update file', 'downloader')
 
     return updatedFile
   }
 
   async deleteFileById (id: string) {
     const file = await this.getFileById(id)
+    const rabbitService = new RabbitMqService()
 
     file.driveFile.forEach(async (drive) => {
       const account = await this.accountService.getAccountById(drive.accountId.toString())
@@ -121,7 +122,7 @@ export default class FileService {
     })
 
     const deleteFile = await this.fileRepository.deleteFile(id)
-    this.rabbitService.sendMessage(id, 'delete file', 'downloader')
+    rabbitService.sendMessage(id, 'delete file', 'downloader')
     return deleteFile
   }
 
