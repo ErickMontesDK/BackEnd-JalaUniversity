@@ -18,7 +18,6 @@ export default class FileAccountService {
 
   async updateFileAccount (accountInfo:any, fileId:any) {
     const fileAccountFromDb: FileAccountEntity | undefined = await this.getRelationByFileAndAccountId(fileId.toString(), accountInfo.accountId.toString())
-    console.log(accountInfo.accountId.toString(), fileId, fileAccountFromDb)
     const fileAccountToUpdate: FileAccountEntity = fileAccountFromDb || new FileAccountEntity()
 
     fileAccountToUpdate.accountId = accountInfo.accountId.toString()

@@ -39,6 +39,5 @@ export default class InfluxDBClient {
     this.writeApi.writePoint(pointFile)
     this.writeApi.writePoint(pointAccount)
     await this.writeApi.flush()
-    console.log(pointFile, pointAccount)
   }
 }

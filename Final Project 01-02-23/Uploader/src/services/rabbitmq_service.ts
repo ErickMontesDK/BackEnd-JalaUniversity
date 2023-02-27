@@ -6,7 +6,6 @@ import AccountEntity from '../database/entities/account.entity'
 import { messageRabbit, rabbitAction, rabbitDestiny } from '../utils/types'
 import AccountService from './account.services'
 import FileService from './file.services'
-import { ErrorBuild } from '../utils/errorBuild'
 
 dotenv.config({ path: resolve(__dirname, '../../../.env') })
 
@@ -100,7 +99,7 @@ export default class RabbitMqService {
 
       channel.consume(this.uploaderQueue, (message:any) => {
         const receivedObj = JSON.parse(message.content.toString())
-        console.log('it this an id?', receivedObj)
+        console.log(receivedObj)
         this.uploaderHandler(receivedObj)
       }, {
         noAck: true
@@ -121,11 +120,10 @@ export default class RabbitMqService {
         fileService.deleteFileById(body.id)
         break
       case 'delete account':
-        console.log('uploader')
         accountService.deleteAccountById(body)
         break
       default:
-        throw ErrorBuild.internalServerError('Action not received')
+        console.error(`Unsupported action ${action}`)
     }
   }
 }

@@ -7,6 +7,7 @@ export default class AccountService {
   private accountRepository : AccountRepository
   private fileAccountService: FileAccountService
   private InfluxDBservice: InfluxDBClient
+  static accountRepository: AccountRepository = new AccountRepository()
 
   constructor () {
     this.accountRepository = new AccountRepository()
@@ -27,8 +28,12 @@ export default class AccountService {
     accounttoUpdate.consecutiveDownloads = accounttoUpdate.consecutiveDownloads || 0
 
     const updatedAccount = await this.accountRepository.updateAccount(accounttoUpdate)
-    this.InfluxDBservice.writePointAccount(updatedAccount, 'update account')
+    this.InfluxDBservice.writePointQuantityAccount()
     return updatedAccount
+  }
+
+  static async getNumberOfAccounts () {
+    return await this.accountRepository.countAccounts()
   }
 
   async updateAccountByDownloader (messageFile: any) {
@@ -44,7 +49,7 @@ export default class AccountService {
     accounttoUpdate.consecutiveDownloads = messageFile.consecutiveDownloads
 
     const updatedAccount = await this.accountRepository.updateAccount(accounttoUpdate)
-    this.InfluxDBservice.writePointAccount(updatedAccount, 'update account')
+    this.InfluxDBservice.writePointQuantityAccount()
     return updatedAccount
   }
 
@@ -65,8 +70,7 @@ export default class AccountService {
 
     if (foundFile) {
       const deletedFile = await this.accountRepository.deleteAccount(foundFile.id)
-      this.InfluxDBservice.writePointAccount(foundFile, 'delete account')
-      console.log(deletedFile)
+      this.InfluxDBservice.writePointQuantityAccount()
 
       const accountRelationWithFiles = await this.fileAccountService.getRelationstByAccountId(foundFile.uploaderId)
 

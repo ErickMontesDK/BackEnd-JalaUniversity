@@ -1,7 +1,7 @@
 import { ErrorBuild } from './errorBuild'
 import { Request, Response, NextFunction } from 'express'
 
-export default function errorHandler (err:any, req: Request, res: Response, next: NextFunction) {
+export default function errorHandler (err:Error | unknown, req: Request, res: Response, next: NextFunction) {
   console.log(err)
 
   if (err instanceof ErrorBuild) {
@@ -9,5 +9,5 @@ export default function errorHandler (err:any, req: Request, res: Response, next
     return
   }
 
-  res.status(500).json(`${err.message}`)
+  res.status(500).json(`${err}`)
 }

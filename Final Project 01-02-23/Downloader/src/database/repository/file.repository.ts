@@ -10,6 +10,10 @@ export class FileRepository {
     return response
   }
 
+  async countFiles (): Promise<number> {
+    return await this.repository.count()
+  }
+
   async readFileById (id: string) {
     const foundFile = await this.repository.findOneBy({ id })
 

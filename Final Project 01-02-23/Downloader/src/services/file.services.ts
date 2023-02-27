@@ -7,6 +7,7 @@ export default class FileService {
   private fileRepository: FileRepository
   private fileAccountService: FileAccountService
   private InfluxDBservice: InfluxDBClient
+  static fileRepository = new FileRepository()
 
   constructor () {
     this.fileRepository = new FileRepository()
@@ -25,8 +26,12 @@ export default class FileService {
     fileToUpdate.downloadsTotal = fileToUpdate.downloadsTotal | 0
 
     const updateFile = await this.fileRepository.updateFile(fileToUpdate)
-    this.InfluxDBservice.writePointFile(updateFile, 'update file')
+    this.InfluxDBservice.writePointQuantityFiles()
     return updateFile
+  }
+
+  static async getNumberOfFiles () {
+    return await this.fileRepository.countFiles()
   }
 
   async updateFileFromDownloader (File: any) {
@@ -37,7 +42,7 @@ export default class FileService {
     fileToUpdate.downloadsTotal = File.downloadsTotal | 0
 
     const updateFile = await this.fileRepository.updateFile(fileToUpdate)
-    this.InfluxDBservice.writePointFile(updateFile, 'update file')
+    this.InfluxDBservice.writePointQuantityFiles()
     return updateFile
   }
 
@@ -58,7 +63,7 @@ export default class FileService {
 
     if (foundFile) {
       await this.fileRepository.deleteFile(foundFile.id)
-      this.InfluxDBservice.writePointFile(foundFile, 'delete file')
+      this.InfluxDBservice.writePointQuantityFiles()
       const fileRelationsWithAccounts = await this.fileAccountService.getRelationstByFileId(foundFile.uploaderId)
 
       fileRelationsWithAccounts.forEach((relation) => {

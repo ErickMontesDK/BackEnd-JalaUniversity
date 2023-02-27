@@ -136,10 +136,8 @@ export default class FileService {
 
   async deleteAccountFromFile (file: FileEntity, accountId: ObjectID) {
     const index = file.driveFile.findIndex((info: driveInfo) => {
-      console.log(info.accountId, accountId, info.accountId.toString() === accountId.toString())
       return info.accountId.toString() === accountId.toString()
     })
-    console.log(index)
     if (index !== -1) {
       file.driveFile.splice(index, 1)
 

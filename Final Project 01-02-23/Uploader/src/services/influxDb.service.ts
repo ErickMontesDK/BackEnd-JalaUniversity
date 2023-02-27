@@ -22,45 +22,52 @@ export default class InfluxDBClient {
   }
 
   public async writePointUpdateFile (file: FileEntity) {
-    const date = new Date()
+    try {
+      const date = new Date()
 
-    const pointFile = new Point('Uploader_File')
-      .tag('updated_file', file.id.toString())
-      .intField('accounts_uploaded ', 4)
-      .timestamp(date)
+      const pointFile = new Point('Uploader_File')
+        .tag('updated_file', file.id.toString())
+        .intField('accounts_uploaded', file.driveFile.length)
+        .timestamp(date)
 
-    this.writeApi.writePoint(pointFile)
-    await this.writeApi.flush()
-    console.log(pointFile)
+      this.writeApi.writePoint(pointFile)
+      await this.writeApi.flush()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   public async writePointQuantityFiles () {
-    const quantity = await FileService.getNumberOfFiles()
-    console.log(quantity)
-    const date = new Date()
+    try {
+      const quantity = await FileService.getNumberOfFiles()
+      const date = new Date()
 
-    const pointFile = new Point('Files_Uploader')
-      .tag('files', 'Files_Uploader')
-      .intField('quantity_Files', quantity)
-      .timestamp(date)
+      const pointFile = new Point('Files_Uploader')
+        .tag('files', 'Files_Uploader')
+        .intField('quantity_Files', quantity)
+        .timestamp(date)
 
-    this.writeApi.writePoint(pointFile)
-    await this.writeApi.flush()
-    console.log(pointFile)
+      this.writeApi.writePoint(pointFile)
+      await this.writeApi.flush()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   public async writePointQuantityAccount () {
-    const quantity = await AccountService.getNumberOfAccounts()
-    console.log(quantity)
-    const date = new Date()
+    try {
+      const quantity = await AccountService.getNumberOfAccounts()
+      const date = new Date()
 
-    const pointFile = new Point('Accounts_Uploader')
-      .tag('accounts', 'Accounts_Uploader')
-      .intField('quantity_Accounts', quantity)
-      .timestamp(date)
+      const pointFile = new Point('Accounts_Uploader')
+        .tag('accounts', 'Accounts_Uploader')
+        .intField('quantity_Accounts', quantity)
+        .timestamp(date)
 
-    this.writeApi.writePoint(pointFile)
-    await this.writeApi.flush()
-    console.log(pointFile)
+      this.writeApi.writePoint(pointFile)
+      await this.writeApi.flush()
+    } catch (error) {
+      console.error(error)
+    }
   }
 }

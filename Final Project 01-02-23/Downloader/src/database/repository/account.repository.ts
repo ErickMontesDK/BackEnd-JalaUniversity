@@ -6,13 +6,17 @@ export class AccountRepository {
   protected repository = AppDataSource.getRepository(AccountEntity)
 
   async createAccount (newAccount: AccountEntity) {
-    const response:any = await this.repository.insert(newAccount)
+    const response = await this.repository.insert(newAccount)
     return response.identifiers[0].id
   }
 
   async updateAccount (updateAccount: AccountEntity) {
     const response = await this.repository.save(updateAccount)
     return response
+  }
+
+  async countAccounts (): Promise<number> {
+    return await this.repository.count()
   }
 
   async readAccountById (id: string) {

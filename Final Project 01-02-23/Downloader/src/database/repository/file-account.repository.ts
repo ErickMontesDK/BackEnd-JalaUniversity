@@ -6,7 +6,7 @@ export class FileAccountRepository {
   protected repository = AppDataSource.getRepository(FileAccountEntity)
 
   async createFileAccount (newFileAccount: FileAccountEntity) {
-    const response:any = await this.repository.insert(newFileAccount)
+    const response = await this.repository.insert(newFileAccount)
     return response.identifiers[0].id
   }
 
@@ -56,7 +56,6 @@ export class FileAccountRepository {
   }
 
   async readFileAccountByFileAndAccountId (fileId: string, accountId: string) {
-    console.log(accountId, fileId)
     const FileAccountFound = await this.repository.findOneBy({
       fileId,
       accountId

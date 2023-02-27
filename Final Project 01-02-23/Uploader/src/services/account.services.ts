@@ -47,7 +47,6 @@ export default class AccountService {
 
     allFiles.forEach((file:FileEntity) => {
       this.rabbitService.sendMessage(file, 'upload drive', 'uploader')
-      console.log('asi se esta enviando el archivo a rabbit', file)
     })
     this.influxDbService.writePointQuantityAccount()
     return account
@@ -84,10 +83,9 @@ export default class AccountService {
   }
 
   async deleteAccountById (id: string) {
-    console.log('paso final', id)
     const deletedAccount = await this.accountRepository.deleteAccount(id)
     this.rabbitService.sendMessage(id, 'delete account', 'downloader')
     this.influxDbService.writePointQuantityAccount()
-    console.log(deletedAccount)
+    return deletedAccount
   }
 }

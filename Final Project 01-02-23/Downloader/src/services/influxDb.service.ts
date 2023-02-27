@@ -2,9 +2,8 @@ import { InfluxDB, Point, WriteApi } from '@influxdata/influxdb-client'
 import { hostname } from 'node:os'
 import dotenv from 'dotenv'
 import { resolve } from 'path'
-import FileEntity from '../database/entities/file.entity'
-import AccountEntity from '../database/entities/account.entity'
-import { influxAccountAction, influxFileAction } from '../utils/types'
+import FileService from './file.services'
+import AccountService from './account.service'
 dotenv.config({ path: resolve(__dirname, './../../.env') })
 
 const url = process.env.INFLUX_URL as string
@@ -21,29 +20,37 @@ export default class InfluxDBClient {
       .useDefaultTags({ location: hostname() })
   }
 
-  public async writePointFile (file: FileEntity, action:influxFileAction) {
-    const date = new Date()
+  public async writePointQuantityFiles () {
+    try {
+      const quantity = await FileService.getNumberOfFiles()
+      const date = new Date()
 
-    const pointFile = new Point('Downloader-File')
-      .tag(action, file.uploaderId)
-      .stringField('file', file.name)
-      .timestamp(date)
+      const pointFile = new Point('Files_Downloader')
+        .tag('files', 'Files_Downloader')
+        .intField('quantity_Files', quantity)
+        .timestamp(date)
 
-    this.writeApi.writePoint(pointFile)
-    await this.writeApi.flush()
-    console.log(pointFile)
+      this.writeApi.writePoint(pointFile)
+      await this.writeApi.flush()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
-  public async writePointAccount (account: AccountEntity, action:influxAccountAction) {
-    const date = new Date()
+  public async writePointQuantityAccount () {
+    try {
+      const quantity = await AccountService.getNumberOfAccounts()
+      const date = new Date()
 
-    const pointFile = new Point('Downloader-Accounts')
-      .tag(action, account.uploaderId)
-      .stringField('account', account.email)
-      .timestamp(date)
+      const pointFile = new Point('Accounts_Downloader')
+        .tag('accounts', 'Accounts_Downloader')
+        .intField('quantity_Accounts', quantity)
+        .timestamp(date)
 
-    this.writeApi.writePoint(pointFile)
-    await this.writeApi.flush()
-    console.log(pointFile)
+      this.writeApi.writePoint(pointFile)
+      await this.writeApi.flush()
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
