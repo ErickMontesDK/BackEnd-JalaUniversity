@@ -4,6 +4,7 @@ import DriveServices from './drive.services'
 import { ObjectID } from 'typeorm'
 import AccountService from './account.services'
 import RabbitMqService from './rabbitmq_service'
+import InfluxDBClient from './influxDb.service'
 const mongodb = require('mongodb')
 const ObjectId = mongodb.ObjectId
 
@@ -19,10 +20,13 @@ interface FileValues {
 export default class FileService {
   protected fileRepository: FileRepository
   protected accountService: AccountService
+  protected influxDbService: InfluxDBClient
+  static fileRepository = new FileRepository()
 
   constructor () {
     this.fileRepository = new FileRepository()
     this.accountService = new AccountService()
+    this.influxDbService = new InfluxDBClient()
   }
 
   async uploadingFile (idGridFile:ObjectID, fileValues: FileValues) {
@@ -44,6 +48,10 @@ export default class FileService {
     const fileFromMongo = await this.fileRepository.createFile(newfile)
     rabbitService.sendMessage(fileFromMongo, 'upload drive', 'uploader')
     return fileFromMongo
+  }
+
+  static async getNumberOfFiles () {
+    return await this.fileRepository.countFiles()
   }
 
   async uploadToDriveAccounts (fileObject: FileEntity) {
@@ -104,7 +112,7 @@ export default class FileService {
 
     const updatedFile = await this.fileRepository.updateFile(updateFile)
     rabbitService.sendMessage(updateFile, 'update file', 'downloader')
-
+    this.influxDbService.writePointUpdateFile(updateFile)
     return updatedFile
   }
 

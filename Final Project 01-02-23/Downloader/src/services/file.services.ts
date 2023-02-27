@@ -1,14 +1,17 @@
 import FileEntity from '../database/entities/file.entity'
 import { FileRepository } from '../database/repository/file.repository'
 import FileAccountService from './file-account.service'
+import InfluxDBClient from './influxDb.service'
 
 export default class FileService {
   private fileRepository: FileRepository
   private fileAccountService: FileAccountService
+  private InfluxDBservice: InfluxDBClient
 
   constructor () {
     this.fileRepository = new FileRepository()
     this.fileAccountService = new FileAccountService()
+    this.InfluxDBservice = new InfluxDBClient()
   }
 
   async updateFileFromUploader (File: any) {
@@ -21,7 +24,9 @@ export default class FileService {
     fileToUpdate.downloadsToday = fileToUpdate.downloadsToday | 0
     fileToUpdate.downloadsTotal = fileToUpdate.downloadsTotal | 0
 
-    return await this.fileRepository.updateFile(fileToUpdate)
+    const updateFile = await this.fileRepository.updateFile(fileToUpdate)
+    this.InfluxDBservice.writePointFile(updateFile, 'update file')
+    return updateFile
   }
 
   async updateFileFromDownloader (File: any) {
@@ -31,7 +36,9 @@ export default class FileService {
     fileToUpdate.downloadsToday = File.downloadsToday | 0
     fileToUpdate.downloadsTotal = File.downloadsTotal | 0
 
-    return await this.fileRepository.updateFile(fileToUpdate)
+    const updateFile = await this.fileRepository.updateFile(fileToUpdate)
+    this.InfluxDBservice.writePointFile(updateFile, 'update file')
+    return updateFile
   }
 
   async getAllFiles () {
@@ -51,7 +58,7 @@ export default class FileService {
 
     if (foundFile) {
       await this.fileRepository.deleteFile(foundFile.id)
-
+      this.InfluxDBservice.writePointFile(foundFile, 'delete file')
       const fileRelationsWithAccounts = await this.fileAccountService.getRelationstByFileId(foundFile.uploaderId)
 
       fileRelationsWithAccounts.forEach((relation) => {

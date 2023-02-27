@@ -1,14 +1,17 @@
 import AccountEntity from '../database/entities/account.entity'
 import { AccountRepository } from '../database/repository/account.repository'
 import FileAccountService from './file-account.service'
+import InfluxDBClient from './influxDb.service'
 
 export default class AccountService {
   private accountRepository : AccountRepository
   private fileAccountService: FileAccountService
+  private InfluxDBservice: InfluxDBClient
 
   constructor () {
     this.accountRepository = new AccountRepository()
     this.fileAccountService = new FileAccountService()
+    this.InfluxDBservice = new InfluxDBClient()
   }
 
   async updateAccountByUploader (messageFile: any) {
@@ -23,7 +26,9 @@ export default class AccountService {
     accounttoUpdate.sizeDownloadsToday = accounttoUpdate.sizeDownloadsToday || 0
     accounttoUpdate.consecutiveDownloads = accounttoUpdate.consecutiveDownloads || 0
 
-    return await this.accountRepository.updateAccount(accounttoUpdate)
+    const updatedAccount = await this.accountRepository.updateAccount(accounttoUpdate)
+    this.InfluxDBservice.writePointAccount(updatedAccount, 'update account')
+    return updatedAccount
   }
 
   async updateAccountByDownloader (messageFile: any) {
@@ -38,7 +43,9 @@ export default class AccountService {
     accounttoUpdate.sizeDownloadsToday = messageFile.sizeDownloadsToday
     accounttoUpdate.consecutiveDownloads = messageFile.consecutiveDownloads
 
-    return await this.accountRepository.updateAccount(accounttoUpdate)
+    const updatedAccount = await this.accountRepository.updateAccount(accounttoUpdate)
+    this.InfluxDBservice.writePointAccount(updatedAccount, 'update account')
+    return updatedAccount
   }
 
   async getAllAccounts () {
@@ -58,6 +65,7 @@ export default class AccountService {
 
     if (foundFile) {
       const deletedFile = await this.accountRepository.deleteAccount(foundFile.id)
+      this.InfluxDBservice.writePointAccount(foundFile, 'delete account')
       console.log(deletedFile)
 
       const accountRelationWithFiles = await this.fileAccountService.getRelationstByAccountId(foundFile.uploaderId)

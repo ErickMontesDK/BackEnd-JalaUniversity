@@ -67,6 +67,10 @@ export class FileRepository {
     }
   }
 
+  async countFiles (): Promise<number> {
+    return await this.repository.count()
+  }
+
   async getFileFromGridFS (idFile:string) {
     const formatId = new ObjectId(idFile)
 

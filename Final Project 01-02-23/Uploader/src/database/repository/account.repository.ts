@@ -51,4 +51,8 @@ export class AccountRepository {
       throw ErrorBuild.badRequest('File not found in Database')
     }
   }
+
+  async countAccounts (): Promise<number> {
+    return await this.repository.count()
+  }
 }

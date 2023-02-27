@@ -1,11 +1,14 @@
 import { InfluxDB, Point, WriteApi } from '@influxdata/influxdb-client'
 import { FileEntity, AccountEntity } from '../types'
 import { hostname } from 'node:os'
+import dotenv from 'dotenv'
+import { resolve } from 'path'
+dotenv.config({ path: resolve(__dirname, './../../.env') })
 
-const url = 'http://localhost:8086'
-const token = 'On0ix5jcG2uAIfTyH_2RYEqxv0ZZgfwinaggu0bD8MhmmVEuqihYbA9CLfAjgSBc3GldbhZc2O4_UA6FqtLhJA=='
-const org = 'jala-backend'
-const bucket = 'microservices'
+const url = process.env.INFLUX_URL as string
+const token = process.env.INFLUX_TOKEN as string
+const org = process.env.INFLUX_ORG as string
+const bucket = process.env.INFLUX_BUCKET as string
 
 export default class InfluxDBClient {
   private writeApi!: WriteApi

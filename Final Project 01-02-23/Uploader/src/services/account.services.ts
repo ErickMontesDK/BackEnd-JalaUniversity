@@ -3,6 +3,7 @@ import { AccountRepository } from '../database/repository/account.repository'
 import RabbitMqService from './rabbitmq_service'
 import FileService from './file.services'
 import FileEntity from '../database/entities/file.entity'
+import InfluxDBClient from './influxDb.service'
 
 type AccountValues = {
   email?: string,
@@ -14,14 +15,21 @@ type AccountValues = {
 export default class AccountService {
   protected accountRepository: AccountRepository
   protected rabbitService: RabbitMqService
+  protected influxDbService: InfluxDBClient
+  static accountRepository: AccountRepository = new AccountRepository()
 
   constructor () {
     this.accountRepository = new AccountRepository()
     this.rabbitService = new RabbitMqService()
+    this.influxDbService = new InfluxDBClient()
   }
 
   async getAllAccounts () {
     return await this.accountRepository.readAll()
+  }
+
+  static async getNumberOfAccounts () {
+    return await this.accountRepository.countAccounts()
   }
 
   async createAccount (accountValues: AccountValues) {
@@ -41,7 +49,7 @@ export default class AccountService {
       this.rabbitService.sendMessage(file, 'upload drive', 'uploader')
       console.log('asi se esta enviando el archivo a rabbit', file)
     })
-
+    this.influxDbService.writePointQuantityAccount()
     return account
   }
 
@@ -79,6 +87,7 @@ export default class AccountService {
     console.log('paso final', id)
     const deletedAccount = await this.accountRepository.deleteAccount(id)
     this.rabbitService.sendMessage(id, 'delete account', 'downloader')
+    this.influxDbService.writePointQuantityAccount()
     console.log(deletedAccount)
   }
 }

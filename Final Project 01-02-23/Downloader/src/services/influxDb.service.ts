@@ -3,8 +3,8 @@ import { hostname } from 'node:os'
 import dotenv from 'dotenv'
 import { resolve } from 'path'
 import FileEntity from '../database/entities/file.entity'
-import FileService from './file.services'
-import AccountService from './account.services'
+import AccountEntity from '../database/entities/account.entity'
+import { influxAccountAction, influxFileAction } from '../utils/types'
 dotenv.config({ path: resolve(__dirname, './../../.env') })
 
 const url = process.env.INFLUX_URL as string
@@ -21,12 +21,12 @@ export default class InfluxDBClient {
       .useDefaultTags({ location: hostname() })
   }
 
-  public async writePointUpdateFile (file: FileEntity) {
+  public async writePointFile (file: FileEntity, action:influxFileAction) {
     const date = new Date()
 
-    const pointFile = new Point('Uploader_File')
-      .tag('updated_file', file.id.toString())
-      .intField('accounts_uploaded ', 4)
+    const pointFile = new Point('Downloader-File')
+      .tag(action, file.uploaderId)
+      .stringField('file', file.name)
       .timestamp(date)
 
     this.writeApi.writePoint(pointFile)
@@ -34,29 +34,12 @@ export default class InfluxDBClient {
     console.log(pointFile)
   }
 
-  public async writePointQuantityFiles () {
-    const quantity = await FileService.getNumberOfFiles()
-    console.log(quantity)
+  public async writePointAccount (account: AccountEntity, action:influxAccountAction) {
     const date = new Date()
 
-    const pointFile = new Point('Files_Uploader')
-      .tag('files', 'Files_Uploader')
-      .intField('quantity_Files', quantity)
-      .timestamp(date)
-
-    this.writeApi.writePoint(pointFile)
-    await this.writeApi.flush()
-    console.log(pointFile)
-  }
-
-  public async writePointQuantityAccount () {
-    const quantity = await AccountService.getNumberOfAccounts()
-    console.log(quantity)
-    const date = new Date()
-
-    const pointFile = new Point('Accounts_Uploader')
-      .tag('accounts', 'Accounts_Uploader')
-      .intField('quantity_Accounts', quantity)
+    const pointFile = new Point('Downloader-Accounts')
+      .tag(action, account.uploaderId)
+      .stringField('account', account.email)
       .timestamp(date)
 
     this.writeApi.writePoint(pointFile)
